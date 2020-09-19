@@ -3,6 +3,7 @@
 Repository used to document and display learning outcomes for Msc programme. The formate will be LO + relevent material that covers it, any work here is my own unless stated otherwise.
 
 Module description can be found [here](https://github.com/Maks-Drzezdzon/Working-With-Data-L-O/blob/master/DATA9900-Data%20Mining.pdf).
+
 Repo wiki can be found [here](https://github.com/Maks-Drzezdzon/Working-With-Data-L-O/wiki).
 
 ### Learning Outcomes
