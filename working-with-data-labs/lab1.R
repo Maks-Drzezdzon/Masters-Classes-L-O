@@ -1,5 +1,4 @@
 library(tidyverse)
-
 vignette("tibble")
 
 
