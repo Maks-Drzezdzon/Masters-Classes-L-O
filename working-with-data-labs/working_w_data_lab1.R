@@ -14,6 +14,8 @@ View(user_df)
 # sets in R
 factor(c(1, 2, 3, 3, 4, 4, 1), levels = c('1', '2', '3', '4'))
 
+#
+#
 # lab 1 tasks
 head(ChickWeight)
 ?ChickWeight
@@ -23,7 +25,8 @@ mean(ChickWeight[ChickWeight$Time == 21,]$weight)
 # count number of chicks on each diet
 table(ChickWeight$Diet)
 
-
+#
+#
 # covert to df
 ?Titanic
 df = data.frame(Titanic)
@@ -38,7 +41,9 @@ sum(df[df$Class=='Crew' & df$Sex=='Female' & df$Survived=='Yes',]$Freq) / sum(df
 # I'd have 97.2% chance to be part of the group with the second highest chance of surviving which is the 1st class passengers at 9.22%
 # second in line would be female and crew member with 86.9% out of 9.63%
 # 0.41% group survival isnt worth the 9.9% difference of being part of it
-# later on id want to find a statistical way of quantofying it further
+
+# ToDo
+# later on id want to find a statistical way of quantifying it further
 
 survived_perecent = sum(df[df$Survived=='Yes',]$Freq) / sum(df$Freq) * 100 # 32.3 survived
 
@@ -61,7 +66,9 @@ sum(df[df$Class=='Crew' & df$Sex=='Female' & df$Survived=='Yes',]$Freq) / sum(df
 sum(df[df$Survived=='Yes' & df$Class=='1st' & df$Sex=='Male',]$Freq) / sum(df[df$Class=='1st' & df$Sex=='Male',]$Freq) * 100 # 34.4
 sum(df[df$Survived=='Yes' & df$Class=='1st' & df$Sex=='Female',]$Freq) / sum(df[df$Class=='1st' & df$Sex=='Female',]$Freq) * 100 # 97.2
 
-# Iris dataset
+#
+#
+# Iris data set
 ?iris
 df = data.frame(iris)
 head(df)
@@ -69,5 +76,47 @@ head(df)
 mean(df[df$Petal.Length & df$Species=='virginica',]$Petal.Length / df[df$Sepal.Length & df$Species=='virginica',]$Sepal.Length)
 
 virginica = df[df$Species=='virginica',]
+
 avg = c(mean(virginica$Sepal.Length), mean(virginica$Sepal.Width), mean(virginica$Petal.Length), mean(virginica$Petal.Width))
 names(avg) = c('Sepal.Length', 'Sepal.Width', 'Petal.Length', 'Petal.Width')
+avg
+
+#
+#
+# mtcars
+?mtcars
+df = data.frame(mtcars)
+head(df)
+df[df$am==1,]
+
+
+#
+#
+# occupationalStatus data set
+?occupationalStatus
+df = data.frame(occupationalStatus)
+head(df)
+
+
+#
+#
+# ggplot2::mpg data set
+?ggplot2::mpg
+df = data.frame(ggplot2::mpg)
+head(df)
+
+
+#
+#
+# lubridate::lakers data set
+?lubridate::lakers
+df = data.frame(lubridate::lakers)
+head(df)
+
+
+#
+#
+# nycflights13::flights data set
+?nycflights13::flights
+df = data.frame(nycflights13::flights)
+head(df)
