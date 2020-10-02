@@ -1,4 +1,5 @@
 library(tidyverse)
+library(ratios)
 vignette("tibble")
 
 # https://learning.oreilly.com/library/view/r-for-data/9781491910382/ch07.html
@@ -60,3 +61,13 @@ sum(df[df$Class=='Crew' & df$Sex=='Female' & df$Survived=='Yes',]$Freq) / sum(df
 sum(df[df$Survived=='Yes' & df$Class=='1st' & df$Sex=='Male',]$Freq) / sum(df[df$Class=='1st' & df$Sex=='Male',]$Freq) * 100 # 34.4
 sum(df[df$Survived=='Yes' & df$Class=='1st' & df$Sex=='Female',]$Freq) / sum(df[df$Class=='1st' & df$Sex=='Female',]$Freq) * 100 # 97.2
 
+# Iris dataset
+?iris
+df = data.frame(iris)
+head(df)
+
+mean(df[df$Petal.Length & df$Species=='virginica',]$Petal.Length / df[df$Sepal.Length & df$Species=='virginica',]$Sepal.Length)
+
+virginica = df[df$Species=='virginica',]
+avg = c(mean(virginica$Sepal.Length), mean(virginica$Sepal.Width), mean(virginica$Petal.Length), mean(virginica$Petal.Width))
+names(avg) = c('Sepal.Length', 'Sepal.Width', 'Petal.Length', 'Petal.Width')
