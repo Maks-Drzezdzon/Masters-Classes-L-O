@@ -27,13 +27,18 @@ table(ChickWeight$Diet)
 ?Titanic
 df = data.frame(Titanic)
 head(df)
-# % of crew that survived 
-sum(df[df$Survived=='Yes' & df$Class=='Crew',]$Freq) / sum(df$Freq) * 100
+# 23.95% of crew that survived 
+sum(df[df$Survived=='Yes' & df$Class=='Crew',]$Freq) / sum(df[df$Class=='Crew',]$Freq) * 100
 
-# % survived and female
-sum(df[df$Survived=='Yes' & df$Sex=='Female',]$Freq) / sum(df$Freq) * 100
+# 2.2% crew survived and female
+sum(df[df$Class=='Crew' & df$Sex=='Female' & df$Survived=='Yes',]$Freq) / sum(df[df$Class=='Crew',]$Freq) * 100
 
-# which passenger would you want to be
+# which passenger would you want to be, id like to be a 1st class passenger and female,
+# I'd have 97.2% chance to be part of the group with the second highest chance of surviving which is the 1st class passengers at 9.22%
+# second in line would be female and crew member with 86.9% out of 9.63%
+# 0.41% group survival isnt worth the 9.9% difference of being part of it
+# later on id want to find a statistical way of quantofying it further
+
 survived_perecent = sum(df[df$Survived=='Yes',]$Freq) / sum(df$Freq) * 100 # 32.3 survived
 
 first = sum(df[df$Survived=='Yes' & df$Class=='1st',]$Freq) / sum(df$Freq) * 100 # 9.22
@@ -47,23 +52,11 @@ sum(df[df$Class=='Crew' & df$Sex=='Female' & df$Survived=='Yes',]$Freq) / crew_s
 
 # more male crew members survived but there was also more of them
 # % of own sex surv rate
-m = sum(df[df$Class=='Crew' & df$Sex=='Male' & df$Survived=='Yes',]$Freq) / sum(df[df$Class=='Crew' & df$Sex=='Male',]$Freq) * 100
+sum(df[df$Class=='Crew' & df$Sex=='Male' & df$Survived=='Yes',]$Freq) / sum(df[df$Class=='Crew' & df$Sex=='Male',]$Freq) * 100
 # 22.27 % of male crew members survived
-f = sum(df[df$Class=='Crew' & df$Sex=='Female' & df$Survived=='Yes',]$Freq) / sum(df[df$Class=='Crew' & df$Sex=='Female',]$Freq) * 100
+sum(df[df$Class=='Crew' & df$Sex=='Female' & df$Survived=='Yes',]$Freq) / sum(df[df$Class=='Crew' & df$Sex=='Female',]$Freq) * 100
 # 86.9% of female crew members survived 
-# id like to be a crew member and female
 
-titanic_df = data.frame(Titanic)
-first <- titanic_df[which(titanic_df$Class=='1st'),]
-first_survived <- first[which(first$Survived=='Yes'),]
-sum(first_survived$Freq)/sum(first$Freq)*100
-second <- titanic_df[which(titanic_df$Class=='2nd'),]
-second_survived <- second[which(second$Survived=='Yes'),]
-sum(second_survived$Freq)/sum(second$Freq)*100
-third <- titanic_df[which(titanic_df$Class=='3rd'),]
-third_survived <- third[which(third$Survived=='Yes'),]
-sum(third_survived$Freq)/sum(third$Freq)*100
-
-
-sum(df[df$Class=='1st' & df$Survived=='Yes',]$Freq) / sum(df[,]$Freq) * 100
+sum(df[df$Survived=='Yes' & df$Class=='1st' & df$Sex=='Male',]$Freq) / sum(df[df$Class=='1st' & df$Sex=='Male',]$Freq) * 100 # 34.4
+sum(df[df$Survived=='Yes' & df$Class=='1st' & df$Sex=='Female',]$Freq) / sum(df[df$Class=='1st' & df$Sex=='Female',]$Freq) * 100 # 97.2
 
