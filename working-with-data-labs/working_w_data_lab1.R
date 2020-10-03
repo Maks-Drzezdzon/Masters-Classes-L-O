@@ -120,7 +120,6 @@ as.table(yr_2008, 'year 2008 avgs')
 change_over_9_yrs = yr_2008 - yr_1999
 as.table(change_over_9_yrs, 'change_over_9_yrs')
 
-as.table(yr_1999, yr_2008)
 #
 #
 # lubridate::lakers data set missing values for x, y and both
