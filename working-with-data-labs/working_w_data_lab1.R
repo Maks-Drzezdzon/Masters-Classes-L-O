@@ -115,12 +115,12 @@ nums = unlist(lapply(df, is.numeric))
 
 yr_1999 = colMeans(df[df$year==1999, nums])
 yr_2008 = colMeans(df[df$year==2008, nums])
-View(yr_1999, 'year 1999 avgs')
-View(yr_2008, 'year 2008 avgs')
+as.table(yr_1999, 'year 1999 avgs')
+as.table(yr_2008, 'year 2008 avgs')
 change_over_9_yrs = yr_2008 - yr_1999
-View(change_over_9_yrs, 'change_over_9_yrs')
+as.table(change_over_9_yrs, 'change_over_9_yrs')
 
-
+as.table(yr_1999, yr_2008)
 #
 #
 # lubridate::lakers data set missing values for x, y and both
