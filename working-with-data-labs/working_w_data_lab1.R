@@ -110,12 +110,12 @@ data_set = ggplot2::mpg
 df = data.frame(ggplot2::mpg)
 head(df)
 # get list of numeric values
+# ToDo plot this
 nums = unlist(lapply(df, is.numeric))
 yr_1999 = colMeans(df[df$year==1999, nums])
 yr_2008 = colMeans(df[df$year==2008, nums])
 View(yr_1999, 'year 1999 avgs')
 View(yr_2008, 'year 2008 avgs')
-
 change_over_9_yrs = yr_2008 - yr_1999
 View(change_over_9_yrs, 'change_over_9_yrs')
 
@@ -124,10 +124,14 @@ View(change_over_9_yrs, 'change_over_9_yrs')
 #
 #
 # lubridate::lakers data set
+library(lubridate)
 ?lubridate::lakers
 df = data.frame(lubridate::lakers)
 head(df)
 
+missing_x = sum(is.na(df$x))/length(df$x)*100
+missing_y = sum(is.na(df$y))/length(df$y)*100
+(sum ( is.na(df$x) ) + sum( is.na(df$y) ) ) / (length( df$x ) + length( df$y ) )*100
 
 #
 #
