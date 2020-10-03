@@ -87,8 +87,8 @@ avg
 ?mtcars
 df = data.frame(mtcars)
 head(df)
-df[df$am==1,]
-row.names(df)
+cars = df[df$am==1,]
+row.names(cars)
 
 
 #
@@ -109,12 +109,17 @@ max(occupationalStatus[row(occupationalStatus)==col(occupationalStatus)])
 data_set = ggplot2::mpg
 df = data.frame(ggplot2::mpg)
 head(df)
+# get list of numeric values
 nums = unlist(lapply(df, is.numeric))
-df[, nums]
-yr_1999 = df[df$year==1999, nums]
-yr_2008 = df[df$year==2008,]
-yr_1999
-yr_1999[is.numeric(row(yr_1999)),]
+yr_1999 = colMeans(df[df$year==1999, nums])
+yr_2008 = colMeans(df[df$year==2008, nums])
+View(yr_1999, 'year 1999 avgs')
+View(yr_2008, 'year 2008 avgs')
+
+change_over_9_yrs = yr_2008 - yr_1999
+View(change_over_9_yrs, 'change_over_9_yrs')
+
+
 
 #
 #
