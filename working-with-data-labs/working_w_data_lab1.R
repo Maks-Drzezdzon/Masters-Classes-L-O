@@ -88,23 +88,33 @@ avg
 df = data.frame(mtcars)
 head(df)
 df[df$am==1,]
+row.names(df)
 
 
 #
 #
-# occupationalStatus data set
+# occupationalStatus data set, find most shared occupation by sons and fathers
 ?occupationalStatus
 df = data.frame(occupationalStatus)
 head(df)
+# a data frame in this case makes things harder, so ill use the dataset as is
+# max(df[row(df)==col(df)])
+max(occupationalStatus[row(occupationalStatus)==col(occupationalStatus)])
 
 
 #
 #
-# ggplot2::mpg data set
+# ggplot2::mpg data set, diff between numeric cols
 ?ggplot2::mpg
+data_set = ggplot2::mpg
 df = data.frame(ggplot2::mpg)
 head(df)
-
+nums = unlist(lapply(df, is.numeric))
+df[, nums]
+yr_1999 = df[df$year==1999, nums]
+yr_2008 = df[df$year==2008,]
+yr_1999
+yr_1999[is.numeric(row(yr_1999)),]
 
 #
 #
