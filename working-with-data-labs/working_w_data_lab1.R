@@ -112,6 +112,7 @@ head(df)
 # get list of numeric values
 # ToDo plot this
 nums = unlist(lapply(df, is.numeric))
+
 yr_1999 = colMeans(df[df$year==1999, nums])
 yr_2008 = colMeans(df[df$year==2008, nums])
 View(yr_1999, 'year 1999 avgs')
@@ -120,10 +121,9 @@ change_over_9_yrs = yr_2008 - yr_1999
 View(change_over_9_yrs, 'change_over_9_yrs')
 
 
-
 #
 #
-# lubridate::lakers data set
+# lubridate::lakers data set missing values for x, y and both
 library(lubridate)
 ?lubridate::lakers
 df = data.frame(lubridate::lakers)
@@ -135,7 +135,17 @@ missing_y = sum(is.na(df$y))/length(df$y)*100
 
 #
 #
-# nycflights13::flights data set
+# nycflights13::flights data set avg, min, max delay for arrival and departure for each month
 ?nycflights13::flights
 df = data.frame(nycflights13::flights)
 head(df)
+
+avg_departure_delay = tapply( df$dep_delay, df$month, mean, na.rm=TRUE)
+avg_arrival_delay = tapply( df$arr_delay, df$month, mean, na.rm=TRUE)
+
+max_departure_delay = tapply( df$dep_delay, df$month, max, na.rm=TRUE)
+max_arrival_delay = tapply( df$arr_delay, df$month, max, na.rm=TRUE)
+
+min_departure_delay = tapply( df$dep_delay, df$month, min, na.rm=TRUE)
+min_arrival_delay = tapply( df$arr_delay, df$month, min, na.rm=TRUE)
+
