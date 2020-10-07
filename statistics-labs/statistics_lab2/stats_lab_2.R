@@ -1,5 +1,0 @@
-attach(survey)
-data = read.table('survey')
-df = data.frame(data)
-head(df)
-plot(df$age, df$marital, xlab = "age", ylab = "martial status" )

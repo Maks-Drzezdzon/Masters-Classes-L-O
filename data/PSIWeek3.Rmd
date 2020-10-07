@@ -53,7 +53,7 @@ scatter + geom_point() + geom_smooth(method = "lm", colour = "Red", se = F) + la
 
 #Pearson Correlation
 stats::cor.test(survey$tpcoiss, survey$tpstress, method='pearson')
-
+stats::cor.test(survey$tposaff, survey$tpstress, method='pearson')
 #Spearman Correlation
 #Change the method to be spearman.
 #This test will give an error since this method uses ranking but cannot handle ties but that is ok with us - we consider this to be missing data
@@ -61,4 +61,5 @@ cor.test(survey$tpcoiss, survey$tpstress, method = "spearman")
 
 #We can also use kendall's tau which does handle ties
 cor.test(survey$tpcoiss, survey$tpstress, method = "kendall")
+stats::cor.test(survey$tposaff, survey$tpstress, method='kendall')
 ```
