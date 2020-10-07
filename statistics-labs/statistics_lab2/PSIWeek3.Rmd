@@ -1,0 +1,64 @@
+---
+title: "R Notebook - Week 3 Probability and Statistical Inference"
+author: "Deirdre Lawless"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+
+### SETUP
+
+```{r}
+#We are using a .sav file created from the SPSS file survey.sav  taken from SPSS Survival Manual 6th Edition Julie Pallant
+#http://spss.allenandunwin.com.s3-website-ap-southeast-2.amazonaws.com/data-files.html#.Wb0vvnWP-po
+#Results on a survey on well being
+#We need to load the file so that we can use it in R.
+
+#Either make sure both the script and the file are in the same folder or qualify the path to the file.
+getwd()
+survey <- read.table("survey.dat")
+
+
+#Setting the column names to be that used in the dataset but in lowercase to make life a bit easier
+colnames(survey) <- tolower(colnames(survey))
+#Remember to install these packages if you haven't already done so
+library(ggplot2) #For creating histograms with more detail than plot
+
+```
+
+
+### CORRELATION
+#### Scatterplot
+```{r}
+
+#Simple scatterplot of feeling of control and perceived stress
+#aes(x,y)
+scatter <- ggplot2::ggplot(survey, aes(tpstress, tpcoiss))
+scatter + geom_point() + labs(x = "Total Perceived Stress", y = "Total PCOISS") 
+
+#Add a regression line
+scatter + geom_point() + geom_smooth(method = "lm", colour = "Red", se = F) + labs(x = "Total Perceived Stress", y = "Total PCOISS") 
+
+#Note: When running this in RStudio the output will appear un the Plots tab on the right hand side, if not visible click the Plots tab
+```
+
+#### Conducting Correlation Tests - Pearson, Spearman, Kendall
+ 
+```{r}
+
+#Pearson Correlation
+stats::cor.test(survey$tpcoiss, survey$tpstress, method='pearson')
+
+#Spearman Correlation
+#Change the method to be spearman.
+#This test will give an error since this method uses ranking but cannot handle ties but that is ok with us - we consider this to be missing data
+cor.test(survey$tpcoiss, survey$tpstress, method = "spearman")
+
+#We can also use kendall's tau which does handle ties
+cor.test(survey$tpcoiss, survey$tpstress, method = "kendall")
+```
