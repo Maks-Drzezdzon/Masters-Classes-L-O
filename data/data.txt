@@ -1,0 +1,4 @@
+price,stock item,ignore,purchased
+6   cat food  %?@T
+2   bread     $#*T
+10  beer      !~^F
