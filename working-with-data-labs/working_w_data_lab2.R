@@ -61,3 +61,26 @@ write.csv(eu_data[0:999,], file = 'isoc_ec_ibuy.csv')
 twitter_unzip = unzip('working_w_data_lab2/trainingandtestdata.zip')
 twitter = read.csv('training.1600000.processed.noemoticon.csv', header = T, col.names = c( 'polarity','id','date','query','user','tweet'))
 colnames(twitter)
+
+# 8 scraping data with r
+library('rvest')
+web_page = read_html('https://www.theguardian.com/football/premierleague/table')
+web_page
+# extract items from html via html tag
+table = html_nodes(web_page, 'table')
+head(table)
+# returns a tibble = simpler data frame 
+page_data = html_table(table)
+page_data
+View(page_data[[1]])
+
+# another example
+
+web_page_2 = read_html('https://markets.ft.com/data')
+table_2 = html_nodes(web_page_2, 'table')
+page_data_2 = html_table(table_2)
+head(page_data_2)
+View(page_data_2[[2]])
+
+# National Climatic Data Center API
+# maybe try later
