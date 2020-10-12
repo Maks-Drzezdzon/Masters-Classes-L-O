@@ -29,3 +29,6 @@ freq #view the words and their frequencies
 tmdata <- data.frame (words=names(freq), freq)
 wordcloud (tmdata$words, tmdata$freq, max.words=100, min.freq=3, scale=c(7,.5), random.order=FALSE, colors=brewer.pal(8, "Dark2"))
 
+# Do later maybe
+# Use the code (and if needed expand it) to analyse 3 or 4 webpages from a company
+# Use this code (and if needed expand it) to analyse and/or compare some news stories from newpaper websites
