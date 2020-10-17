@@ -8,6 +8,80 @@
 student_pref = read.table("sperformance-dataset.csv",sep=";",header=TRUE)
 colnames(student_pref)
 
+###### Hypothesis Question #######
+##                              ##
+##################################
+
+###########
+## NOTES ##
+###########
+
+# sample vs population
+# a sample is a piece of a population (selection of observations)
+# a population might be all the people in a school or country
+# that is so large that it would be impossible or too expensive 
+# to collect data on each individual, to combat this a random sample is taken
+# and used to make general conclusions about the population
+
+### A few things can cause samples to vary from the population
+
+## sampling error
+# is when by chance, you happened to pick data/people that don't represent the average person
+# e.g
+# finding mean age in country
+# sample mean is 50 and for the sake of argument the mean of the pop is 60
+# this 10 years error is too great to be ignored and could have occurred because by chance the people in  
+# the sample lead poorer lifestyles than your average person 
+
+## selection bias
+# this occurs when a sample is not randomly selected / not selected fairly
+# e.g
+# targeting a job ad to a specific website
+# your sample is now based on that websites demographic alone
+# only people that use said website will see that job ad
+
+
+###########
+## NOTES ##
+###########
+
+### ToDo for portfolio
+## testing for normality is done 
+## graphs and normality tests
+## q-q plot and frequency distribution
+## QQ plot y = predicted value, x = actual value
+
+### P value
+# is the probability value
+# null hypothesis is that here is no difference between two groups
+ 
+
+
+## Null hypothesis 
+# for this pick a test such as pearson, shapiro-wilk, kolmogorov-smirnov and 
+# if its parametric or not
+# P > 0.05 Values are sampled from a population that follows normal distribution
+# P =< 0.05 values are sampled from a population that does NOT follow normal distribution 
+
+### parametric tests
+
+# skewness and kurtosis z-values
+# the closer to 0 the better
+
+# skewness / std error
+# kurtosis / std error
+# should be between -/+ 1.96 
+
+# shapiro-wilk test p-value
+# null-H is that the data is normally distributed 
+# so above 0.05, data is approx distributed
+# it is rejected if it is below 0.05, is not approx distributed
+
+# visual tests
+# histogram, normal Q-Q plots and box plots
+# these should show visually show that data is, well, normal
+
+
 
 
 
