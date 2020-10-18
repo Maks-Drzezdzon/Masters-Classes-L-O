@@ -8,9 +8,11 @@
 student_pref = read.table("sperformance-dataset.csv",sep=";",header=TRUE)
 colnames(student_pref)
 
-###### Hypothesis Question #######
-##                              ##
-##################################
+######################## Hypothesis Question ###########################
+# Parents education level correlate with students academic achievement #
+########################################################################
+# how much does family relations impact that performance ? #
+############################################################
 
 ###########
 ## NOTES ##
