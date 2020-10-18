@@ -12,7 +12,9 @@ colnames(student_pref)
 # Parents education level correlate with students academic achievement #
 ########################################################################
 # how much do family relations impact that performance ? #
-##########################################################
+#######################################################################
+# who gets affected more, lower educated parents or those with more ? #
+#######################################################################
 
 ###########
 ## NOTES ##
