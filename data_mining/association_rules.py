@@ -1,5 +1,6 @@
 import pandas as pd
-
+# review
+# https://b-tierney.com/python_ml/l12-association_rules/
 df = pd.read_excel('http://archive.ics.uci.edu/ml/machine-learning-databases/00352/Online%20Retail.xlsx')
 print(df.head())
 
