@@ -1,0 +1,126 @@
+---
+title: "Week 5 Difference  - Non-Parametric Tests"
+output:
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+
+ 
+### SETUP
+```{r}
+
+#First check that package required is installed, if not install it
+# Specify your packages
+needed_packages <- c("ggplot2", "coin", "rstatix") 
+# Extract not installed packages
+not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
+# Install not installed packages
+if(length(not_installed)) install.packages(not_installed) 
+
+
+library(ggplot2) #For creating histograms with more detail than plot
+library(coin)# For Wilcox test (non-parametric)
+library(rstatix)# For calculating effect size
+
+#Load the data into a dataframe - it is a .csv file, we indicate that the first row is a header with colnames
+drinkset<- read.csv("Field-BDI-Non-parametric.csv", header=TRUE)
+#Create data subsets for each drink
+drinkxdata <- subset(drinkset, drink=='DrinkX')
+drinkydata <-subset(drinkset, drink=='DrinkY')
+```
+
+
+### Differences in Depression Levels - Sunday
+```{r}
+#Note: I am not doing the inspection of the variables here as I know they are not normal since this data has been designed to illustrate non-parametric difference
+
+#Get your descriptive statistics - we are using the by function to handle the need to group
+by(drinkset$bdisun,drinkset$drink, median)
+by(drinkset$bdisun,drinkset$drink, IQR)
+
+#Create plots of these
+gs <- ggplot(drinkxdata, aes(x=bdisun))
+gs <- gs + ggtitle ("Depression Levels Sunday")
+gs <- gs + labs(x="Drink X")
+gs <- gs + geom_histogram(binwidth=2, colour="black")
+gs <- gs + scale_fill_gradient("Count", low="#DCDCDC", high="#7C7C7C")
+gs <- gs + stat_function(fun=dnorm, color="red",args=list(mean=mean(drinkxdata$bdisun, na.rm=TRUE), sd=sd(drinkxdata$bdisun, na.rm=TRUE)))
+gs
+
+gs <- ggplot(drinkydata, aes(x=bdisun))
+gs <- gs + ggtitle ("Depression Levels Sunday")
+gs <- gs + labs(x="Drink Y")
+gs <- gs + geom_histogram(binwidth=2, colour="black")
+gs <- gs + scale_fill_gradient("Count", low="#DCDCDC", high="#7C7C7C")
+gs <- gs + stat_function(fun=dnorm, color="red",args=list(mean=mean(drinkydata$bdisun, na.rm=TRUE), sd=sd(drinkydata$bdisun, na.rm=TRUE)))
+gs
+
+# Test for differences on  Sunday to get our U statistic (reported as W)
+stats::wilcox.test(bdisun~drink, data=drinkset) 
+#by default wilcox.test() calculates an exact p-value if the samples contain less than 50 finite values and there are no ties. Otherwise, a normal approximation is used. In our example, the sample contains less than 50 finite values but there are ties. That’s why the warning message “cannot compute exact p-value with ties” is appearing.
+
+
+#To calculate Z we can use the Wilcox test from the coin package 
+coin::wilcox_test(bdisun~as.factor(drink), data=drinkset)
+
+#Calculate the effect size R
+reff=rstatix::wilcox_effsize(bdisun~drink, data=drinkset)
+
+#Calculate the effect r
+reff$effsize
+
+```
+### Reporting the results of the Sunday Finding
+```
+Depression levels in those who drank DrinkX (Mdn = 17.50, IQR=3.75) did not differ significantly from those who drank DrinkY (Mdn = 16.00, IQR=3.00) the day after the drinks were taken, (U = 64.5, z = 1.11, p = .29, r = 0.25).
+
+#Note: We are reporting the W statistic output by the stats::wilcox_test as U here.
+
+```
+
+### Differences in Depression Levels - Wednesday
+```{r}
+#Note I am not doing the inspection of the variables here as I know they are not normal since this data has been designed to illustrate non-parametric difference
+
+#Get your descriptive statistcs
+by(drinkset$bdiwed,drinkset$drink, median)
+by(drinkset$bdiwed,drinkset$drink, IQR)
+
+#Create plots of these
+gs <- ggplot(drinkxdata, aes(x=bdiwed))
+gs <- gs + ggtitle ("Depression Levels Wednesday")
+gs <- gs + labs(x="Drink X")
+gs <- gs + geom_histogram(binwidth=2, colour="black")
+gs <- gs + scale_fill_gradient("Count", low="#DCDCDC", high="#7C7C7C")
+gs <- gs + stat_function(fun=dnorm, color="red",args=list(mean=mean(drinkxdata$bdiwed, na.rm=TRUE), sd=sd(drinkxdata$bdiwed, na.rm=TRUE)))
+gs
+
+gs <- ggplot(drinkydata, aes(x=bdiwed))
+gs <- gs + ggtitle ("Depression Levels Wednesday")
+gs <- gs + labs(x="Drink Y")
+gs <- gs + geom_histogram(binwidth=2, colour="black")
+gs <- gs + scale_fill_gradient("Count", low="#DCDCDC", high="#7C7C7C")
+gs <- gs + stat_function(fun=dnorm, color="red",args=list(mean=mean(drinkydata$bdiwed, na.rm=TRUE), sd=sd(drinkydata$bdiwed, na.rm=TRUE)))
+gs
+
+# Test for differences on  Wednesday to get our U statistic (reported as W)
+stats::wilcox.test(bdiwed~drink, data=drinkset) 
+#by default wilcox.test() calculates an exact p-value if the samples contain less than 50 finite values and there are no ties. Otherwise, a normal approximation is used. In our example, the sample contains less than 50 finite values but there are ties. That’s why the warning message “cannot compute exact p-value with ties” is appearing.
+
+#To calculate Z we can use the Wilcox test from the coin package 
+coin::wilcox_test(bdiwed~as.factor(drink), data=drinkset)
+
+#Calculate the effect size R
+reff=rstatix::wilcox_effsize(bdiwed~drink, data=drinkset)
+
+#Calculate the effect r
+reff$effsize
+
+```
+### Reporting the comparison
+```
+However, by Wednesday, those who drank DrinkX (Mdn = 33.50, IQR=6.75) were significantly more depressed than those who drank DrinkY (Mdn = 7.50, IQR=3.75), (U = 96.00, z = 3.48, p < .001, r = ` r round(reff$effsize,2)).
+```

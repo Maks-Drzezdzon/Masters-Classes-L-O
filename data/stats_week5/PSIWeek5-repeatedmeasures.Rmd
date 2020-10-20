@@ -1,0 +1,36 @@
+---
+title: "Week 5 Difference - Repeated Measurs"
+output:
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+```{r}
+#Paired T-test:
+#t.test(y1,y2,paired=TRUE) # where y1 & y2 are numeric
+#Experiment - fear of statistics
+edata<-read.table('experim.dat')
+# Difference between FearFor our example:
+t.test(edata$fost1,edata$fost2,paired=TRUE)
+
+```
+```{r}
+#Non-parametric Repeated measure
+#We are using the drink dataset again
+drinkset<- read.csv("Field-BDI-Non-parametric.csv", header=TRUE)
+#Need to split the file or subset it  and run against each sub-set
+drinkxdata<-subset(drinkset,drinkset$drink=='DrinkX')
+drinkydata<-subset(drinkset,drinkset$drink=='DrinkY')
+
+
+summary(drinkxdata)
+summary(drinkydata)
+#Wilcoxon test syntax
+#stats::wilcox.test(y1,y2,paired=TRUE)
+
+stats::wilcox.test(drinkxdata$bdisun,drinkxdata$bdiwed,paired=TRUE)
+stats::wilcox.test(drinkydata$bdisun,drinkydata$bdiwed,paired=TRUE)
+
+```
