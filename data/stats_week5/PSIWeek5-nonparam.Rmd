@@ -26,7 +26,7 @@ library(coin)# For Wilcox test (non-parametric)
 library(rstatix)# For calculating effect size
 
 #Load the data into a dataframe - it is a .csv file, we indicate that the first row is a header with colnames
-drinkset<- read.csv("Field-BDI-Non-parametric.csv", header=TRUE)
+drinkset<- read.csv("stats_week5/Field-BDI-Non-parametric.csv", header=TRUE)
 #Create data subsets for each drink
 drinkxdata <- subset(drinkset, drink=='DrinkX')
 drinkydata <-subset(drinkset, drink=='DrinkY')
