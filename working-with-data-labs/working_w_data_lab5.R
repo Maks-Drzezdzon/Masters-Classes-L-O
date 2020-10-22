@@ -10,3 +10,11 @@ filter(baby_names, name == 'John')
 select(baby_names, name, year, sex)
 head(arrange(baby_names, name, year))
 head(summarise(baby_names, name, year))
+
+inner_join(baby_names,births, by = c('sex', 'year'))
+
+# group by name
+# namesBirth = group_by(births, name)
+# summarise ( births , total = sum( total ) )
+
+# look over some joins on dplyr
