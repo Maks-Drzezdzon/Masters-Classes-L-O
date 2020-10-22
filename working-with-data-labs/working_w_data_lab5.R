@@ -1,5 +1,6 @@
 library(dplyr)
 library(ggplot2)
+library(foreign)
 
 births = read.csv('births.csv')
 baby_names = data.frame(read.csv('bnames.csv'))
@@ -18,3 +19,5 @@ inner_join(baby_names,births, by = c('sex', 'year'))
 # summarise ( births , total = sum( total ) )
 
 # look over some joins on dplyr
+# test = read.dbf('test/stl_parcels_2002.dbf')
+# head(test)
