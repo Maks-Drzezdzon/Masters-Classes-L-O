@@ -1,7 +1,7 @@
 library(dplyr)
 library(tidyverse)
 library(data.table)
-
+library(feather)
 # file is small enough to hold in memory ~2gigs
 # use read_csv for optimized load speed
 # https://www.kaggle.com/PROPPG-PPG/hourly-weather-surface-brazil-southeast-region
@@ -19,6 +19,7 @@ new_names = c( "ID", "w_station_name", "elevation", "lat", "long",
               "min_temp_hr", "min_dew_temp", "relative_humidity", "max_relative_humidity", 
               "min_relative_humidity", "wind_speed", "wind_direction_rdegrees", "wind_gust_mps"  )
 df = df %>% setnames( old = old_names, new = new_names)
+h5
 colnames(df)
 
 # inspect unique weather station names, 122 as the file suggests
