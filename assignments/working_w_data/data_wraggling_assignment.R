@@ -1,6 +1,7 @@
 library(dplyr)
 library(tidyverse)
 library(data.table)
+install.packages("feather", dependencies = T)
 library(feather)
 # file is small enough to hold in memory ~2gigs
 # use read_csv for optimized load speed
@@ -31,3 +32,9 @@ sao_goncalo
 
 head(d)
 select(d, city)
+
+
+# read
+# https://blog.rstudio.com/2016/03/29/feather/#:~:text=Feather%20is%20a%20fast%2C%20lightweight,by%20Python%20or%20R%20code.
+# https://csgillespie.github.io/efficientR/input-output.html
+
