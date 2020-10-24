@@ -8,14 +8,28 @@ library(reticulate)
 df = read_feather('weather-data.feather')
 sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
 
-###########
-# LOAD ME #
-###########
 
 
+
+#################
+# ^^ LOAD ME ^^ #
+#################
+
+
+
+
+# main repo # https://github.com/Maks-Drzezdzon/Masters-Classes-L-O/tree/master/assignments/working_w_data
 # file is small enough to hold in memory ~2gigs
 # https://www.kaggle.com/PROPPG-PPG/hourly-weather-surface-brazil-southeast-region
-# https://github.com/Maks-Drzezdzon/Masters-Classes-L-O/tree/master/assignments/working_w_data
+
+
+
+
+##########################
+# initial data wrangling #
+##########################
+# this section focuses on wrangling a csv file
+# to produce a feather file used in further sections
 
 df = read_csv('weather-data.csv')
 # inspect df data types and cols
@@ -44,9 +58,6 @@ unique(df$wsnm , incomparables = FALSE)
 # HDF5 would be better for a mix of I/O and size optimization
 write_feather(df, 'weather-data.feather')
 
-##############
-# Start Here #
-##############
 
 df = read_feather('weather-data.feather')
 head(df)
@@ -65,10 +76,19 @@ colnames(df)
 # cut off 300 Mb of data
 write_feather(df, 'weather-data.feather')
 
+
+
+
+####################
+# data exploration #
+####################
+# this section focuses on exploring the data set
+# and provide some insights for the written report
+
+
+
 # find empty values count for each col
 # (tidyverse function)
-# i dont want to drop these because 
-# there is a way in python that lets you reconstruct 
 # missing data
 map(df , ~sum(is.na(.)))
 # df[row,col]
@@ -88,14 +108,31 @@ plot(sao_goncalo$observation_date_time, sao_goncalo$air_temprature)
 # some data missing for 2009-2010, similar blip for 2011-2012
 # there is also lots of 0 values during that time too
 plot(sao_goncalo$observation_date_time, sao_goncalo$precipitation_last_hr_ml)
+# there is very little data here meaning there is little rainfall
 plot(sao_goncalo$observation_date_time, sao_goncalo$relative_humidity)
 # another example of missing data in 2009-2010 and 2011-2012
-plot(sao_goncalo$observation_date_time, sao_goncalo$solar_radiation)
+plot(sao_goncalo$observation_date_time, sao_goncalo$solar_radiation, lables = c("time", "humidity"))
 # another example of missing data in 2009-2010 and 2011-2012
 
-identify(sao_goncalo$observation_date_time, sao_goncalo$air_temprature, lables = paste(as.character(sao_goncalo$ )))
+identify(sao_goncalo$observation_date_time, sao_goncalo$air_temprature, lables = paste(as.character(sao_goncalo$observation_date_time )))
 
 
 plot(sao_goncalo$observation_date_time, )
+
+
+
+
+
+######################
+# data visualization #
+######################
+# this section focuses on generating visualizations
+# for the report along with exploring different methods 
+# of doing so
+
+
+
+
+
 
 
