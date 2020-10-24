@@ -3,9 +3,20 @@ library(tidyverse)
 library(data.table)
 library(feather)
 library(lubridate)
+library(reticulate)
+
+df = read_feather('weather-data.feather')
+sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
+
+###########
+# LOAD ME #
+###########
+
 
 # file is small enough to hold in memory ~2gigs
 # https://www.kaggle.com/PROPPG-PPG/hourly-weather-surface-brazil-southeast-region
+# https://github.com/Maks-Drzezdzon/Masters-Classes-L-O/tree/master/assignments/working_w_data
+
 df = read_csv('weather-data.csv')
 # inspect df data types and cols
 spec(df)
@@ -43,11 +54,8 @@ colnames(df)
 # need to fix time formats
 typeof(df$observation_date) # integer
 typeof(df$observation_date_time) # double
-# find empty vals count for each col
-# (tidyverse function)
-map(df , ~sum(is.na(.)))
 
-# construct timedates and fill out any gaps then  drop them as they arent needed
+# construct dates/times and fill out any gaps then drop them as they arent needed
 df %>% mutate(observation_date = make_date(year, month, day))
 df %>% mutate(observation_date_time = make_datetime(year, month, day, hour)) 
 # drop cols in c()
@@ -57,13 +65,37 @@ colnames(df)
 # cut off 300 Mb of data
 write_feather(df, 'weather-data.feather')
 
+# find empty values count for each col
+# (tidyverse function)
+# i dont want to drop these because 
+# there is a way in python that lets you reconstruct 
+# missing data
+map(df , ~sum(is.na(.)))
+# df[row,col]
+# explore data of one city 
+View(sao_goncalo)
+# dyplyr function, data set is too big for table()
+glimpse(df)
+# exploring other options
+str(df)
 
-sao_goncalo = where(df, city == 'SÃO GONÇALO')
-sao_goncalo
+# all data
+# plot(df$observation_date_time, df$air_temprature)
 
 
-head(d)
-select(d, city)
+plot(sao_goncalo$observation_date_time, sao_goncalo$air_temprature)
+# this station has been in operation since 2008 more or less
+# some data missing for 2009-2010, similar blip for 2011-2012
+# there is also lots of 0 values during that time too
+plot(sao_goncalo$observation_date_time, sao_goncalo$precipitation_last_hr_ml)
+plot(sao_goncalo$observation_date_time, sao_goncalo$relative_humidity)
+# another example of missing data in 2009-2010 and 2011-2012
+plot(sao_goncalo$observation_date_time, sao_goncalo$solar_radiation)
+# another example of missing data in 2009-2010 and 2011-2012
 
+identify(sao_goncalo$observation_date_time, sao_goncalo$air_temprature, lables = paste(as.character(sao_goncalo$ )))
+
+
+plot(sao_goncalo$observation_date_time, )
 
 
