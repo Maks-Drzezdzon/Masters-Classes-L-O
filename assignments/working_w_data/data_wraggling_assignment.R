@@ -1,10 +1,10 @@
 library(dplyr)
 library(tidyverse)
 library(data.table)
-# install.packages("feather", dependencies = T)
 library(feather)
+library(lubridate)
+
 # file is small enough to hold in memory ~2gigs
-# use read_csv for optimized load speed
 # https://www.kaggle.com/PROPPG-PPG/hourly-weather-surface-brazil-southeast-region
 df = read_csv('weather-data.csv')
 # inspect df data types and cols
@@ -30,13 +30,32 @@ unique(df$wsnm , incomparables = FALSE)
 # and is supported by both python and r
 # from here on out the feather file will be used instead
 # drawback is that its slightly larger than the original file
-# hdf5 would be better for a mix of I/O and size optimization
+# HDF5 would be better for a mix of I/O and size optimization
 write_feather(df, 'weather-data.feather')
 
+##############
+# Start Here #
+##############
+
 df = read_feather('weather-data.feather')
-df = feather.write_dataframe
+head(df)
 colnames(df)
-spec(df)
+# need to fix time formats
+typeof(df$observation_date) # integer
+typeof(df$observation_date_time) # double
+# find empty vals count for each col
+# (tidyverse function)
+map(df , ~sum(is.na(.)))
+
+# construct timedates and fill out any gaps then  drop them as they arent needed
+df %>% mutate(observation_date = make_date(year, month, day))
+df %>% mutate(observation_date_time = make_datetime(year, month, day, hour)) 
+# drop cols in c()
+df = df[,!names(df) %in% c("year", "month", "day", "hour")]
+head(df)
+colnames(df)
+# cut off 300 Mb of data
+write_feather(df, 'weather-data.feather')
 
 
 sao_goncalo = where(df, city == 'SÃO GONÇALO')
