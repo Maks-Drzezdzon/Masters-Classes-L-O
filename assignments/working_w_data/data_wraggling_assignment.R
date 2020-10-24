@@ -1,9 +1,10 @@
 library(dplyr)
 library(tidyverse)
 library(data.table)
-library(feather)
-library(lubridate)
-library(reticulate)
+library(feather) # file format lib
+library(lubridate) # date transformation 
+library(reticulate) # embed python inside R code
+library(skimr) # summary statistics for larger data sets
 
 df = read_feather('weather-data.feather')
 sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
@@ -39,7 +40,7 @@ spec(df)
 new_names = 
 df = df %>% setnames( 
                       old = c(colnames(df)), 
-                      new = c( "ID", "w_station_name", "elevation", "lat", "long", 
+                      new = c( "station_id", "w_station_name", "elevation", "lat", "long", 
                                "station_num", "city", "province", "observation_date_time", 
                                "observation_date", "year", "month", "day", "hour", "precipitation_last_hr_ml",
                                "air_pressure_hr_hPa", "max_air_pressure_hr_hPa", "min_air_pressure_hr_hPa", 
@@ -57,9 +58,8 @@ unique(df$wsnm , incomparables = FALSE)
 # drawback is that its slightly larger than the original file
 # HDF5 would be better for a mix of I/O and size optimization
 write_feather(df, 'weather-data.feather')
-
-
 df = read_feather('weather-data.feather')
+
 head(df)
 colnames(df)
 # need to fix time formats
@@ -73,6 +73,7 @@ df %>% mutate(observation_date_time = make_datetime(year, month, day, hour))
 df = df[,!names(df) %in% c("year", "month", "day", "hour")]
 head(df)
 colnames(df)
+# update feather file
 # cut off 300 Mb of data
 write_feather(df, 'weather-data.feather')
 
@@ -98,6 +99,8 @@ View(sao_goncalo)
 glimpse(df)
 # exploring other options
 str(df)
+summary(df)
+summary(sao_goncalo)
 
 # all data
 # plot(df$observation_date_time, df$air_temprature)
@@ -111,7 +114,7 @@ plot(sao_goncalo$observation_date_time, sao_goncalo$precipitation_last_hr_ml)
 # there is very little data here meaning there is little rainfall
 plot(sao_goncalo$observation_date_time, sao_goncalo$relative_humidity)
 # another example of missing data in 2009-2010 and 2011-2012
-plot(sao_goncalo$observation_date_time, sao_goncalo$solar_radiation, lables = c("time", "humidity"))
+plot(sao_goncalo$observation_date_time, sao_goncalo$solar_radiation)
 # another example of missing data in 2009-2010 and 2011-2012
 
 identify(sao_goncalo$observation_date_time, sao_goncalo$air_temprature, lables = paste(as.character(sao_goncalo$observation_date_time )))
