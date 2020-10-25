@@ -37,7 +37,6 @@ df = read_csv('weather-data.csv')
 spec(df)
 
 # rename cols to be more descriptive 
-new_names = 
 df = df %>% setnames( 
                       old = c(colnames(df)), 
                       new = c( "station_id", "w_station_name", "elevation", "lat", "long", 
@@ -76,7 +75,8 @@ colnames(df)
 # update feather file
 # cut off 300 Mb of data
 write_feather(df, 'weather-data.feather')
-
+df = read_feather('weather-data.feather')
+sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
 
 
 
@@ -96,11 +96,11 @@ map(df , ~sum(is.na(.)))
 # explore data of one city 
 View(sao_goncalo)
 # dyplyr function, data set is too big for table()
-glimpse(df)
+glimpse(sao_goncalo)
 # exploring other options
-str(df)
+str(sao_goncalo)
 summary(df)
-summary(sao_goncalo)
+summary(sao_goncalo$observation_date)
 
 # Look over this
 skim(sao_goncalo)
