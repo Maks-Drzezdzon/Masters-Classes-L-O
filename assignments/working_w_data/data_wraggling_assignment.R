@@ -102,11 +102,16 @@ str(df)
 summary(df)
 summary(sao_goncalo)
 
+# Look over this
+skim(sao_goncalo)
 # all data
 # plot(df$observation_date_time, df$air_temprature)
-
+# ToDo look over plots
+# https://www.kaggle.com/sanjayroberts1/exploratory-data-analysis-and-clean-up
 
 plot(sao_goncalo$observation_date_time, sao_goncalo$air_temprature)
+hist( sao_goncalo$observation_date_time, sao_goncalo$air_temprature)
+
 # this station has been in operation since 2008 more or less
 # some data missing for 2009-2010, similar blip for 2011-2012
 # there is also lots of 0 values during that time too
