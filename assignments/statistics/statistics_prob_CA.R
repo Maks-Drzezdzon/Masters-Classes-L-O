@@ -46,27 +46,55 @@ colnames(student_pref)
 
 library(tidyverse)
 library(skimr)
+library(ggplot2)
+
+
+####################
+# Data exploration #
+####################
+student_pref = read_csv("sperformance-dataset.csv")
 
 glimpse(student_pref)
-
+map(student_pref , ~sum(is.na(.)))
 # max 382 students 184 male and 198 female
 unique(student_pref$sex , incomparables = FALSE)
-nrow(student_pref)
+nrow(student_pref) # checking that rows add up
 sum(as.integer(student_pref$sex == "M"))
 sum(as.integer(student_pref$sex == "F"))
 
-# basic histogram for each col, missing data, mean, standard of dev, percentiles 0-25-50-75-100
+
+# basic histogram for each col, missing data/completion rate 0-1, mean, standard of dev, percentiles 0-25-50-75-100
 skim(student_pref)
+skim(student_pref$Medu)
+skim(student_pref$Fedu)
+# wants to pursue higher education maths
+# No - 18 Yes - 364
+table(student_pref$higher.m)
+# No - 18 Yes - 364
+table(student_pref$higher.p)
+# very few students dont want to pursue higher education 
+
 
 ###########
 ## ToDos ##
 ###########
 
-## testing for normality 
-
+### testing for normality 
 ## graphs and normality tests
+# q-q plot
+head(student_pref$Medu)
 
-## q-q plot and frequency distribution
+# qq plot has stairs pattern meaning there are groups of values, makes sense
+# 
+qqnorm(student_pref$Medu)
+qqline(student_pref$Medu, col = "blue", lwd = 2)
+
+qqnorm(student_pref$mG1)
+qqline(student_pref$mG1, col = "blue", lwd = 2)
+
+# frequency distribution
+hist(student_pref$Medu, breaks = 6, col = "black")
+
 
 ## QQ plot y = predicted value, x = actual value
 
