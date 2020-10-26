@@ -4,8 +4,8 @@
 # d3=merge(d1,d2,by=c("school","sex","age","address","famsize","Pstatus","Medu","Fedu","Mjob","Fjob","reason","nursery","internet"))
 # print(nrow(d3)) # 382 students
 
-
-student_pref = read.table("sperformance-dataset.csv",sep=";",header=TRUE)
+# .m represents for maths tables and .p represents Portuguese  
+student_pref = read_csv("sperformance-dataset.csv")
 colnames(student_pref)
 
 ######################## Hypothesis Question ###########################
@@ -44,21 +44,39 @@ colnames(student_pref)
 # your sample is now based on that websites demographic alone
 # only people that use said website will see that job ad
 
+library(tidyverse)
+library(skimr)
+
+glimpse(student_pref)
+
+# max 382 students 184 male and 198 female
+unique(student_pref$sex , incomparables = FALSE)
+nrow(student_pref)
+sum(as.integer(student_pref$sex == "M"))
+sum(as.integer(student_pref$sex == "F"))
+
+# basic histogram for each col, missing data, mean, standard of dev, percentiles 0-25-50-75-100
+skim(student_pref)
 
 ###########
-## NOTES ##
+## ToDos ##
 ###########
 
-### ToDo for portfolio
-## testing for normality is done 
+## testing for normality 
+
 ## graphs and normality tests
+
 ## q-q plot and frequency distribution
+
 ## QQ plot y = predicted value, x = actual value
 
 ### P value
+
 # is the probability value
+
 # null hypothesis is that here is no difference between two groups
  
+
 
 
 ## Null hypothesis 
@@ -86,6 +104,15 @@ colnames(student_pref)
 # these should show visually show that data is, well, normal
 
 
+
+
+
+
+
+
+###########
+## NOTES ##
+###########
 
 
 
