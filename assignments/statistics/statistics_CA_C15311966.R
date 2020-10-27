@@ -43,6 +43,11 @@ library(ggplot2)
 # Data exploration #
 ####################
 student_pref = read_csv("sperformance-dataset.csv")
+getmode <- function(v) {
+        uniqv <- unique(v)
+        uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+
 # exploring data
 glimpse(student_pref)
 map(student_pref , ~sum(is.na(.)))
@@ -77,6 +82,7 @@ table(student_pref$higher.p)
 
 ## graphs and normality tests
 # qq plot has stairs pattern meaning there are groups of values, makes sense
+# QQ plot y = predicted value, x = actual value
 # mothers education
 qqnorm(student_pref$Medu, main = "Mothers education levels")
 qqline(student_pref$Medu, col = "blue", lwd = 2)
@@ -86,15 +92,11 @@ qqline(student_pref$Medu, col = "blue", lwd = 2)
 
 # https://stats.stackexchange.com/questions/161591/how-to-interpret-this-qq-plot
 # Maths results qq plots
-qqnorm(student_pref$mG1, main = "first period grade")
-qqline(student_pref$mG1, col = "blue", lwd = 2)
-
-qqnorm(student_pref$mG2, main = "second period grade")
-qqline(student_pref$mG2, col = "blue", lwd = 2)
 
 # comment on sknewness and kurtosis
 qqnorm(student_pref$mG3, main = "final period grade")
 qqline(student_pref$mG3, col = "blue", lwd = 2)
+
 
 # frequency distribution
 hist(student_pref$Medu, col = "cornflowerblue", main = "Mothers education levels", ylab = "Person Count", xlab = "Mothers education")
@@ -106,14 +108,12 @@ hist(student_pref$Medu,
      prob = T)
 # adding density curve
 lines(density(student_pref$Medu), lwd = 2, col = "red")
+# descriptive statistics 
+mean(student_pref$Medu)
+getmode(as.integer(student_pref$Medu))
+median(sort(student_pref$Medu))
 
-
-hist(student_pref$mG1, col = "cornflowerblue", main = "first period grade", ylab = "Person Count", xlab = "first pass grades")
-
-
-hist(student_pref$mG2, col = "cornflowerblue", main = "second period grade", ylab = "Person Count", xlab = "second pass grades")
-
-
+# examining final grade for CA
 hist(student_pref$mG3, col = "cornflowerblue", main = "final period grade", ylab = "Person Count", xlab = "final pass grades")
 # need to convert count area to density to then layer on a curve
 hist(student_pref$mG3,
@@ -125,7 +125,11 @@ hist(student_pref$mG3,
 # layer on density curve ontop
 lines(density(student_pref$mG3), lwd = 2, col = "red")
 
-## QQ plot y = predicted value, x = actual value
+mean(student_pref$mG3)
+getmode(as.integer(student_pref$mG3))
+median(sort(student_pref$mG3))
+## box plot
+boxplot(student_pref$mG3)
 
 ### P value
 
