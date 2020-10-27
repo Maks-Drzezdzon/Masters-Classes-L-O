@@ -82,20 +82,16 @@ table(student_pref$higher.p)
 ### testing for normality 
 ## graphs and normality tests
 # q-q plot
-head(student_pref$Medu)
-
 # qq plot has stairs pattern meaning there are groups of values, makes sense
 # 
 qqnorm(student_pref$Medu)
 qqline(student_pref$Medu, col = "blue", lwd = 2)
 
-qqnorm(student_pref$mG1)
-qqline(student_pref$mG1, col = "blue", lwd = 2)
-
 # frequency distribution
 hist(student_pref$Medu, breaks = 6, col = "black")
 
 
+  
 ## QQ plot y = predicted value, x = actual value
 
 ### P value
