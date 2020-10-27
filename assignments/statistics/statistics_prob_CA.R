@@ -98,6 +98,14 @@ qqline(student_pref$mG3, col = "blue", lwd = 2)
 
 # frequency distribution
 hist(student_pref$Medu, col = "cornflowerblue", main = "Mothers education levels", ylab = "Person Count", xlab = "Mothers education")
+hist(student_pref$Medu,
+     col = "cornflowerblue", 
+     main = "Mothers education levels", 
+     ylab = "% of People", 
+     xlab = "Mothers education",
+     prob = T)
+# adding density curve
+lines(density(student_pref$Medu), lwd = 2, col = "red")
 
 
 hist(student_pref$mG1, col = "cornflowerblue", main = "first period grade", ylab = "Person Count", xlab = "first pass grades")
@@ -107,8 +115,16 @@ hist(student_pref$mG2, col = "cornflowerblue", main = "second period grade", yla
 
 
 hist(student_pref$mG3, col = "cornflowerblue", main = "final period grade", ylab = "Person Count", xlab = "final pass grades")
+# need to convert count area to density to then layer on a curve
+hist(student_pref$mG3,
+     col = "cornflowerblue", 
+     main = "final period grade", 
+     ylab = "% of People", 
+     xlab = "final pass grades",
+     prob = T)
+# layer on density curve ontop
+lines(density(student_pref$mG3), lwd = 2, col = "red")
 
-  
 ## QQ plot y = predicted value, x = actual value
 
 ### P value
