@@ -74,13 +74,17 @@ table(student_pref$higher.p)
 # mG1 and pG1 scores for maths and language tests - numeric 
 
 ### testing for normality 
+
 ## graphs and normality tests
-# q-q plot
 # qq plot has stairs pattern meaning there are groups of values, makes sense
 # mothers education
 qqnorm(student_pref$Medu, main = "Mothers education levels")
 qqline(student_pref$Medu, col = "blue", lwd = 2)
+# comment on sknewness and kurtosis
+# calc standardized values
+# app normality if between +/-2
 
+# https://stats.stackexchange.com/questions/161591/how-to-interpret-this-qq-plot
 # Maths results qq plots
 qqnorm(student_pref$mG1, main = "first period grade")
 qqline(student_pref$mG1, col = "blue", lwd = 2)
@@ -88,17 +92,21 @@ qqline(student_pref$mG1, col = "blue", lwd = 2)
 qqnorm(student_pref$mG2, main = "second period grade")
 qqline(student_pref$mG2, col = "blue", lwd = 2)
 
+# comment on sknewness and kurtosis
 qqnorm(student_pref$mG3, main = "final period grade")
 qqline(student_pref$mG3, col = "blue", lwd = 2)
 
 # frequency distribution
-hist(student_pref$Medu, breaks = 6, col = "black")
+hist(student_pref$Medu, col = "cornflowerblue", main = "Mothers education levels", ylab = "Person Count", xlab = "Mothers education")
 
-hist(student_pref$mG1, breaks = 6, col = "black")
 
-hist(student_pref$mG2, breaks = 6, col = "black")
+hist(student_pref$mG1, col = "cornflowerblue", main = "first period grade", ylab = "Person Count", xlab = "first pass grades")
 
-hist(student_pref$mG3, breaks = 6, col = "black")
+
+hist(student_pref$mG2, col = "cornflowerblue", main = "second period grade", ylab = "Person Count", xlab = "second pass grades")
+
+
+hist(student_pref$mG3, col = "cornflowerblue", main = "final period grade", ylab = "Person Count", xlab = "final pass grades")
 
   
 ## QQ plot y = predicted value, x = actual value
