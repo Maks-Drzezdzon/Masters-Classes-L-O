@@ -175,6 +175,9 @@ boxplot(student_pref$mG3)
 ## NOTES ##
 ###########
 
+# How do you use the t distribution and test statistic to determine whether to reject a null hypothesis?
+# How do you use the normal distribution and a test statistic to determine whether to reject a null hypothesis?
+# How do you use a probability distribution, a test statistic and critical values when trying to test a hypothesis?
 
 
 # ctr+shift+c in windows
