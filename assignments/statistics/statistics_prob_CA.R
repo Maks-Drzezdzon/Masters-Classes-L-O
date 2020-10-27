@@ -1,20 +1,10 @@
-# d1=read.table("student-mat.csv",sep=";",header=TRUE)
-# d2=read.table("student-por.csv",sep=";",header=TRUE)
-
-# d3=merge(d1,d2,by=c("school","sex","age","address","famsize","Pstatus","Medu","Fedu","Mjob","Fjob","reason","nursery","internet"))
-# print(nrow(d3)) # 382 students
-
 # .m represents for maths tables and .p represents Portuguese  
 student_pref = read_csv("sperformance-dataset.csv")
 colnames(student_pref)
 
-######################## Hypothesis Question ###########################
-# Parents education level correlate with students academic achievement #
-########################################################################
-# how much do family relations impact that performance ? #
-#######################################################################
-# who gets affected more, lower educated parents or those with more ? #
-#######################################################################
+#################################### Hypothesis Question ######################################
+# Does a student's parents' level of education influence their level of academic achievement? #
+###############################################################################################
 
 ###########
 ## NOTES ##
@@ -53,7 +43,7 @@ library(ggplot2)
 # Data exploration #
 ####################
 student_pref = read_csv("sperformance-dataset.csv")
-
+# exploring data
 glimpse(student_pref)
 map(student_pref , ~sum(is.na(.)))
 # max 382 students 184 male and 198 female
@@ -78,18 +68,37 @@ table(student_pref$higher.p)
 ###########
 ## ToDos ##
 ###########
+# fields of interest 
+# higher - wants to go to college - binary yes/no
+# Medu - mothers education status - categorical and numeric
+# mG1 and pG1 scores for maths and language tests - numeric 
 
 ### testing for normality 
 ## graphs and normality tests
 # q-q plot
 # qq plot has stairs pattern meaning there are groups of values, makes sense
-# 
-qqnorm(student_pref$Medu)
+# mothers education
+qqnorm(student_pref$Medu, main = "Mothers education levels")
 qqline(student_pref$Medu, col = "blue", lwd = 2)
+
+# Maths results qq plots
+qqnorm(student_pref$mG1, main = "first period grade")
+qqline(student_pref$mG1, col = "blue", lwd = 2)
+
+qqnorm(student_pref$mG2, main = "second period grade")
+qqline(student_pref$mG2, col = "blue", lwd = 2)
+
+qqnorm(student_pref$mG3, main = "final period grade")
+qqline(student_pref$mG3, col = "blue", lwd = 2)
 
 # frequency distribution
 hist(student_pref$Medu, breaks = 6, col = "black")
 
+hist(student_pref$mG1, breaks = 6, col = "black")
+
+hist(student_pref$mG2, breaks = 6, col = "black")
+
+hist(student_pref$mG3, breaks = 6, col = "black")
 
   
 ## QQ plot y = predicted value, x = actual value
