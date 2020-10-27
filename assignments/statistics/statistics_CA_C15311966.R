@@ -101,11 +101,13 @@ qqline(student_pref$mG3, col = "blue", lwd = 2)
 # frequency distribution
 hist(student_pref$Medu, col = "cornflowerblue", main = "Mothers education levels", ylab = "Person Count", xlab = "Mothers education")
 hist(student_pref$Medu,
+     breaks = 5,
      col = "cornflowerblue", 
      main = "Mothers education levels", 
      ylab = "% of People", 
      xlab = "Mothers education",
      prob = T)
+
 # adding density curve
 lines(density(student_pref$Medu), lwd = 2, col = "red")
 # descriptive statistics 
@@ -131,12 +133,12 @@ median(sort(student_pref$mG3))
 ## box plot
 boxplot(student_pref$mG3)
 
-### P value
 
-# is the probability value
+# skewness  = mean - median / std
 
-# null hypothesis is that here is no difference between two groups
- 
+### P value is the probability value
+
+
 
 
 
