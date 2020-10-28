@@ -47,6 +47,32 @@ gg
 qqnorm(student_pref$Medu, main = "Mothers education levels")
 qqline(student_pref$Medu, col = "blue", lwd = 2)
 
+#stat.desc is a function from pastecs - make sure you include the basic switch=F to ensure you don't get scienfitic notation
+pastecs::stat.desc(student_pref$Medu, basic=F)
+dlife = pastecs::stat.desc(student_pref$Medu, basic=F)
+
+#We can make our decision based on the value of the standardised score for skew and kurtosis
+#We divide the skew statistic by the standard error to get the standardised score
+#This will indicate if we have a problem
+tpskew = semTools::skew(student_pref$Medu)
+tpkurt = semTools::kurtosis(student_pref$Medu)
+# skew falls slightly above +/-3 
+tpskew[1]/tpskew[2]
+
+# kurtosis falls inline with +/-10
+tpkurt[1]/tpkurt[2]
+
+#and by calculating the percentage of standardised scores for the variable itself that are outside our acceptable range
+#This will tell us how big a problem we have
+# Calculate the percentage of standardised scores that are greated than 1.96
+# the perc function which is part of the FSA package which calculate the percentage that are within a range - you can look for greater than "gt", greater than or equal "geq", "gt", less than or equal "leq",  or less than "lt"),
+# scale is a function that creates z scores, abs gets absolute value
+
+mothers_education_level = abs(scale(student_pref$Medu))
+
+FSA::perc(as.numeric(mothers_education_level), 1.96, "gt")
+FSA::perc(as.numeric(mothers_education_level), 3.29, "gt")
+
 
 ```
 
