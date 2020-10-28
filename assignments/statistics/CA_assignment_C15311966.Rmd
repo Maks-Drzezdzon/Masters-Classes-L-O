@@ -92,17 +92,14 @@ gg = gg + stat_function(fun=dnorm, color="red", args=list(mean=mean(student_pref
 #to display the graph 
 gg
 
-#Create a qqplot for mothers education levels
+#Create a qqplot for Final student grades
 qqnorm(student_pref$mG3, main = "Final student grades")
 qqline(student_pref$mG3, col = "blue", lwd = 2)
 
-#stat.desc is a function from pastecs - make sure you include the basic switch=F to ensure you don't get scienfitic notation
 pastecs::stat.desc(student_pref$mG3, basic=F)
 dlife = pastecs::stat.desc(student_pref$mG3, basic=F)
 
-#We can make our decision based on the value of the standardised score for skew and kurtosis
-#We divide the skew statistic by the standard error to get the standardised score
-#This will indicate if we have a problem
+
 final_grade_skew = semTools::skew(student_pref$mG3)
 efinal_grade_kurt = semTools::kurtosis(student_pref$mG3)
 # skew falls above +/-3 
@@ -111,11 +108,6 @@ final_grade_skew[1]/final_grade_skew[2]
 # kurtosis falls inline with +/-10
 efinal_grade_kurt[1]/efinal_grade_kurt[2]
 
-#and by calculating the percentage of standardised scores for the variable itself that are outside our acceptable range
-#This will tell us how big a problem we have
-# Calculate the percentage of standardised scores that are greated than 1.96
-# the perc function which is part of the FSA package which calculate the percentage that are within a range - you can look for greater than "gt", greater than or equal "geq", "gt", less than or equal "leq",  or less than "lt"),
-# scale is a function that creates z scores, abs gets absolute value
 
 student_grades = abs(scale(student_pref$mG3))
 
