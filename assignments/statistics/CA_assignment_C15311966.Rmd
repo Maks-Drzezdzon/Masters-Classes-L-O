@@ -90,7 +90,7 @@ Mothers education can be considered to follow a normal distribution, 100% of sta
 
 ```{r student final grade assessing normality}
 gg = ggplot(student_pref, aes(x=mG3))
-gg = gg + geom_histogram(bins = 5, colour="cornflowerblue", aes(y=..density.., fill=..count..))
+gg = gg + geom_histogram(bins =6, colour="cornflowerblue", aes(y=..density.., fill=..count..))
 gg = gg + labs(x="Final student grades")
 #adding a normal curve
 gg = gg + stat_function(fun=dnorm, color="red", args=list(mean=mean(student_pref$mG3, na.rm=TRUE), sd=sd(student_pref$mG3, na.rm=TRUE)))
