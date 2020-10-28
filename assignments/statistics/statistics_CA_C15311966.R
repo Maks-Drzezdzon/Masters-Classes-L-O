@@ -37,6 +37,9 @@ colnames(student_pref)
 library(tidyverse)
 library(skimr)
 library(ggplot2)
+library(pastecs)
+library(psych)
+library(semTools) #For skewness and kurtosis
 
 
 ####################

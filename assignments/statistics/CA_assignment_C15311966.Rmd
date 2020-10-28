@@ -1,18 +1,40 @@
 ---
-title: "R Notebook"
-output: html_notebook
+title: "C15311966 CA notebook"
+output:
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+  output: html_notebook
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
-
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
-
+## Setup
 ```{r}
-plot(cars)
+library(tidyverse) # useful tooling
+library(skimr) # for descriptions
+library(ggplot2) # plots
+library(pastecs) # for descriptive statistic summaries
+library(psych) # useful descriptive functions
+library(semTools) #For skewness and kurtosis
+library(FSA) #For percentage
+
+
+student_pref = read_csv("sperformance-dataset.csv")
+getmode <- function(v) {
+        uniqv <- unique(v)
+        uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+
 ```
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
 
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+```{r assessing normality}
 
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+
+```
+
+```{r descriptive statistics}
+
+
+```
