@@ -17,19 +17,35 @@ library(pastecs) # for descriptive statistic summaries
 library(psych) # useful descriptive functions
 library(semTools) #For skewness and kurtosis
 library(FSA) #For percentage
-
+library(car) # For Levene's test for homogeneity of variance 
+library(effectsize) #To calculate effect size for t-test
 
 student_pref = read_csv("sperformance-dataset.csv")
 getmode <- function(v) {
         uniqv <- unique(v)
         uniqv[which.max(tabulate(match(v, uniqv)))]
 }
+# Hypothesis Question: Does a student’s parents’ level of education influence their level of academic achievement?
 
 ```
 
-
+## H0: There is no difference in students scores in regards to mothers education level.
+## HA: There is a difference in students scores in regards to mothers education level.
+### tlifesat Examine/Assess Normality
 ```{r assessing normality}
+gg = ggplot(student_pref, aes(x=Medu))
+gg = gg + geom_histogram(bins = 5, colour="cornflowerblue", aes(y=..density.., fill=..count..))
+#adding a normal curve
+#use stat_function to compute a normalised score for each value of tlifesat
+#pass the mean and standard deviation
+#use the na.rm parameter to say how missing values are handled
+gg = gg + stat_function(fun=dnorm, color="red",args=list(mean=mean(student_pref$Medu, na.rm=TRUE), sd=sd(student_pref$Medu, na.rm=TRUE)))
+#to display the graph 
+gg
 
+#Create a qqplot for mothers education levels
+qqnorm(student_pref$Medu, main = "Mothers education levels")
+qqline(student_pref$Medu, col = "blue", lwd = 2)
 
 
 ```
