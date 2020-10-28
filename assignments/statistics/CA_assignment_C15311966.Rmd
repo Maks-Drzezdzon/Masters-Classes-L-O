@@ -35,6 +35,7 @@ getmode <- function(v) {
 ```{r assessing normality}
 gg = ggplot(student_pref, aes(x=Medu))
 gg = gg + geom_histogram(bins = 5, colour="cornflowerblue", aes(y=..density.., fill=..count..))
+gg = gg + labs(x="Mothers education levels")
 #adding a normal curve
 #use stat_function to compute a normalised score for each value of tlifesat
 #pass the mean and standard deviation
