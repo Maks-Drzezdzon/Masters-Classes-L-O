@@ -140,8 +140,6 @@ boxplot(student_pref$mG3)
 
 
 
-
-
 ## Null hypothesis 
 # for this pick a test such as pearson, shapiro-wilk, kolmogorov-smirnov and 
 # if its parametric or not
@@ -167,7 +165,12 @@ boxplot(student_pref$mG3)
 # these should show visually show that data is, well, normal
 
 
-
+# outline proc for assesing normality
+# key statistics used to ilustrate decison making
+# graphs
+# use statistical tests
+# shapiro-wilks for small sampls
+# kolmogorov-smirnov for large smaples > 50
 
 
 

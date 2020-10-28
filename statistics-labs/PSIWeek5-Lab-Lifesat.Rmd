@@ -1,0 +1,139 @@
+---
+title: "Week 5 Difference - Lab"
+output:
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+## SETUP
+```{r setup}
+
+#We are using a .dat file (survey.dat) created from the SPSS file survey.sav  taken from SPSS Survival Manual 6th Edition Julie Pallant
+#http://spss.allenandunwin.com.s3-website-ap-southeast-2.amazonaws.com/data-files.html#.Wb0vvnWP-po
+#Results on a survey on well being
+#We need to load the file so that we can use it in R.
+survey <- read.table("survey.dat")
+#Setting the column names to be that used in the dataset
+colnames(survey) <- tolower(colnames(survey))
+
+needed_packages <- c("pastecs", "ggplot2", "psych", "semTools", "FSA", "car", "coin", "rstatix")                      
+# Extract not installed packages
+not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
+# Install not installed packages
+if(length(not_installed)) install.packages(not_installed) 
+
+library(pastecs) #For creating descriptive statistic summaries
+library(ggplot2) #For creating histograms with more detail than plot
+library(psych) # Some useful descriptive functions
+library(semTools) #For skewness and kurtosis
+library(FSA) #For percentage
+library(car) # For Levene's test for homogeneity of variance 
+library(effectsize) #To calculate effect size for t-test
+```
+
+## 1. H0: There is no difference in Life Satisfaction scores for respondents who have chidren and those who do not. HA: There is a difference in Life Satisfaction scores for respondents who have chidren and those who do not.
+### tlifesat Examine/Assess Normality
+```{r tlifesat-normality}
+
+#We will allocate the histogram to a variable to allow use to manipulate it
+gg <- ggplot(survey, aes(x=tlifesat))
+
+#Change the label of the x axis
+gg <- gg + labs(x="Total Life Satisfaction")
+
+#manage binwidth and colours
+gg <- gg + geom_histogram(binwidth=2, colour="black", aes(y=..density.., fill=..count..))
+gg <- gg + scale_fill_gradient("Count", low="#DCDCDC", high="#7C7C7C")
+
+#adding a normal curve
+#use stat_function to compute a normalised score for each value of tlifesat
+#pass the mean and standard deviation
+#use the na.rm parameter to say how missing values are handled
+gg <- gg + stat_function(fun=dnorm, color="red",args=list(mean=mean(survey$tlifesat, na.rm=TRUE), sd=sd(survey$tlifesat, na.rm=TRUE)))
+
+#to display the graph request the contents of the variable be shown
+gg
+
+#Create a qqplot
+qqnorm(survey$tlifesat)
+qqline(survey$tlifesat, col=2) #show a line on theplot
+
+
+#stat.desc is a function from pastecs - make sure you include the basic switch=F to ensure you don't get scienfitic notation
+pastecs::stat.desc(survey$tlifesat, basic=F)
+dlife<-pastecs::stat.desc(survey$tlifesat, basic=F)
+
+#We can make our decision based on the value of the standardised score for skew and kurtosis
+#We divide the skew statistic by the standard error to get the standardised score
+#This will indicate if we have a problem
+tpskew<-semTools::skew(survey$tlifesat)
+tpkurt<-semTools::kurtosis(survey$tlifesat)
+tpskew[1]/tpskew[2]
+
+tpkurt[1]/tpkurt[2]
+
+#and by calculating the percentage of standardised scores for the variable itself that are outside our acceptable range
+#This will tell us how big a problem we have
+# Calculate the percentage of standardised scores that are greated than 1.96
+# the perc function which is part of the FSA package which calculate the percentage that are within a range - you can look for greater than "gt", greater than or equal "geq", "gt", less than or equal "leq",  or less than "lt"),
+# scale is a function that creates z scores, abs gets absolute value
+
+ztlifesat<- abs(scale(survey$tlifesat))
+
+FSA::perc(as.numeric(ztlifesat), 1.96, "gt")
+FSA::perc(as.numeric(ztlifesat), 3.29, "gt")
+
+```
+```
+Life Satisfaction can be considered to follow a normal distribution (m=`r round(mean(survey$tlifesat, na.rm=TRUE),2)`, sd=`r round(sd(survey$tlifesat, na.rm=TRUE),2)`, n=`r length(survey$tlifesat)-sum(is.na(survey$tlifesat))`, 100% of standardized scores falling within +/- 3.29). Therefore we can use a parametric difference test.
+```
+
+### Differences - Parametric Tests
+#### Independent t-test
+##### Describe Life Satisfaction by group (have children v do not have children - variable child)
+```{r Describe}
+#Get descriptive stastitics by group - output as a matrix
+psych::describeBy(survey$tlifesat, survey$child, mat=TRUE)
+
+#Conduct Levene's test for homogeneity of variance in library car - the null hypothesis is that variances in groups are equal so to assume homogeneity we woudl expect probaility to not be statistically significant.
+car::leveneTest(tlifesat ~ child, data=survey)
+#Pr(>F) is your probability - in this case it is not statistically significant so we can assume homogeneity
+
+
+#Conduct the t-test from package stats
+#In this case we can use the var.equal = TRUE option to specify equal variances and a pooled variance estimate
+stats::t.test(tlifesat~child,var.equal=TRUE,data=survey)
+#No statistically significant difference was found
+
+res <- stats::t.test(tlifesat~child,var.equal=TRUE,data=survey)
+#Calculate Cohen's d
+#artithmetically
+effcd=round((2*res$statistic)/sqrt(res$parameter),2)
+
+#Using function from effectsize package
+effectsize::t_to_d(t = res$statistic, res$parameter)
+
+
+#Eta squared calculation
+effes=round((res$statistic*res$statistic)/((res$statistic*res$statistic)+(res$parameter)),3)
+effes
+
+
+
+```
+### Reporting the results with Cohen's d effect
+
+```
+An independent-samples t-test was conducted to compare Life Satisfaction scores for respondents who have  children and those who do not have children. No significant difference in the scores for Life Satisfaction was found (M=`r round(mean(survey$tlifesat[survey$child=="YES"], na.rm=TRUE),2)`, SD=`r round(sd(survey$tlifesat[survey$child=="YES"], na.rm=TRUE),2)` for respondents who have children, M=`r round(mean(survey$tlifesat[survey$child=="NO"], na.rm=TRUE),2)`, SD=`r round(sd(survey$tlifesat[survey$child=="NO"], na.rm=TRUE),2)` for respondents who do not have children), (t(`r res$parameter`)= `r round(res$statistic,3)`, p = `r round(res$p.value,2)`. Cohen's d also indicated a small effect size (`r effcd`).
+
+```
+
+### Reporting the results with eta squred effect
+
+```
+An independent-samples t-test was conducted to compare Life Satisfaction scores for respondents who have  children and those who do not have children. No significant difference in the scores for Life Satisfaction was found (M=`r round(mean(survey$tlifesat[survey$child=="YES"], na.rm=TRUE),2)`, SD=`r round(sd(survey$tlifesat[survey$child=="YES"], na.rm=TRUE),2)` for respondents who have children, M=`r round(mean(survey$tlifesat[survey$child=="NO"], na.rm=TRUE),2)`, SD=`r round(sd(survey$tlifesat[survey$child=="NO"], na.rm=TRUE),2)` for respondents who do not have children), (t(`r res$parameter`)= `r round(res$statistic,3)`, p = `r round(res$p.value,2)`. A small effect size was also indicated by the eta squared value (`r effes`).
+
+```
+
+
