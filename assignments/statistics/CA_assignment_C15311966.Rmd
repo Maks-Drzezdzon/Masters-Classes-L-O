@@ -32,7 +32,7 @@ getmode <- function(v) {
 ## H0: There is no difference in students scores in regards to mothers education level.
 ## HA: There is a difference in students scores in regards to mothers education level.
 ### tlifesat Examine/Assess Normality
-```{r assessing normality}
+```{r Medu assessing normality}
 gg = ggplot(student_pref, aes(x=Medu))
 gg = gg + geom_histogram(bins = 5, colour="cornflowerblue", aes(y=..density.., fill=..count..))
 gg = gg + labs(x="Mothers education levels")
@@ -76,11 +76,54 @@ FSA::perc(as.numeric(mothers_education_level), 3.29, "gt")
 
 ```
 ```
-Life Satisfaction can be considered to follow a normal distribution (m=`r round(mean(survey$tlifesat, na.rm=TRUE),2)`, sd=`r round(sd(survey$tlifesat, na.rm=TRUE),2)`, n=`r length(survey$tlifesat)-sum(is.na(survey$tlifesat))`, 100% of standardized scores falling within +/- 3.29). Therefore we can use a parametric difference test.
+Mothers education can be considered to follow a normal distribution, 100% of standardized scores falling within +/- 3.29). Therefore a parametric difference test.
 ```
 
 
-```{r descriptive statistics}
+```{r student final grade assessing normality}
+gg = ggplot(student_pref, aes(x=mG3))
+gg = gg + geom_histogram(bins = 5, colour="cornflowerblue", aes(y=..density.., fill=..count..))
+gg = gg + labs(x="Final student grades")
+#adding a normal curve
+#use stat_function to compute a normalised score for each value of tlifesat
+#pass the mean and standard deviation
+#use the na.rm parameter to say how missing values are handled
+gg = gg + stat_function(fun=dnorm, color="red", args=list(mean=mean(student_pref$mG3, na.rm=TRUE), sd=sd(student_pref$mG3, na.rm=TRUE)))
+#to display the graph 
+gg
 
+#Create a qqplot for mothers education levels
+qqnorm(student_pref$mG3, main = "Final student grades")
+qqline(student_pref$mG3, col = "blue", lwd = 2)
 
+#stat.desc is a function from pastecs - make sure you include the basic switch=F to ensure you don't get scienfitic notation
+pastecs::stat.desc(student_pref$mG3, basic=F)
+dlife = pastecs::stat.desc(student_pref$mG3, basic=F)
+
+#We can make our decision based on the value of the standardised score for skew and kurtosis
+#We divide the skew statistic by the standard error to get the standardised score
+#This will indicate if we have a problem
+final_grade_skew = semTools::skew(student_pref$mG3)
+efinal_grade_kurt = semTools::kurtosis(student_pref$mG3)
+# skew falls above +/-3 
+final_grade_skew[1]/final_grade_skew[2]
+
+# kurtosis falls inline with +/-10
+efinal_grade_kurt[1]/efinal_grade_kurt[2]
+
+#and by calculating the percentage of standardised scores for the variable itself that are outside our acceptable range
+#This will tell us how big a problem we have
+# Calculate the percentage of standardised scores that are greated than 1.96
+# the perc function which is part of the FSA package which calculate the percentage that are within a range - you can look for greater than "gt", greater than or equal "geq", "gt", less than or equal "leq",  or less than "lt"),
+# scale is a function that creates z scores, abs gets absolute value
+
+student_grades = abs(scale(student_pref$mG3))
+
+FSA::perc(as.numeric(student_grades), 1.96, "gt")
+FSA::perc(as.numeric(student_grades), 3.29, "gt")
+
+```
+
+```
+Students final grades can be considered to follow a normal distribution, 100% of standardized scores falling within +/- 3.29). Therefore a parametric difference test.
 ```
