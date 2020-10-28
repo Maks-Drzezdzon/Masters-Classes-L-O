@@ -11,7 +11,7 @@ editor_options:
 ## Setup
 ```{r}
 
-needed_packages <- c("pastecs","skimr", "ggplot2", "psych", "semTools", "FSA", "car", "coin", "rstatix", "effectsize")                      
+needed_packages <- c("pastecs","skimr", "ggplot2", "psych", "semTools", "FSA", "car", "coin", "rstatix", "effectsize", "tidyverse")                      
 # Extract not installed packages
 not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
 # Install not installed packages
@@ -45,7 +45,7 @@ gg = ggplot(student_pref, aes(x=Medu))
 gg = gg + geom_histogram(bins = 5, colour="cornflowerblue", aes(y=..density.., fill=..count..))
 gg = gg + labs(x="Mothers education levels")
 #adding a normal curve
-#use stat_function to compute a normalised score for each value of tlifesat
+#use stat_function to compute a normalized score for each value of Medu
 #pass the mean and standard deviation
 #use the na.rm parameter to say how missing values are handled
 gg = gg + stat_function(fun=dnorm, color="red",args=list(mean=mean(student_pref$Medu, na.rm=TRUE), sd=sd(student_pref$Medu, na.rm=TRUE)))
@@ -56,12 +56,12 @@ gg
 qqnorm(student_pref$Medu, main = "Mothers education levels")
 qqline(student_pref$Medu, col = "blue", lwd = 2)
 
-#stat.desc is a function from pastecs - make sure you include the basic switch=F to ensure you don't get scienfitic notation
+#stat.desc is a function from pastecs - make sure you include the basic switch=F to ensure you don't get scientific notation
 pastecs::stat.desc(student_pref$Medu, basic=F)
 dlife = pastecs::stat.desc(student_pref$Medu, basic=F)
 
-#We can make our decision based on the value of the standardised score for skew and kurtosis
-#We divide the skew statistic by the standard error to get the standardised score
+#We can make our decision based on the value of the standardized score for skew and kurtosis
+#We divide the skew statistic by the standard error to get the standardized score
 #This will indicate if we have a problem
 edu_skew = semTools::skew(student_pref$Medu)
 edu_kurt = semTools::kurtosis(student_pref$Medu)
@@ -71,9 +71,9 @@ edu_skew[1]/edu_skew[2]
 # kurtosis falls inline with +/-10
 edu_kurt[1]/edu_kurt[2]
 
-#and by calculating the percentage of standardised scores for the variable itself that are outside our acceptable range
+#and by calculating the percentage of standardized scores for the variable itself that are outside our acceptable range
 #This will tell us how big a problem we have
-# Calculate the percentage of standardised scores that are greated than 1.96
+# Calculate the percentage of standardized scores that are greater than 1.96
 # the perc function which is part of the FSA package which calculate the percentage that are within a range - you can look for greater than "gt", greater than or equal "geq", "gt", less than or equal "leq",  or less than "lt"),
 # scale is a function that creates z scores, abs gets absolute value
 
@@ -130,7 +130,7 @@ Students final grades can be considered to follow a normal distribution, 100% of
 #### Independent t-test
 ##### Describe Life Satisfaction by group (have children v do not have children - variable child)
 ```{r Describe}
-#Get descriptive stastitics by group - output as a matrix
+#Get descriptive statistics by group - output as a matrix
 psych::describeBy(student_pref$Medu, student_pref$mG3, mat=TRUE)
 
 
