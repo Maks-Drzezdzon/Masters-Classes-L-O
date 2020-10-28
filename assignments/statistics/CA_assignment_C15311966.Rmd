@@ -40,7 +40,7 @@ getmode <- function(v) {
 ## H0: There is no difference in students scores in regards to mothers education level.
 ## HA: There is a difference in students scores in regards to mothers education level.
 ### tlifesat Examine/Assess Normality
-```{r Medu assessing normality}
+```{r mothers education assessing normality}
 gg = ggplot(student_pref, aes(x=Medu))
 gg = gg + geom_histogram(bins = 5, colour="cornflowerblue", aes(y=..density.., fill=..count..))
 gg = gg + labs(x="Mothers education levels")
