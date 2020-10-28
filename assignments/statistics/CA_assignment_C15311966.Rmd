@@ -54,13 +54,13 @@ dlife = pastecs::stat.desc(student_pref$Medu, basic=F)
 #We can make our decision based on the value of the standardised score for skew and kurtosis
 #We divide the skew statistic by the standard error to get the standardised score
 #This will indicate if we have a problem
-tpskew = semTools::skew(student_pref$Medu)
-tpkurt = semTools::kurtosis(student_pref$Medu)
+edu_skew = semTools::skew(student_pref$Medu)
+edu_kurt = semTools::kurtosis(student_pref$Medu)
 # skew falls slightly above +/-3 
-tpskew[1]/tpskew[2]
+edu_skew[1]/edu_skew[2]
 
 # kurtosis falls inline with +/-10
-tpkurt[1]/tpkurt[2]
+edu_kurt[1]/edu_kurt[2]
 
 #and by calculating the percentage of standardised scores for the variable itself that are outside our acceptable range
 #This will tell us how big a problem we have
@@ -73,8 +73,11 @@ mothers_education_level = abs(scale(student_pref$Medu))
 FSA::perc(as.numeric(mothers_education_level), 1.96, "gt")
 FSA::perc(as.numeric(mothers_education_level), 3.29, "gt")
 
-
 ```
+```
+Life Satisfaction can be considered to follow a normal distribution (m=`r round(mean(survey$tlifesat, na.rm=TRUE),2)`, sd=`r round(sd(survey$tlifesat, na.rm=TRUE),2)`, n=`r length(survey$tlifesat)-sum(is.na(survey$tlifesat))`, 100% of standardized scores falling within +/- 3.29). Therefore we can use a parametric difference test.
+```
+
 
 ```{r descriptive statistics}
 
