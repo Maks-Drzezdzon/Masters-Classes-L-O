@@ -129,11 +129,32 @@ Students final grades can be considered to follow a normal distribution, 100% of
 ### Differences - Parametric Tests
 #### Independent t-test
 ##### Describe Life Satisfaction by group (have children v do not have children - variable child)
-```{r Describe}
-#Get descriptive statistics by group - output as a matrix
+```{r Tests}
+# Get descriptive statistics by group - output as a matrix
 psych::describeBy(student_pref$Medu, student_pref$mG3, mat=TRUE)
 
+#Conduct Levene's test for homogeneity of variance in library car - the null hypothesis is that variances in groups are equal so to assume homogeneity we woudl expect probaility to not be statistically significant.
+car::leveneTest(Medu ~ mG3, data=student_pref)
+#Pr(>F) is your probability - in this case it is not statistically significant so we can assume homogeneity
 
+
+#Conduct the t-test from package stats
+#In this case we can use the var.equal = TRUE option to specify equal variances and a pooled variance estimate
+stats::t.test(Medu~mG3,var.equal=TRUE,data=student_pref)
+#No statistically significant difference was found
+
+res <- stats::t.test(Medu~mG3,var.equal=TRUE,data=student_pref)
+#Calculate Cohen's d
+#artithmetically
+effcd=round((2*res$statistic)/sqrt(res$parameter),2)
+
+#Using function from effectsize package
+effectsize::t_to_d(t = res$statistic, res$parameter)
+
+
+#Eta squared calculation
+effes=round((res$statistic*res$statistic)/((res$statistic*res$statistic)+(res$parameter)),3)
+effes
 
 
 ```
