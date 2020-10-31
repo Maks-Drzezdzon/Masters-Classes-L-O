@@ -59,7 +59,7 @@ unique(student_pref$sex , incomparables = FALSE)
 nrow(student_pref) # checking that rows add up
 sum(as.integer(student_pref$sex == "M"))
 sum(as.integer(student_pref$sex == "F"))
-
+unique(student_pref$mG3)
 
 # basic histogram for each col, missing data/completion rate 0-1, mean, standard of dev, percentiles 0-25-50-75-100
 skim(student_pref)

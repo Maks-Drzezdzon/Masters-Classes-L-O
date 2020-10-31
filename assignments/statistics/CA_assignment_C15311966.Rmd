@@ -129,9 +129,22 @@ Students final grades can be considered to follow a normal distribution, 100% of
 ### Differences - Parametric Tests
 #### Independent t-test
 ##### Describe Life Satisfaction by group (have children v do not have children - variable child)
-```{r Tests}
+```{r H-Tests}
 # Get descriptive statistics by group - output as a matrix
-psych::describeBy(student_pref$Medu, student_pref$mG3, mat=TRUE)
+# psych::describeBy(student_pref$Medu, student_pref$mG3, mat=TRUE)
+# Use 1 way ANOVA
+
+# get groups and plot them with qqplot
+# mG3 scores and mothers education 
+# split mG3 into 20 groups ?
+
+#qqnorm(student_pref$, main = "")
+#qqline(student_pref$, col = "blue", lwd = 2)
+
+
+
+
+
 
 
 
