@@ -1,0 +1,141 @@
+---
+title: "Week 6 Difference - Anova"
+output:
+  html_document:
+    df_print: paged
+
+editor_options:
+  chunk_output_type: console
+---
+
+
+## SETUP
+```{r setup}
+
+#We are using a .rdata file (sleep.rdata) created from the SPSS file sleep.sav  taken from SPSS Survival Manual 6th Edition Julie Pallant
+#http://spss.allenandunwin.com.s3-website-ap-southeast-2.amazonaws.com/data-files.html#.Wb0vvnWP-po
+#a real data file condensed from a study conducted to explore the prevalence and impact of sleep problems on various aspects of people’s lives. Staff from a university in Melbourne, Australia were invited to complete a questionnaire containing questions about their sleep behaviour (e.g. hours slept per night), sleep problems (e.g. difficulty getting to sleep) and the impact that these problems have on aspects of their lives (work, driving, relationships). The sample consisted of 271 respondents (55% female, 45% male) ranging in age from 18 to 84 years (mean=44yrs).
+
+
+#We need to load the file so that we can use it in R.
+sleep <- read.table("sleep.rdata")
+#Setting the column names to be that used in the dataset
+colnames(sleep) <- tolower(colnames(sleep))
+
+needed_packages <- c("pastecs", "ggplot2", "psych", "semTools", "FSA", "sjstats", "userfriendlyscience")                      
+# Extract not installed packages
+not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
+# Install not installed packages
+if(length(not_installed)) install.packages(not_installed) 
+
+library(pastecs) #For creating descriptive statistic summaries
+library(ggplot2) #For creating histograms with more detail than plot
+library(psych) # Some useful descriptive functions
+library(semTools) #For skewness and kurtosis
+library(FSA) #For percentage
+library(sjstats) #To calculate effect size for t-test
+library(userfriendlyscience)
+```
+
+## 1. H0: There are no differences between Total Sleepiness and associated sensation scale score scores for respondents in Group 1, Group2  or Group 3. HA: There are differences in between Total Sleepiness and associated sensation scale score scores for respondents in Group 1, Group 2 and Group3.
+### totsas Examine/Assess Normality
+```{r totsas-normality}
+
+#We will allocate the histogram to a variable to allow use to manipulate it
+gg <- ggplot(sleep, aes(x=totsas))
+gg <- gg+ggtitle("Figure 1 - Histogram for Total Sleepiness and Associated Sensation Scale Scores")
+
+#Change the label of the x axis
+gg <- gg + labs(x="Total Sleepiness and Associated Sensation Scale Scores")
+
+#manage binwidth and colours
+gg <- gg + geom_histogram(binwidth=2, colour="black", aes(y=..density.., fill=..count..))
+gg <- gg + scale_fill_gradient("Count", low="#DCDCDC", high="#7C7C7C")
+
+#adding a normal curve
+#use stat_function to compute a normalised score for each value of totsas
+#pass the mean and standard deviation
+#use the na.rm parameter to say how missing values are handled
+gg <- gg + stat_function(fun=dnorm, color="red",args=list(mean=mean(sleep$totsas, na.rm=TRUE), sd=sd(sleep$totsas, na.rm=TRUE)))
+
+#to display the graph request the contents of the variable be shown
+gg
+
+#Create a qqplot
+qqnorm(sleep$totsas, main="Figure 2 - QQ Plot for Total Sleepiness")
+qqline(sleep$totsas, col=2) #show a line on the plot
+
+
+#stat.desc is a function from pastecs - make sure you include the basic switch=F to ensure you don't get scienfitic notation
+pastecs::stat.desc(sleep$totsas, basic=F)
+
+#We can make our decision based on the value of the standardised score for skew and kurtosis
+#We divide the skew statistic by the standard error to get the standardised score
+#This will indicate if we have a problem
+tpskew<-semTools::skew(sleep$totsas)
+tpkurt<-semTools::kurtosis(sleep$totsas)
+tpskew[1]/tpskew[2]
+
+tpkurt[1]/tpkurt[2]
+
+#and by calculating the percentage of standardised scores for the variable itself that are outside our acceptable range
+#This will tell us how big a problem we have
+# Calculate the percentage of standardised scores that are greated than 1.96
+# the perc function which is part of the FSA package which calculate the percentage that are within a range - you can look for greater than "gt", greater than or equal "geq", "gt", less than or equal "leq",  or less than "lt"),
+# scale is a function that creates z scores, abs gets absolute value
+
+ztotsas<- abs(scale(sleep$totsas))
+
+FSA::perc(as.numeric(ztotsas), 1.96, "gt")
+FSA::perc(as.numeric(ztotsas), 3.29, "gt")
+
+```
+### Report assessment of normality
+
+<p style="text-align:justify">
+Total Sleepiness and associated sensation scores data was assessed for normality. Visual inspection of the histogram and QQ-Plot (see Figure 1 and Figure 2) identified some issues with skewness and kurtosis. The standardised score for skewness (`r round(tpskew[1]/tpskew[2],2)`) can be considered acceptable using the criteria proposed by West, Finch and Curran (1996), however the standardised score for kurtosis (`r round(tpkurt[1]/tpkurt[2],2)`) was outside the acceptable range.  However as 100% of standardised scores for total sleepiness and associated sensation fall within the bounds of +/- 3.29, using the guidance of Field, Miles and Field (2013) the data can be considered to approximate a normal distribution (m=`r round(mean(sleep$totsas, na.rm=TRUE),2)`, sd=`r round(sd(sleep$totsas, na.rm=TRUE),2)`, n=`r length(sleep$totsas)-sum(is.na(sleep$totsas))`).
+</p>
+
+### Differences more than 2 groups - Parametric Tests
+#### ANOVA
+##### Describe Total Sleepiness and associated sensation scale score by group (young, middle-aged, old - variable agegp3)
+
+```{r Describe}
+#Get descriptive stastitics by group - output as a matrix
+psych::describeBy(sleep$totsas, sleep$agegp3, mat=TRUE)
+
+#Conduct Bartlett's test for homogeneity of variance in library car - the null hypothesis is that variances in groups are equal so to assume homogeneity we would expect probability to not be statistically significant.
+stats::bartlett.test(totsas~ agegp3, data=sleep)
+#p value is > 0.05 so the result is not statistically significant so we can assume homogeneity
+
+
+#Conduct ANOVA using the userfriendlyscience test oneway
+#In this case we can use Tukey as the post-hoc test option since variances in the groups are equal
+#If variances were not equal we would use Games-Howell
+userfriendlyscience::oneway(as.factor(sleep$agegp3),y=sleep$totsas,posthoc='Tukey')
+#No statistically significant difference was found
+
+userfriendlyscience::oneway(as.factor(sleep$agegp3),y=sleep$totsas,posthoc='Tukey')
+
+#use the aov function - same as one way but makes it easier to access values for reporting
+res2<-stats::aov(totsas~ agegp3, data = sleep)
+#Get the F statistic into a variable to make reporting easier
+fstat<-summary(res2)[[1]][["F value"]][[1]]
+#Get the p value into a variable to make reporting easier
+aovpvalue<-summary(res2)[[1]][["Pr(>F)"]][[1]]
+#Calculate effect
+aoveta<-sjstats::eta_sq(res2)[2]
+                
+#In the report we are using the res2 variable to retrieve the degrees of freedom
+#and the eta_sq function from the sjstats package to calculate the effect
+```
+
+
+### Reporting the results with eta squared effect
+
+<p>
+An one-way between-groups analysis of variance (ANOVA) was conducted to to explore the impact of age on Total Sleepiness and associated sensation scale score scores. Participants were divided into three groups according to their age (Group 1: 37 yrs or less; Group 2: 38 to 50 yrs; Group 3: 51yrs and above).   No statistically significant difference in the scores for Total Sleepiness and associated sensation scale score was found (M=`r round(mean(sleep$totsas[sleep$agegp3=="<= 37"], na.rm=TRUE),2)`, SD=`r round(sd(sleep$totsas[sleep$agegp3=="<= 37"], na.rm=TRUE),2)` for Group 1, M=`r round(mean(sleep$totsas[sleep$agegp3=="38 - 50"], na.rm=TRUE),2)`, SD=`r round(mean(sleep$totsas[sleep$agegp3=="38 - 50"], na.rm=TRUE),2)` for Group 2, M=`r round(mean(sleep$totsas[sleep$agegp3=="51+"], na.rm=TRUE),2)`, SD=`r round(mean(sleep$totsas[sleep$agegp3=="51+"], na.rm=TRUE),2)` for Group 3) , (F(2, `r round(res2$df.residual,2)`)= `r round(fstat,2)`, p=`r round(aovpvalue,2)`). A small effect size was also indicated by the eta squared value (`r round(aoveta[[1]],2)`).
+</p>
+
+
+

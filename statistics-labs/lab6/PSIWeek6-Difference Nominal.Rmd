@@ -1,0 +1,59 @@
+---
+title: "Week 6 - Difference Nominal"
+output:
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: inline
+---
+
+
+### Setup
+```{r}
+#Using the bullying.dat dataset (Paul Connolly)
+#created from the .sav version available at http://cw.routledge.com/textbooks/9780415372985/resources/datasets.asp
+#Contains the results of national school level survey, subset of this survey which deals with bullying.
+#Question:
+#"Is there a difference between boys and girls in terms of whether they have been bullied at school?"
+#H0:  There is no difference
+#HA: There is a difference
+#Variables: 
+#'rsex' {1-Male, 2-Female, 99-not answered}; 
+#'ubullsch' - Q26. Have you yourself ever been bullied in school? {1- Yes, 2 -No, 99-not answered}
+bully<-read.table("bullying.dat")
+
+needed_packages <- c("sjstats", "gmodels")                      
+# Extract not installed packages
+not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
+# Install not installed packages
+if(length(not_installed)) install.packages(not_installed) 
+
+library(gmodels) #For creating histograms with more detail than plot
+library(sjstats)#chi-square effect size
+```
+
+##Comparing Nominal Variables
+###Contingency table
+```{r}
+#Use the Crosstable function
+#CrossTable(predictor, outcome, fisher = TRUE, chisq = TRUE, expected = TRUE)
+gmodels::CrossTable(bully$rsex, bully$ubullsch, fisher = TRUE, chisq = TRUE, expected = TRUE, sresid = TRUE, format = "SPSS")
+
+#more simplistic way of doing Chi-Square
+
+#Create your contingency table
+mytable<-xtabs(~ubullsch+rsex, data=bully)
+
+ctest<-stats::chisq.test(mytable, correct=TRUE)#chi square test
+#correct=TRUE to get Yates correction needed for 2x2 table
+
+ctest#will give you the details of the test statistic and p-value
+ctest$expected#expected frequencies
+ctest$observed#observed frequencies
+ctest$p.value
+#Calculate effect size
+sjstats::phi(mytable)
+sjstats::cramer(mytable)
+
+```
+###For repeated measures for categorical variables use McNemars test mcnemars.test 
