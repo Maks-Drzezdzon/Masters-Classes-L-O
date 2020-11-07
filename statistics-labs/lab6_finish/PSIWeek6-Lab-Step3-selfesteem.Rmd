@@ -1,0 +1,142 @@
+---
+title: "Week 6 Lab Survey Dataset Does Age Impact Total Self-Esteem?"
+output:
+  html_document:
+    df_print: paged
+
+editor_options:
+  chunk_output_type: console
+---
+
+
+## SETUP
+```{r setup}
+
+#We are using a .dat file (survey.dat) created from the SPSS file survey.sav  taken from SPSS Survival Manual 6th Edition Julie Pallant
+#http://spss.allenandunwin.com.s3-website-ap-southeast-2.amazonaws.com/data-files.html#.Wb0vvnWP-po
+#Results on a survey on well being
+#We need to load the file so that we can use it in R.
+
+
+#We need to load the file so that we can use it in R.
+survey <- read.table("survey.dat")
+#Setting the column names to be that used in the dataset
+colnames(survey) <- tolower(colnames(survey))
+
+needed_packages <- c("pastecs", "ggplot2", "psych", "semTools", "FSA", "sjstats", "userfriendlyscience")                      
+# Extract not installed packages
+not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
+# Install not installed packages
+if(length(not_installed)) install.packages(not_installed) 
+
+library(pastecs) #For creating descriptive statistic summaries
+library(ggplot2) #For creating histograms with more detail than plot
+library(psych) # Some useful descriptive functions
+library(semTools) #For skewness and kurtosis
+library(FSA) #For percentage
+library(sjstats) #To calculate effect size for t-test
+library(userfriendlyscience)
+```
+
+## 1. H0: There are no differences between total self-esteem scores for respondents in Group 1, Group 2 and Group 3. HA: There are differences between  total self-esteem scores for repondents in Group 1, Group 2 and Group 3.
+### Step 1: Examine/Assess Normality
+```{r tslfest-normality}
+
+#We will allocate the histogram to a variable to allow use to manipulate it
+gg <- ggplot(survey, aes(x=tslfest))
+gg <- gg+ggtitle("Figure 1 - Histogram for Total Self-Esteem")
+
+#Change the label of the x axis
+gg <- gg + labs(x="Total Self-Esteem")
+
+#manage binwidth and colours
+gg <- gg + geom_histogram(binwidth=2, colour="black", aes(y=..density.., fill=..count..))
+gg <- gg + scale_fill_gradient("Count", low="#DCDCDC", high="#7C7C7C")
+
+#adding a normal curve
+#use stat_function to compute a normalised score for each value of tslfest
+#pass the mean and standard deviation
+#use the na.rm parameter to say how missing values are handled
+gg <- gg + stat_function(fun=dnorm, color="red",args=list(mean=mean(survey$tslfest, na.rm=TRUE), sd=sd(survey$tslfest, na.rm=TRUE)))
+
+#to display the graph request the contents of the variable be shown
+gg
+
+#Create a qqplot
+qqnorm(survey$tslfest, main="Figure 2 - QQ Plot for Total Self-Esteem")
+qqline(survey$tslfest, col=2) #show a line on the plot
+
+
+#stat.desc is a function from pastecs - make sure you include the basic switch=F to ensure you don't get scienfitic notation
+pastecs::stat.desc(survey$tslfest, basic=F)
+
+#We can make our decision based on the value of the standardised score for skew and kurtosis
+#We divide the skew statistic by the standard error to get the standardised score
+#This will indicate if we have a problem
+tpskew<-semTools::skew(survey$tslfest)
+tpkurt<-semTools::kurtosis(survey$tslfest)
+tpskew[1]/tpskew[2]
+
+tpkurt[1]/tpkurt[2]
+
+#and by calculating the percentage of standardised scores for the variable itself that are outside our acceptable range
+#This will tell us how big a problem we have
+# Calculate the percentage of standardised scores that are greated than 1.96
+# the perc function which is part of the FSA package which calculate the percentage that are within a range - you can look for greater than "gt", greater than or equal "geq", "gt", less than or equal "leq",  or less than "lt"),
+# scale is a function that creates z scores, abs gets absolute value
+
+ztslfest<- abs(scale(survey$tslfest))
+
+FSA::perc(as.numeric(ztslfest), 1.96, "gt")
+FSA::perc(as.numeric(ztslfest), 3.29, "gt")
+
+```
+### Report assessment of normality
+
+<p style="text-align:justify">
+Total self-esteem scores data was assessed for normality. Visual inspection of the histogram and QQ-Plot (see Figure 1 and Figure 2) identified some issues with skewness and kurtosis. The standardised score for kurtosis (`r round(tpkurt[1]/tpkurt[2],2)`) can be considered acceptable using the criteria proposed by West, Finch and Curran (1996), but the standardised score for skewness (`r round(tpskew[1]/tpskew[2],2)`)  was outside the acceptable range.  However over 100% of standardised scores for total self-esteem and associated sensation fall within the bounds of +/- 3.29, using the guidance of Field, Miles and Field (2013) the data can be considered to approximate a normal distribution (m=`r round(mean(survey$tslfest, na.rm=TRUE),2)`, sd=`r round(sd(survey$tslfest, na.rm=TRUE),2)`, n=`r length(survey$tslfest)-sum(is.na(survey$tslfest))`).
+</p>
+
+### Differences more than 2 groups - Parametric Tests
+#### ANOVA
+##### Describe Total self-esteem by group (Group 1, Group 2, Group3 agegp3)
+
+```{r Describe}
+#Get descriptive stastitics by group - output as a matrix
+psych::describeBy(survey$tslfest, survey$agegp3, mat=TRUE)
+
+#Conduct Bartlett's test for homogeneity of variance in library car - the null hypothesis is that variances in groups are equal so to assume homogeneity we would expect probability to not be statistically significant.
+stats::bartlett.test(tslfest~ agegp3, data=survey)
+#p value is > 0.05 so the result is not statistically significant so we can assume homogeneity
+
+
+#Conduct ANOVA using the userfriendlyscience test oneway
+#In this case we can use Tukey as the post-hoc test option since variances in the groups are equal
+#If variances were not equal we would use Games-Howell
+userfriendlyscience::oneway(as.factor(survey$agegp3),y=survey$tslfest,posthoc='Tukey')
+
+res1<-userfriendlyscience::oneway(as.factor(survey$agegp3),y=survey$tslfest,posthoc='Tukey')
+
+#use the aov function - same as one way but makes it easier to access values for reporting
+res2<-stats::aov(tslfest~ agegp3, data = survey)
+#Get the F statistic into a variable to make reporting easier
+fstat<-summary(res2)[[1]][["F value"]][[1]]
+#Get the p value into a variable to make reporting easier
+aovpvalue<-summary(res2)[[1]][["Pr(>F)"]][[1]]
+#Calculate effect
+aoveta<-sjstats::eta_sq(res2)[2]
+                
+#In the report we are using the res2 variable to retrieve the degrees of freedom
+#and the eta_sq function from the sjstats package to calculate the effect
+#A statistically significant difference was found so we need to examine and report the post-hoc results also.
+```
+
+
+### Reporting the results with eta squared effect
+
+<p>
+A one-way between-groups analysis of variance (ANOVA) was conducted to explore the impact of age on levels of self-esteem. Participants were divided into three groups according to their age (Group 1: 29 yrs or less; Group 2: 30 to 44 yrs; Group 3: 45yrs and above).  There was a statistically significant difference at the p < .05 level in total self-esteem scores for the three age groups: (F(2, `r round(res2$df.residual,2)`)= `r round(fstat,2)`, p<0.05.  Despite reaching statistical significance, the actual difference in mean scores between groups was quite small. The effect size, calculated using eta squared was small (`r round(aoveta[[1]],2)`). Post-hoc comparisons using the Tukey HSD test indicated that the mean score for Group 1 (M=`r round(mean(survey$tslfest[survey$agegp3=="18 - 29"], na.rm=TRUE),2)`, SD=`r round(sd(survey$tslfest[survey$agegp3=="18 - 29"], na.rm=TRUE),2)`) was significantly different to that for Group 3 (M=`r round(mean(survey$tslfest[survey$agegp3=="45+"], na.rm=TRUE),2)`, SD=`r round(sd(survey$tslfest[survey$agegp3=="45+"], na.rm=TRUE),2)`). Group 2 (M=`r round(mean(survey$tslfest[survey$agegp3=="30 - 44"], na.rm=TRUE),2)`, SD=`r round(sd(survey$tslfest[survey$agegp3=="30 - 44"], na.rm=TRUE),2)`) did not differ significantly from Group 1 or Group3.
+</p>
+
+
+

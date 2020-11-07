@@ -1,0 +1,142 @@
+---
+title: "Week 6 Lab Survey Dataset Does Education Level Impact Total perceived stress?"
+output:
+  html_document:
+    df_print: paged
+
+editor_options:
+  chunk_output_type: console
+---
+
+
+## SETUP
+```{r setup}
+
+#We are using a .dat file (survey.dat) created from the SPSS file survey.sav  taken from SPSS Survival Manual 6th Edition Julie Pallant
+#http://spss.allenandunwin.com.s3-website-ap-southeast-2.amazonaws.com/data-files.html#.Wb0vvnWP-po
+#Results on a survey on well being
+#We need to load the file so that we can use it in R.
+
+
+#We need to load the file so that we can use it in R.
+survey <- read.table("survey.dat")
+#Setting the column names to be that used in the dataset
+colnames(survey) <- tolower(colnames(survey))
+
+needed_packages <- c("pastecs", "ggplot2", "psych", "semTools", "FSA", "sjstats", "userfriendlyscience")                      
+# Extract not installed packages
+not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
+# Install not installed packages
+if(length(not_installed)) install.packages(not_installed) 
+
+library(pastecs) #For creating descriptive statistic summaries
+library(ggplot2) #For creating histograms with more detail than plot
+library(psych) # Some useful descriptive functions
+library(semTools) #For skewness and kurtosis
+library(FSA) #For percentage
+library(sjstats) #To calculate effect size for t-test
+library(userfriendlyscience)
+```
+
+## 1. H0: There are no differences between total perceived stress scores for respondents in Group 1, Group 2 and Group 3. HA: There are differences between  total perceived stress scores for repondents in Group 1, Group 2 and Group 3.
+### Step 1: Examine/Assess Normality
+```{r tpstress-normality}
+
+#We will allocate the histogram to a variable to allow use to manipulate it
+gg <- ggplot(survey, aes(x=tpstress))
+gg <- gg+ggtitle("Figure 1 - Histogram for Total perceived stress")
+
+#Change the label of the x axis
+gg <- gg + labs(x="Total perceived stress")
+
+#manage binwidth and colours
+gg <- gg + geom_histogram(binwidth=2, colour="black", aes(y=..density.., fill=..count..))
+gg <- gg + scale_fill_gradient("Count", low="#DCDCDC", high="#7C7C7C")
+
+#adding a normal curve
+#use stat_function to compute a normalised score for each value of tpstress
+#pass the mean and standard deviation
+#use the na.rm parameter to say how missing values are handled
+gg <- gg + stat_function(fun=dnorm, color="red",args=list(mean=mean(survey$tpstress, na.rm=TRUE), sd=sd(survey$tpstress, na.rm=TRUE)))
+
+#to display the graph request the contents of the variable be shown
+gg
+
+#Create a qqplot
+qqnorm(survey$tpstress, main="Figure 2 - QQ Plot for Total perceived stress")
+qqline(survey$tpstress, col=2) #show a line on the plot
+
+
+#stat.desc is a function from pastecs - make sure you include the basic switch=F to ensure you don't get scienfitic notation
+pastecs::stat.desc(survey$tpstress, basic=F)
+
+#We can make our decision based on the value of the standardised score for skew and kurtosis
+#We divide the skew statistic by the standard error to get the standardised score
+#This will indicate if we have a problem
+tpskew<-semTools::skew(survey$tpstress)
+tpkurt<-semTools::kurtosis(survey$tpstress)
+tpskew[1]/tpskew[2]
+
+tpkurt[1]/tpkurt[2]
+
+#and by calculating the percentage of standardised scores for the variable itself that are outside our acceptable range
+#This will tell us how big a problem we have
+# Calculate the percentage of standardised scores that are greated than 1.96
+# the perc function which is part of the FSA package which calculate the percentage that are within a range - you can look for greater than "gt", greater than or equal "geq", "gt", less than or equal "leq",  or less than "lt"),
+# scale is a function that creates z scores, abs gets absolute value
+
+ztpstress<- abs(scale(survey$tpstress))
+
+FSA::perc(as.numeric(ztpstress), 1.96, "gt")
+FSA::perc(as.numeric(ztpstress), 3.29, "gt")
+
+```
+### Report assessment of normality
+
+<p style="text-align:justify">
+Total perceived stress scores data was assessed for normality. Visual inspection of the histogram and QQ-Plot (see Figure 1 and Figure 2) identified some issues with skewness and kurtosis. The standardised score for kurtosis (`r round(tpkurt[1]/tpkurt[2],2)`) can be considered acceptable using the criteria proposed by West, Finch and Curran (1996), but the standardised score for skewness (`r round(tpskew[1]/tpskew[2],2)`)  was outside the acceptable range.  However over 99% of standardised scores for total perceived stress and associated sensation fall within the bounds of +/- 3.29, using the guidance of Field, Miles and Field (2013) the data can be considered to approximate a normal distribution (m=`r round(mean(survey$tpstress, na.rm=TRUE),2)`, sd=`r round(sd(survey$tpstress, na.rm=TRUE),2)`, n=`r length(survey$tpstress)-sum(is.na(survey$tpstress))`).
+</p>
+
+### Differences more than 2 groups - Parametric Tests
+#### ANOVA
+##### Describe Total perceived stress by group (Group 1, Group 2, Group3 educ)
+
+```{r Describe}
+#Get descriptive stastitics by group - output as a matrix
+psych::describeBy(survey$tpstress, survey$educ, mat=TRUE)
+
+#Conduct Bartlett's test for homogeneity of variance in library car - the null hypothesis is that variances in groups are equal so to assume homogeneity we would expect probability to not be statistically significant.
+stats::bartlett.test(tpstress~ educ, data=survey)
+#p value is > 0.05 so the result is not statistically significant so we can assume homogeneity
+
+
+#Conduct ANOVA using the userfriendlyscience test oneway
+#In this case we can use Tukey as the post-hoc test option since variances in the groups are equal
+#If variances were not equal we would use Games-Howell
+userfriendlyscience::oneway(as.factor(survey$educ),y=survey$tpstress,posthoc='Tukey')
+
+res1<-userfriendlyscience::oneway(as.factor(survey$educ),y=survey$tpstress,posthoc='Tukey')
+
+#use the aov function - same as one way but makes it easier to access values for reporting
+res2<-stats::aov(tpstress~ educ, data = survey)
+#Get the F statistic into a variable to make reporting easier
+fstat<-summary(res2)[[1]][["F value"]][[1]]
+#Get the p value into a variable to make reporting easier
+aovpvalue<-summary(res2)[[1]][["Pr(>F)"]][[1]]
+#Calculate effect
+aoveta<-sjstats::eta_sq(res2)[2]
+                
+#In the report we are using the res2 variable to retrieve the degrees of freedom
+#and the eta_sq function from the sjstats package to calculate the effect
+#No statistically significant difference was found so we do not need to examine and report the post-hoc results also.
+```
+
+
+### Reporting the results with eta squared effect
+
+<p>
+A one-way between-groups analysis of variance (ANOVA) was conducted to explore the impact of respondents' level of education () on levels of perceived stress. Participants were divided into six groups according to their education level (Group 1: completed primary school; Group 2 = completed some secondary school; Group 3 = completed high school; Group 4 = some additional training after high school; Group 5 = completed an undergraduate degree; Group 6 = completed a postgraduate degree.).  No statistically significant difference was found at the p < .05 level in total perceived stress scores for six education levels: (F(2, `r round(res2$df.residual,2)`)= `r round(fstat,2)`, p=`r round(aovpvalue,2)`,  Group 1 (M=`r round(mean(survey$tpstress[survey$educ=="PRIMARY"], na.rm=TRUE),2)`, SD=`r round(sd(survey$tpstress[survey$educ=="PRIMARY"], na.rm=TRUE),2)`), Group 2 (M=`r round(mean(survey$tpstress[survey$educ=="SOME SECONDARY"], na.rm=TRUE),2)`, SD=`r round(sd(survey$tpstress[survey$educ=="SOME SECONDARY"], na.rm=TRUE),2)`), Group 3 (M=`r round(mean(survey$tpstress[survey$educ=="COMPLETED HIGHSCHOOL"], na.rm=TRUE),2)`, SD=`r round(sd(survey$tpstress[survey$educ=="COMPLETED HIGHSCHOOL"], na.rm=TRUE),2)`), Group 4 (M=`r round(mean(survey$tpstress[survey$educ=="SOME ADDITIONAL TRAINING"], na.rm=TRUE),2)`, SD=`r round(sd(survey$tpstress[survey$educ=="SOME ADDITIONAL TRAINING"], na.rm=TRUE),2)`), Group 5 (M=`r round(mean(survey$tpstress[survey$educ=="COMPLETED UNDERGRADUATE"], na.rm=TRUE),2)`, SD=`r round(sd(survey$tpstress[survey$educ=="COMPLETED UNDERGRADUATE"], na.rm=TRUE),2)`), Group 6 (M=`r round(mean(survey$tpstress[survey$educ=="POSTGRADUATE COMPLETED"], na.rm=TRUE),2)`, SD=`r round(sd(survey$tpstress[survey$educ=="POSTGRADUATE COMPLETED"], na.rm=TRUE),2)`)
+The effect size, calculated using eta squared, was small (`r round(aoveta[[1]],2)`).
+
+</p>
+
