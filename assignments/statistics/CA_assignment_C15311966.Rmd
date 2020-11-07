@@ -145,8 +145,35 @@ Students final grades can be considered to follow a normal distribution, 100% of
 
 
 
+```
+Apply your understanding to the dataset provided**<br>
+Provide an example of each general type of descriptive and visual for variables from the dataset
+Assess at least one variable for normality
 
+Identify some at least one correlation between your concepts of interest you want to investigate
+State a hypothesis
 
+Using your previous assessment of the data and conducting any additional assessment required, identify the most appropriate test to use
+Conduct the test
+Interpret the output
+
+Report the output in text adhering to APA guidelines
+Identify at least one difference effect involving a concept of interest and involving two groups you want to investigate
+State a hypothesis
+
+Using your previous assessment of the data and conducting any additional assessment required, identify the most appropriate test to use
+Conduct the test
+Interpret the output
+
+Report the output in text adhering to APA guidelines
+Identify at least one difference effect involving a concept of interest and involving more than two groups you want to investigate
+State a hypothesis
+
+Using your previous assessment of the data and conducting any additional assessment required, identify the most appropriate test to use
+Conduct the test
+Interpret the output
+
+Report the output in text adhering to APA guidelines
 
 
 ```
