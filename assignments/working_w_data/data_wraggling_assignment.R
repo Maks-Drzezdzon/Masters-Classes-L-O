@@ -150,8 +150,10 @@ ggplot(data=sao_goncalo_2012, aes(x=solar_radiation, y=relative_humidity)) + geo
 
 # plot min max temp for station on one graph
 
+#################################
+# find coldest and warmest city # Done
+#################################
 
-# find coldest city in brazil and rank the one i have against it
 sapply(df, max, na.rm = T)
 # max max temp is 42.4
 # max min temp is 37.6
@@ -173,12 +175,46 @@ skim(coldest_city)
 least_coldest_city = filter(df, max_temp_hr >= -2.5)
 skim(least_coldest_city)
 
+##################################
+# find most and least rainy city #
+##################################
+# might be better to use group by here and graph it ?
 
-# find most rainy, humid etc months
-# Air pressure and wind analysis
-# graph all stations, compare two that are far apart or close to each other ??
-# move to visualization 
+sapply(df, max, na.rm = T)
+# max  is 100
 
+most_rainy_city = filter(df, precipitation_last_hr_ml >= 100)
+skim(most_rainy_city)
+
+
+sapply(df, min, na.rm = T)
+# min 0
+
+least_rainy_city = filter(df, precipitation_last_hr_ml >= 0)
+skim(least_rainy_city)
+
+
+
+##################################
+# find most and least humid city #
+##################################
+# might be better to use group by here and graph it ?
+
+sapply(df, max, na.rm = T)
+# max 
+
+most_humid_city = filter(df, relative_humidity >= 100)
+skim(most_humid_city)
+
+
+sapply(df, min, na.rm = T)
+# min 
+
+least_humid_city = filter(df, relative_humidity >= 0)
+skim(least_humid_city)
+
+
+# Air pressure and wind analysis maybe ?
 
 
 ######################
@@ -187,7 +223,10 @@ skim(least_coldest_city)
 # this section focuses on generating visualizations
 # for the report along with exploring different methods 
 # of doing so
+# use meteorologist graphs to visualise findings and explain what its, should be a good wrap up
 # http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html
+# https://cengel.github.io/R-data-wrangling/data-visualization-with-ggplot2.html
+# https://community.rstudio.com/t/help-with-making-plot-with-multiple-columns/50763
 
 
 
