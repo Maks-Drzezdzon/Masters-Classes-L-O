@@ -138,15 +138,13 @@ plot(type = "l", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$solar_
 
 # quick inspection before forecasting
 ggplot(data=sao_goncalo_2008, aes(x=solar_radiation, y=observation_date_time)) + geom_point()
-ggplot(sao_goncalo_2008) + geom_histogram(bins = 12, aes(x=relative_humidity))
+ggplot(data=sao_goncalo_2008, aes(x=solar_radiation, y=relative_humidity)) + geom_point()
 
-ggplot(sao_goncalo_2010) + geom_histogram(bins = 12, aes(x=solar_radiation))
-ggplot(sao_goncalo_2010) + geom_histogram(bins = 12, aes(x=relative_humidity))
+ggplot(data=sao_goncalo_2010, aes(x=solar_radiation, y=observation_date_time)) + geom_point()
+ggplot(data=sao_goncalo_2010, aes(x=solar_radiation, y=relative_humidity)) + geom_point()
 
-
-ggplot(sao_goncalo_2012) + geom_histogram(bins = 12, aes(x=solar_radiation))
-ggplot(sao_goncalo_2012) + geom_histogram(bins = 12, aes(x=relative_humidity))
-
+ggplot(data=sao_goncalo_2012, aes(x=solar_radiation, y=observation_date_time)) + geom_point()
+ggplot(data=sao_goncalo_2012, aes(x=solar_radiation, y=relative_humidity)) + geom_point()
 
 
 # find most rainy, humid etc months
