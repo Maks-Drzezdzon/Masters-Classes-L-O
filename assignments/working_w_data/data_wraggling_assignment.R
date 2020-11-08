@@ -135,25 +135,18 @@ plot(sao_goncalo_2012$observation_date_time, sao_goncalo_2012$precipitation_last
 plot(sao_goncalo_2012$observation_date_time, sao_goncalo_2012$relative_humidity)
 plot(sao_goncalo_2012$observation_date_time, sao_goncalo_2012$solar_radiation)
 
+# quick inspection before forecasting
+ggplot(sao_goncalo_2008) + geom_histogram(bins = 12, aes(x=solar_radiation))
+ggplot(sao_goncalo_2008) + geom_histogram(bins = 12, aes(x=relative_humidity))
+
+ggplot(sao_goncalo_2010) + geom_histogram(bins = 12, aes(x=solar_radiation))
+ggplot(sao_goncalo_2010) + geom_histogram(bins = 12, aes(x=relative_humidity))
 
 
-sao_goncalo2 = na.omit(sao_goncalo)
-sao_goncalo2 = with(sao_goncalo_2008, sao_goncalo_2008[(observation_date_time <= "2008-12-31"), ])
-
-plot(sao_goncalo2$observation_date_time, sao_goncalo2$precipitation_last_hr_ml)
-plot(sao_goncalo2$observation_date_time, sao_goncalo2$relative_humidity)
-plot(sao_goncalo2$observation_date_time, sao_goncalo2$solar_radiation)
+ggplot(sao_goncalo_2012) + geom_histogram(bins = 12, aes(x=solar_radiation))
+ggplot(sao_goncalo_2012) + geom_histogram(bins = 12, aes(x=relative_humidity))
 
 
-ggplot(sao_goncalo2, aes(observation_date_time, precipitation_last_hr_ml)) +
-  ggtitle("title")
-
-ggplot(sao_goncalo_2008) + geom_histogram(bins = 12, aes(x=observation_date_time)) 
-ggplot(sao_goncalo_2010) + geom_histogram(bins = 12, aes(x=observation_date_time)) 
-ggplot(sao_goncalo_2012) + geom_histogram(bins = 12, aes(x=observation_date_time))
-
-
-# use lat and log values to create map graph
 
 # find most rainy months in 2010
 # check lat long values with lat long of city
