@@ -68,10 +68,6 @@ df = df[,!names(df) %in% c("year", "month", "day", "hour")]
 head(df)
 colnames(df)
 
-# cut off 300 Mb of data
-write_feather(df, 'weather-data.feather')
-df = read_feather('weather-data.feather')
-sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
 
 
 
@@ -80,7 +76,10 @@ sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
 ####################
 # this section focuses on exploring the data set
 # and provide some insights for the written report
-
+df = na.omit(df)
+write_feather(df, 'weather-data.feather')
+df = read_feather('weather-data.feather')
+sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
 
 
 # missing data
@@ -138,7 +137,7 @@ plot(type = "h", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$relati
 plot(type = "l", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$solar_radiation, xlab = "2012 12 month period", ylab = "sunlight in  KJ/m2")
 
 # quick inspection before forecasting
-ggplot(sao_goncalo_2008) + geom_histogram(bins = 12, aes(x=solar_radiation))
+ggplot(data=sao_goncalo_2008, aes(x=solar_radiation, y=observation_date_time)) + geom_point()
 ggplot(sao_goncalo_2008) + geom_histogram(bins = 12, aes(x=relative_humidity))
 
 ggplot(sao_goncalo_2010) + geom_histogram(bins = 12, aes(x=solar_radiation))
@@ -150,8 +149,7 @@ ggplot(sao_goncalo_2012) + geom_histogram(bins = 12, aes(x=relative_humidity))
 
 
 
-# find most rainy months in 2010
-# check lat long values with lat long of city
+# find most rainy, humid etc months
 # Air pressure and wind analysis
 # graph all stations, compare two that are far apart or close to each other ??
 # move to visualization 
