@@ -150,6 +150,30 @@ ggplot(data=sao_goncalo_2012, aes(x=solar_radiation, y=relative_humidity)) + geo
 
 # plot min max temp for station on one graph
 
+
+# find coldest city in brazil and rank the one i have against it
+sapply(df, max, na.rm = T)
+# max max temp is 42.4
+# max min temp is 37.6
+
+warmest_city = filter(df, max_temp_hr >= 42.4)
+skim(warmest_city)
+
+lest_warmest_city = filter(df, max_temp_hr >= 37.6)
+skim(lest_warmest_city)
+
+
+sapply(df, min, na.rm = T)
+# min max temp is - 2.9
+# min min temp is -2.5
+
+coldest_city = filter(df, max_temp_hr >= - 2.9)
+skim(coldest_city)
+
+least_coldest_city = filter(df, max_temp_hr >= -2.5)
+skim(least_coldest_city)
+
+
 # find most rainy, humid etc months
 # Air pressure and wind analysis
 # graph all stations, compare two that are far apart or close to each other ??
@@ -163,7 +187,7 @@ ggplot(data=sao_goncalo_2012, aes(x=solar_radiation, y=relative_humidity)) + geo
 # this section focuses on generating visualizations
 # for the report along with exploring different methods 
 # of doing so
-
+# http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html
 
 
 
