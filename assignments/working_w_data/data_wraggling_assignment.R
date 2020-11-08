@@ -94,8 +94,6 @@ glimpse(sao_goncalo)
 str(sao_goncalo)
 summary(df)
 summary(sao_goncalo$observation_date)
-
-# Look over this
 skim(sao_goncalo)
 
 plot(sao_goncalo$observation_date_time, sao_goncalo$air_temprature)
@@ -110,18 +108,32 @@ hist( sao_goncalo$observation_date_time, sao_goncalo$air_temprature)
 plot(sao_goncalo$observation_date_time, sao_goncalo$precipitation_last_hr_ml)
 plot(sao_goncalo$observation_date_time, sao_goncalo$relative_humidity)
 plot(sao_goncalo$observation_date_time, sao_goncalo$solar_radiation)
-plot(sao_goncalo_2009$observation_date_time, sao_goncalo_2009$dew_temp)
 
 # 12 month blocks
 sao_goncalo_2008 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2008-12-31" & observation_date_time >= "2008-01-01"), ])
+skim(sao_goncalo_2008)
+
 sao_goncalo_2010 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2010-12-31" & observation_date_time >= "2010-01-01"), ])
+skim(sao_goncalo_2010)
+
 sao_goncalo_2012 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2012-12-31" & observation_date_time >= "2012-01-01"), ])
+skim(sao_goncalo_2012)
 
 par(mfrow=c(2,2)) # 2x2 block per graph
-help(plot)
 plot(sao_goncalo_2008$observation_date_time, sao_goncalo_2008$dew_temp)
+plot(sao_goncalo_2008$observation_date_time, sao_goncalo_2008$precipitation_last_hr_ml)
+plot(sao_goncalo_2008$observation_date_time, sao_goncalo_2008$relative_humidity)
+plot(sao_goncalo_2008$observation_date_time, sao_goncalo_2008$solar_radiation)
+
 plot(sao_goncalo_2010$observation_date_time, sao_goncalo_2010$dew_temp)
+plot(sao_goncalo_2010$observation_date_time, sao_goncalo_2010$precipitation_last_hr_ml)
+plot(sao_goncalo_2010$observation_date_time, sao_goncalo_2010$relative_humidity)
+plot(sao_goncalo_2010$observation_date_time, sao_goncalo_2010$solar_radiation)
+
 plot(sao_goncalo_2012$observation_date_time, sao_goncalo_2012$dew_temp)
+plot(sao_goncalo_2012$observation_date_time, sao_goncalo_2012$precipitation_last_hr_ml)
+plot(sao_goncalo_2012$observation_date_time, sao_goncalo_2012$relative_humidity)
+plot(sao_goncalo_2012$observation_date_time, sao_goncalo_2012$solar_radiation)
 
 
 
