@@ -12,7 +12,7 @@ sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
 
 
 ###############
-# ^^ LOAD  ^^ #
+# ^^ Setup  ^^ #
 ###############
 
 
@@ -49,7 +49,7 @@ df = df %>% setnames(
 
 colnames(df)
 # inspect unique weather station names, 122 as the file suggests
-unique(df$wsnm , incomparables = FALSE)
+unique(df$w_station_name , incomparables = FALSE)
 
 write_feather(df, 'weather-data.feather')
 df = read_feather('weather-data.feather')
@@ -136,6 +136,8 @@ plot(type = "b", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$precip
 plot(type = "h", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$relative_humidity, xlab = "2012 12 month period", ylab = "humidity as % out of 100")
 plot(type = "l", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$solar_radiation, xlab = "2012 12 month period", ylab = "sunlight in  KJ/m2")
 
+help("ggplot")
+
 # quick inspection before forecasting
 ggplot(data=sao_goncalo_2008, aes(x=solar_radiation, y=observation_date_time)) + geom_point()
 ggplot(data=sao_goncalo_2008, aes(x=solar_radiation, y=relative_humidity)) + geom_point()
@@ -146,6 +148,7 @@ ggplot(data=sao_goncalo_2010, aes(x=solar_radiation, y=relative_humidity)) + geo
 ggplot(data=sao_goncalo_2012, aes(x=solar_radiation, y=observation_date_time)) + geom_point()
 ggplot(data=sao_goncalo_2012, aes(x=solar_radiation, y=relative_humidity)) + geom_point()
 
+# plot min max temp for station on one graph
 
 # find most rainy, humid etc months
 # Air pressure and wind analysis
