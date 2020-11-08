@@ -50,11 +50,7 @@ df = df %>% setnames(
 colnames(df)
 # inspect unique weather station names, 122 as the file suggests
 unique(df$wsnm , incomparables = FALSE)
-# saving file to feather format as its has faster I/O 
-# and is supported by both python and r
-# from here on out the feather file will be used instead
-# drawback is that its slightly larger than the original file
-# HDF5 would be better for a mix of I/O and size optimization
+
 write_feather(df, 'weather-data.feather')
 df = read_feather('weather-data.feather')
 
@@ -71,7 +67,7 @@ df %>% mutate(observation_date_time = make_datetime(year, month, day, hour))
 df = df[,!names(df) %in% c("year", "month", "day", "hour")]
 head(df)
 colnames(df)
-# update feather file
+
 # cut off 300 Mb of data
 write_feather(df, 'weather-data.feather')
 df = read_feather('weather-data.feather')
@@ -87,8 +83,6 @@ sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
 
 
 
-# find empty values count for each col
-# (tidyverse function)
 # missing data
 map(df , ~sum(is.na(.)))
 # df[row,col]
@@ -116,14 +110,23 @@ hist( sao_goncalo$observation_date_time, sao_goncalo$air_temprature)
 plot(sao_goncalo$observation_date_time, sao_goncalo$precipitation_last_hr_ml)
 plot(sao_goncalo$observation_date_time, sao_goncalo$relative_humidity)
 plot(sao_goncalo$observation_date_time, sao_goncalo$solar_radiation)
+plot(sao_goncalo_2009$observation_date_time, sao_goncalo_2009$dew_temp)
 
-
-sao_goncalo_2008 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2008-12-31"), ])
-sao_goncalo_2009 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2012-12-31" & observation_date_time >= "2012-01-01"), ])
+# 12 month blocks
+sao_goncalo_2008 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2008-12-31" & observation_date_time >= "2008-01-01"), ])
 sao_goncalo_2010 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2010-12-31" & observation_date_time >= "2010-01-01"), ])
+sao_goncalo_2012 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2012-12-31" & observation_date_time >= "2012-01-01"), ])
+
+par(mfrow=c(2,2)) # 2x2 block per graph
+help(plot)
+plot(sao_goncalo_2008$observation_date_time, sao_goncalo_2008$dew_temp)
+plot(sao_goncalo_2010$observation_date_time, sao_goncalo_2010$dew_temp)
+plot(sao_goncalo_2012$observation_date_time, sao_goncalo_2012$dew_temp)
+
+
 
 sao_goncalo2 = na.omit(sao_goncalo)
-sao_goncalo2 = with(sao_goncalo2, sao_goncalo2[(observation_date_time <= "2008-12-31"), ])
+sao_goncalo2 = with(sao_goncalo_2008, sao_goncalo_2008[(observation_date_time <= "2008-12-31"), ])
 
 plot(sao_goncalo2$observation_date_time, sao_goncalo2$precipitation_last_hr_ml)
 plot(sao_goncalo2$observation_date_time, sao_goncalo2$relative_humidity)
@@ -133,18 +136,13 @@ plot(sao_goncalo2$observation_date_time, sao_goncalo2$solar_radiation)
 ggplot(sao_goncalo2, aes(observation_date_time, precipitation_last_hr_ml)) +
   ggtitle("title")
 
-ggplot(sao_goncalo_2008) + geom_histogram(bins = 12, aes(x=observation_date_time)) # missing
-ggplot(sao_goncalo_2009) + geom_histogram(bins = 12, aes(x=observation_date_time)) # missing
-ggplot(sao_goncalo_2010) + geom_histogram(bins = 12, aes(x=observation_date_time)) # good year
+ggplot(sao_goncalo_2008) + geom_histogram(bins = 12, aes(x=observation_date_time)) 
+ggplot(sao_goncalo_2010) + geom_histogram(bins = 12, aes(x=observation_date_time)) 
+ggplot(sao_goncalo_2012) + geom_histogram(bins = 12, aes(x=observation_date_time))
 
-sao_goncalo_2010 %>% group_by("observation_date_time")
-
-ggplot(data = sao_goncalo_2010) +
-  geom_sf() +
-  xlab("Longitude") + ylab("Latitude") +
-  ggtitle("World map", subtitle = paste0("(", length(unique(sao_goncalo_2010$w_station_name)), " w_station_name)"))
 
 # use lat and log values to create map graph
+
 # find most rainy months in 2010
 # check lat long values with lat long of city
 # Air pressure and wind analysis
