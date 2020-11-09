@@ -224,6 +224,10 @@ skim(least_humid_city)
 # for the report along with exploring different methods 
 # of doing so
 # use meteorologist graphs to visualise findings and explain what its, should be a good wrap up
+# https://davetang.org/muse/2020/01/08/plotting-weather-data-using-r/
+# https://www.visualcrossing.com/resources/documentation/weather-data-tutorials/how-can-i-find-weather-forecast-data-for-analysis-in-r/
+
+# links
 # http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html
 # https://cengel.github.io/R-data-wrangling/data-visualization-with-ggplot2.html
 # https://community.rstudio.com/t/help-with-making-plot-with-multiple-columns/50763
