@@ -39,6 +39,7 @@ getmode <- function(v) {
 
 ```{r Generating descriptive statistics}
 # fill with the rest of summary statistics
+# find kurtosis function
 
 getmode(student_pref$mG3)
 
