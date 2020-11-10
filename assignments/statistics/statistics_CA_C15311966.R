@@ -46,6 +46,8 @@ library(semTools) #For skewness and kurtosis
 # Data exploration #
 ####################
 student_pref = read_csv("sperformance-dataset.csv")
+student_pref = na.omit(student_pref)
+
 getmode <- function(v) {
         uniqv <- unique(v)
         uniqv[which.max(tabulate(match(v, uniqv)))]
@@ -62,9 +64,19 @@ sum(as.integer(student_pref$sex == "F"))
 unique(student_pref$mG3)
 
 # basic histogram for each col, missing data/completion rate 0-1, mean, standard of dev, percentiles 0-25-50-75-100
+getmode(student_pref$mG3)
+getmode(student_pref$Medu)
+var(student_pref$Medu)
+median(student_pref$mG3)
+median(student_pref$Medu)
+
 skim(student_pref)
 skim(student_pref$Medu)
 skim(student_pref$Fedu)
+
+
+
+
 # wants to pursue higher education maths
 # No - 18 Yes - 364
 table(student_pref$higher.m)
