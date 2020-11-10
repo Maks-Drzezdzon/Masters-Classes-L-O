@@ -38,7 +38,7 @@ getmode <- function(v) {
 ```
 
 ```{r Generating descriptive statistics}
-
+# fill with the rest of summary statistics
 
 getmode(student_pref$mG3)
 
