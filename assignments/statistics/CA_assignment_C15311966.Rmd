@@ -37,6 +37,43 @@ getmode <- function(v) {
 
 ```
 
+```{r Generating descriptive statistics}
+
+
+getmode(student_pref$mG3)
+
+getmode(student_pref$Medu)
+
+# just checking variance with function
+var(student_pref$Medu)
+var(student_pref$mG3)
+
+# median for final maths grades
+median(student_pref$mG3)
+# median for mothers education levels
+median(student_pref$Medu)
+
+# IQR for final maths grades
+quantile(student_pref$mG3) # Q3 (14) - Q1 (8) = 6
+# IQR for mothers education levels
+quantile(student_pref$Medu) # Q3 (4) - Q1 (2) = 2
+
+
+
+skim(student_pref)
+skim(student_pref$Medu)
+skim(student_pref$Fedu)
+
+
+# wants to pursue higher education maths
+# No - 18 Yes - 364
+table(student_pref$higher.m)
+# No - 18 Yes - 364
+table(student_pref$higher.p)
+# very few students dont want to pursue higher education 
+
+```
+
 ## H0: There is no difference in students scores in regards to mothers education level.
 ## HA: There is a difference in students scores in regards to mothers education level.
 ### tlifesat Examine/Assess Normality

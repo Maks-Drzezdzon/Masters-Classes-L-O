@@ -67,8 +67,13 @@ unique(student_pref$mG3)
 getmode(student_pref$mG3)
 getmode(student_pref$Medu)
 var(student_pref$Medu)
+
 median(student_pref$mG3)
 median(student_pref$Medu)
+
+quantile(student_pref$mG3) # Q3 (14) - Q1 (8) = 6
+quantile(student_pref$Medu) # Q3 (4) - Q1 (2) = 2
+
 
 skim(student_pref)
 skim(student_pref$Medu)
