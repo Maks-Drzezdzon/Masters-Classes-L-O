@@ -1,0 +1,74 @@
+---
+title: "Week 6 Lab - Are there differences in GCSE Maths grades (gradmath) achieved by students with parents of different educational attainment (s1pared)? (variables: gradmath, s1pared)"
+output:
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+### Kruskal-Wallis (Non-Parametric)
+## SETUP
+```{r setup}
+
+needed_packages <- c("psych", "semTools", "FSA", "sjstats", "rstatix", "foreign")                      
+# Extract not installed packages
+not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
+# Install not installed packages
+if(length(not_installed)) install.packages(not_installed) 
+
+
+library(semTools)
+library(psych)
+library(stats)
+library(FSA)
+library(rstatix)#Kruskal wallis effect size
+library(sjstats)#chi-square effect size
+library(foreign)#Will allow us to open an SPSS file
+
+#We are using youthcohort.sav (Taken from Quantitative Data Analysis in Education, Paul Connolly)
+#created from the .sav version available at http://cw.routledge.com/textbooks/9780415372985/resources/datasets.asp
+
+
+#We need to load the file so that we can use it in R.
+ydata <- foreign::read.spss(file="youthcohort.sav", use.value.labels = TRUE, to.data.frame = TRUE)
+#Setting the column names to be that used in the dataset
+colnames(ydata) <- tolower(colnames(ydata))
+#Question:
+#Are there differences in GCSE Maths grades (gradmath) achieved by students with parents of different educational attainment (s1pared)? (variables: gradmath, s1pared)
+#Variables: 's1pared' parental education, 'gradmath' grade achieved in maths
+
+#We know we are going to use non-parametric tests since the variable gradmath is ordinal
+#Get some descriptive statistics on the maths grade for each ethnicity
+
+psych::describeBy(as.numeric(ydata$gradmath),factor(ydata$s1pared) )
+
+#run a kruskal wallis test
+kw<-stats::kruskal.test(gradmath~s1pared,data=ydata)
+
+#Post hoc testing
+
+#Need library FSA to run the post-hoc tests
+tmp<-FSA::dunnTest(x=as.numeric(ydata$gradmath), g=factor(ydata$s1pared), method="bonferroni") 
+#We are using the basic dunnTest from R to give use the comparison
+dunnTest(x=as.numeric(ydata$gradmath), g=factor(ydata$s1pared), method="bonferroni") 
+
+#We need the as.numeric to make sure our gradmath variable is treated as a numeric variable and we are using the numerical categories for s1pared so we use the factors
+
+#Print results so that in the output X=gradmath, g=s1pared and the test statistic is Z with significance shown underneath
+print(tmp, dunn.test.results = TRUE)
+
+
+#calculate the effect size
+kweta<-rstatix::kruskal_effsize(ydata, gradmath~s1pared, ci = FALSE, conf.level = 0.95,
+  ci.type = "perc", nboot = 1000)#uses bootstrapping
+
+```
+
+### Reporting the results with eta squared effect
+
+<p>
+A Kruskal-Wallis test was conducted to explore whether the education attainment level of a student's parents impacts the GCSE Maths grades students achieve. Participants were divided into three groups according to their parents' education achievement (Group 1: at least one parent has a degree; Group 2 = at least one parent with an A-level; Group 3 = neither parent has an A-level.).  A statistically significant difference was found in GCSE grades achieved for the three parental education attainment levels: (H(`r round(kw$parameter,2)`)= `r round(kw$statistic,2)`, p<0.001). A posthoc Dunns Test using a Bonferroni correction identified statistically significant differences  (p <0.001) between all groups (Group 1 (Mdn=`r round (median(as.numeric(ydata$gradmath)[ydata$s1pared=="At least one parent with degree"], na.rm=TRUE),2)`, IQR=`r round(IQR(as.numeric(ydata$gradmath[ydata$s1pared=="At least one parent with degree"]), na.rm=TRUE),2)`), Group 2 (Mdn=`r round(median(as.numeric(ydata$gradmath[ydata$s1pared=="At least one parent with A-level"]), na.rm=TRUE),2)`, IQR=`r round(IQR(ydata$gradmath[ydata$s1pared=="At least one parent with A-level"], na.rm=TRUE),2)`), Group 3 (Mdn=`r round(median(as.numeric(ydata$gradmath[ydata$s1pared=="Neither parent with A-level"]), na.rm=TRUE),2)`, IQR=`r round(IQR(as.numeric(ydata$gradmath[ydata$s1pared=="Neither parent with A-level"]), na.rm=TRUE),2)`)).
+The effect size, calculated using eta squared, was small (`r round(kweta$effsize,2)`).
+
+</p>
+

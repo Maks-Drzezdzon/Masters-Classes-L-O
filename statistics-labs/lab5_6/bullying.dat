@@ -1,0 +1,820 @@
+"id" "rsex" "typeschl" "sclotbul" "stfbuljb" "gotostaf" "schlbul" "ubullsch" "oftenbul" "ubulloth" "oftenub"
+"1" 1 "Female" "Secondary" "A little" "Don't know" NA "Don't know" "No" NA "No" NA
+"2" 2 "Male" "Secondary" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"3" 3 "Female" "Grammar" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"4" 4 "Female" "Planned Integrated" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"5" 5 "Female" "Grammar" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"6" 6 "Male" "Grammar" "A lot" "Yes" "It depends" "Yes" "Yes" "A little" "No" NA
+"7" 7 "Male" "Secondary" "A little" "No" NA "No" "No" NA "No" NA
+"8" 8 "Female" "Grammar" "Not at all" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"9" 9 "Male" "Secondary" "A little" "Yes" "It depends" "Don't know" "Yes" "Not at all" "No" NA
+"10" 10 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"11" 11 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "Yes" "Not at all "
+"12" 12 "Female" "Secondary" "A lot" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"13" 13 "Male" "Grammar" "A little" "No" NA "Yes" "No" NA "No" NA
+"14" 14 "Female" "Secondary" "A little" "No" NA "Yes" "Yes" "Not at all" "No" NA
+"15" 15 "Female" "Grammar" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"16" 16 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "Yes" "Not at all" "No" NA
+"17" 17 "Female" "Grammar" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"18" 18 "Female" "Secondary" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"19" 19 "Female" "Secondary" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"20" 20 "Female" "Planned Integrated" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"21" 21 "Female" "Grammar" "A little" "No" NA "Yes" "No" NA "No" NA
+"22" 22 "Male" "Secondary" "A lot" "Yes" "It depends" NA "Yes" "A little" "No" NA
+"23" 23 "Male" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"24" 24 "Female" "Secondary" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"25" 25 "Female" "Grammar" "A little" "No" NA "No" "Yes" "Not at all" "No" NA
+"26" 26 "Female" "Grammar" "A little" "Don't know" NA "Yes" "Yes" "Not at all" "No" NA
+"27" 27 "Female" "Grammar" "A little" "No" NA "No" "No" NA "No" NA
+"28" 28 "Female" "Grammar" "A little" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"29" 29 "Male" "Secondary" "A lot" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"30" 30 "Female" "Secondary" "A lot" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"31" 31 "Male" "Secondary" "A little" "No" NA "No" "No" NA "No" NA
+"32" 32 "Female" "Grammar" "Not at all" "Don't know" NA "Yes" "No" NA "No" NA
+"33" 33 "Male" "Secondary" "A little" "Yes" "It depends" NA "No" NA "No" NA
+"34" 34 "Male" "Grammar" "A little" "Don't know" NA "Yes" "Yes" "Not at all" "Yes" "A little"
+"35" 35 "Female" "Secondary" "A little" "Yes" "Would not talk to them" "Don't know" "No" NA "No" NA
+"36" 36 "Female" "Grammar" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"37" 37 "Female" "Secondary" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"38" 38 "Male" NA NA NA NA NA NA NA NA NA
+"39" 39 "Female" "Secondary" "A little" "Don't know" NA "No" "No" NA "No" NA
+"40" 40 "Male" "Secondary" "A little" "No" NA "No" "No" NA "No" NA
+"41" 41 "Male" "Grammar" "A little" "No" NA "Don't know" "No" NA "No" NA
+"42" 42 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"43" 43 "Female" "Secondary" "A lot" "Yes" "It depends" "No" "Yes" "Not at all" "No" NA
+"44" 44 "Female" "Grammar" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"45" 45 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"46" 46 "Female" "Grammar" "A little" "No" NA "Yes" "No" NA "No" NA
+"47" 47 "Female" "Grammar" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"48" 48 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"49" 49 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "No" "Yes" "Not at all" "No" NA
+"50" 50 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"51" 51 "Female" "Grammar" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"52" 52 "Female" "Grammar" "A little" "No" NA "No" "No" NA "No" NA
+"53" 53 "Female" "Grammar" "A little" "Don't know" NA "No" "Yes" "A little" "No" NA
+"54" 54 "Male" "Secondary" "Don't know" "Yes" "Don't know" "Don't know" "No" NA "No" NA
+"55" 55 "Female" "Grammar" "A lot" "Don't know" NA "Don't know" "No" NA "No" NA
+"56" 56 "Female" "Grammar" "A little" "Yes" "Would not talk to them" "Don't know" "No" NA "No" NA
+"57" 57 "Female" "Grammar" "A little" "Don't know" NA "Yes" "Yes" "Not at all" "No" NA
+"58" 58 "Male" "Planned Integrated" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"59" 59 "Female" "Grammar" "A little" "Don't know" NA "No" "No" NA "No" NA
+"60" 60 "Female" "Grammar" "Don't know" "Yes" "It depends" "No" "No" NA "No" NA
+"61" 61 "Female" "Secondary" "A lot" "Yes" "It depends" "Yes" "Yes" "A little" "No" NA
+"62" 62 "Male" "Grammar" "A little" "No" NA "No" "No" NA "No" NA
+"63" 63 "Female" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"64" 64 "Female" "Secondary" "A lot" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"65" 65 "Male" "Secondary" "A lot" "No" NA "No" "No" NA "No" NA
+"66" 66 "Female" "Grammar" "Don't know" "Don't know" NA "Yes" "No" NA "No" NA
+"67" 67 "Female" "Grammar" "Don't know" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"68" 68 "Female" "Secondary" "A little" "Don't know" NA "No" "Yes" "Not at all" "No" NA
+"69" 69 "Female" "Grammar" "Don't know" "Don't know" NA "Don't know" "No" NA "No" NA
+"70" 70 "Female" "Secondary" "A little" "Don't know" NA "No" "Yes" "A little" "No" NA
+"71" 71 "Female" "Secondary" "A lot" "Yes" "It depends" "Yes" "Yes" "A little" "Yes" "A little"
+"72" 72 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"73" 73 "Female" "Grammar" "A lot" "Yes" "It depends" "Yes" "Yes" "A little" "No" NA
+"74" 74 "Female" "Grammar" "A little" "Yes" "It depends" "No" "Yes" "Not at all" "No" NA
+"75" 75 "Female" "Grammar" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"76" 76 "Female" "Secondary" "A little" NA NA NA "No" NA "No" NA
+"77" 77 "Female" "Grammar" "Not at all" "No" NA "Yes" "No" NA "No" NA
+"78" 78 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"79" 79 "Female" "Grammar" "A lot" "Yes" "It depends" "Yes" "Yes" "A lot" "No" NA
+"80" 80 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "A little" "Yes" "A little"
+"81" 81 "Male" "Secondary" "A little" "Yes" "It depends" NA "No" NA "No" NA
+"82" 82 "Female" "Secondary" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"83" 83 "Female" "Secondary" "A lot" "No" NA "No" "Yes" "A little" "No" NA
+"84" 84 "Female" "Grammar" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"85" 85 "Male" "Grammar" "Not at all" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"86" 86 "Female" "Secondary" "A little" "Don't know" NA "No" "Yes" "Not at all" "Yes" "Not at all "
+"87" 87 "Female" "Grammar" "A little" "No" NA "No" "Yes" "Not at all" "Yes" "Not at all "
+"88" 88 "Female" "Grammar" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"89" 89 "Male" "Secondary" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"90" 90 "Female" "Grammar" "A little" "Don't know" NA "Don't know" "Yes" "Not at all" "No" NA
+"91" 91 "Female" "Grammar" "Don't know" "Don't know" NA "Yes" "No" NA "No" NA
+"92" 92 "Male" "Planned Integrated" "Don't know" "Yes" "It depends" "Yes" "No" NA "No" NA
+"93" 93 "Male" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"94" 94 "Female" "Secondary" "A little" "Yes" "It depends" NA "Yes" "A little" "No" NA
+"95" 95 "Male" "Grammar" "A little" "Yes" "Would talk to them" "Yes" "Yes" "Not at all" "No" NA
+"96" 96 "Male" "Secondary" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"97" 97 "Female" "Secondary" "A little" "Don't know" NA "No" "No" NA "No" NA
+"98" 98 "Female" "Secondary" "A lot" "Yes" "It depends" "Don't know" "Yes" "Not at all" "No" NA
+"99" NA "Female" "Secondary" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"100" 100 "Male" "Grammar" "A lot" "Yes" "It depends" "No" "Yes" "A little" "No" NA
+"101" 101 "Male" "Grammar" NA NA NA NA NA NA NA NA
+"102" 102 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"103" 103 "Male" "Grammar" "Don't know" "Yes" "Would not talk to them" "Don't know" "No" NA "No" NA
+"104" 104 "Female" "Grammar" "A little" "No" NA "No" "Yes" "Not at all" "No" NA
+"105" 105 "Male" "Grammar" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"106" 106 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"107" 107 "Female" "Grammar" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"108" 108 "Female" "Secondary" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"109" 109 "Female" "Secondary" "A little" "No" NA "No" "No" NA "No" NA
+"110" 110 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"111" 111 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"112" 112 "Female" "Secondary" "Don't know" "Yes" "It depends" "Yes" "No" NA "No" NA
+"113" 113 "Female" "Planned Integrated" "A lot" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"114" 114 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"115" 115 "Female" "Secondary" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"116" 116 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "Yes" "Not at all "
+"117" 117 "Male" "Grammar" "Don't know" "Yes" "It depends" "Yes" "No" NA "No" NA
+"118" 118 "Female" "Secondary" "A little" "Yes" "Would talk to them" "No" "Yes" "Not at all" "No" NA
+"119" 119 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"120" 120 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "Yes" "A little" "No" NA
+"121" 121 "Male" NA NA NA NA NA NA NA NA NA
+"122" 122 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"123" 123 "Female" "Grammar" "A little" "Don't know" NA "Don't know" "No" NA "No" NA
+"124" 124 "Male" "Grammar" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"125" 125 "Male" "Grammar" "A lot" "Don't know" NA "Yes" "Yes" "Not at all" "No" NA
+"126" 126 "Male" "Grammar" "A little" "Don't know" NA "Yes" "Yes" "A little" "No" NA
+"127" 127 "Male" "Grammar" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"128" 128 "Male" "Secondary" "Don't know" "Don't know" NA "Don't know" "No" NA "No" NA
+"129" 129 "Female" "Grammar" "A little" "No" NA "No" "No" NA "No" NA
+"130" 130 "Male" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "Yes" "A little"
+"131" 131 "Male" "Planned Integrated" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"132" 132 "Female" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"133" 133 "Female" "Grammar" "A little" "No" NA "No" "No" NA "No" NA
+"134" 134 "Male" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"135" 135 "Male" "Planned Integrated" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"136" 136 "Male" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"137" 137 "Female" "Grammar" "A little" "No" NA "No" "Yes" "A lot" "No" NA
+"138" 138 "Female" "Secondary" "A little" "Yes" "Would not talk to them" "Yes" "Yes" "A little" "No" NA
+"139" 139 "Female" "Secondary" "A lot" "No" NA "Don't know" "No" NA "No" NA
+"140" 140 "Male" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "A little" "No" NA
+"141" 141 "Male" "Secondary" "A little" "No" NA "Yes" "No" NA "No" NA
+"142" 142 "Male" "Grammar" "A lot" "Don't know" NA "No" "Yes" "A little" "No" NA
+"143" 143 "Female" "Secondary" "A little" "Don't know" NA "Don't know" "No" NA "No" NA
+"144" 144 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"145" 145 "Male" "Secondary" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"146" 146 "Male" "Secondary" "A lot" "Yes" "Would talk to them" "Yes" "Yes" "Not at all" "No" NA
+"147" 147 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "Yes" "Not at all "
+"148" 148 "Male" "Grammar" "A little" "Yes" "It depends" "Don't know" "Yes" "Not at all" "No" NA
+"149" 149 "Female" "Grammar" "A little" "No" NA "Don't know" "No" NA "No" NA
+"150" 150 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "Yes" "Not at all "
+"151" 151 "Female" "Secondary" "A little" "Don't know" NA "No" "Yes" "Not at all" "No" NA
+"152" 152 "Female" "Grammar" "A little" "No" NA "No" "No" NA "No" NA
+"153" 153 "Male" "Grammar" "Don't know" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"154" 154 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"155" 155 "Female" "Grammar" "A little" "No" NA "No" "No" NA NA NA
+"156" 156 "Female" "Grammar" "Don't know" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"157" 157 "Female" "Grammar" "A little" "Don't know" NA "No" "Yes" "Not at all" "No" NA
+"158" 158 "Female" "Secondary" "A little" "Yes" "Would not talk to them" "No" "Yes" "Not at all" "No" NA
+"159" 159 "Male" "Secondary" "A little" "No" NA "No" "No" NA "No" NA
+"160" 160 "Female" "Secondary" "A little" "No" NA "No" "No" NA "No" NA
+"161" 161 "Male" "Grammar" "A little" "Don't know" NA "No" "No" NA "No" NA
+"162" 162 "Male" "Grammar" "Don't know" "Don't know" NA "Don't know" "No" NA "No" NA
+"163" 163 "Female" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"164" 164 "Female" "Grammar" "A little" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"165" 165 "Male" "Grammar" "Don't know" "Yes" "It depends" "No" "No" NA "No" NA
+"166" 166 "Female" "Grammar" "A little" "Don't know" NA "Yes" "Yes" "Not at all" "No" NA
+"167" 167 "Male" "Secondary" "Don't know" "Yes" "It depends" "Yes" "No" NA "No" NA
+"168" 168 "Female" "Grammar" "Not at all" "Yes" "It depends" "Yes" "No" NA "Yes" "Not at all "
+"169" 169 "Female" "Grammar" "Not at all" "Don't know" NA "Don't know" "No" NA "No" NA
+"170" 170 "Male" "Planned Integrated" "A little" "No" NA "Yes" "No" NA "No" NA
+"171" 171 "Male" "Secondary" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"172" 172 "Male" "Secondary" "A little" "No" NA "No" "No" NA "Yes" "A little"
+"173" 173 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"174" 174 "Male" "Grammar" "A little" "Don't know" NA "No" "No" NA "No" NA
+"175" 175 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"176" 176 "Male" "Grammar" "Not at all" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"177" 177 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"178" 178 "Female" "Grammar" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"179" 179 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"180" 180 "Female" "Secondary" "Not at all" "Yes" "It depends" "No" "No" NA "No" NA
+"181" 181 "Male" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"182" 182 "Female" "Grammar" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"183" 183 "Female" "Grammar" "A little" "Yes" "It depends" NA "No" NA "No" NA
+"184" 184 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"185" 185 "Male" "Secondary" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"186" 186 "Female" "Secondary" "A little" "No" NA "No" "Yes" "Not at all" "No" NA
+"187" 187 "Male" "Secondary" "Not at all" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"188" 188 "Female" "Other" "A little" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"189" 189 "Male" "Secondary" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"190" 190 "Female" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "Yes" "Not at all" "No" NA
+"191" 191 "Female" "Secondary" "Not at all" "No" NA "Yes" "No" NA "No" NA
+"192" 192 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"193" 193 "Male" "Secondary" "A little" "Yes" "Would not talk to them" "No" "No" NA "Yes" "A little"
+"194" 194 "Male" "Planned Integrated" "Don't know" "Don't know" NA "Yes" "No" NA "No" NA
+"195" 195 "Male" "Secondary" "A little" "Don't know" NA NA "Yes" "A little" "Yes" "Not at all "
+"196" 196 "Male" "Planned Integrated" "Don't know" "Yes" "It depends" "Yes" "No" NA "No" NA
+"197" 197 "Male" "Grammar" "A little" "No" NA "Don't know" "No" NA "No" NA
+"198" 198 "Female" "Secondary" "A little" NA NA NA "No" NA "No" NA
+"199" 199 "Female" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"200" 200 "Female" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"201" 201 "Female" "Secondary" "A little" "Don't know" NA "Don't know" "No" NA "No" NA
+"202" 202 "Female" "Grammar" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"203" 203 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "Yes" "Not at all "
+"204" 204 "Male" "Other" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"205" 205 "Female" "Secondary" "Don't know" "Don't know" NA "Yes" "Yes" "Not at all" "No" NA
+"206" 206 "Female" "Secondary" "A lot" "Yes" "It depends" "Yes" "Yes" "A little" "No" NA
+"207" 207 "Male" "Grammar" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"208" 208 "Female" "Grammar" "A little" "No" NA "No" "No" NA "No" NA
+"209" 209 "Female" "Grammar" "A lot" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"210" 210 "Male" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"211" 211 "Female" "Secondary" "Don't know" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"212" 212 "Female" "Secondary" "Don't know" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"213" 213 "Female" "Grammar" "A little" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"214" 214 "Male" "Grammar" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"215" 215 "Female" "Secondary" "A little" "Don't know" NA "No" "No" NA "No" NA
+"216" 216 "Male" "Secondary" "Don't know" "Don't know" NA "Don't know" "Yes" "A little" "No" NA
+"217" 217 "Male" "Secondary" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"218" 218 "Male" "Secondary" "A lot" "Yes" "Would not talk to them" "No" "Yes" "A little" "No" NA
+"219" 219 "Female" "Planned Integrated" "Not at all" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"220" 220 "Male" "Secondary" "A little" "No" NA "No" "No" NA "No" NA
+"221" 221 "Female" "Secondary" "A little" "Yes" "Would not talk to them" "Don't know" "No" NA "No" NA
+"222" 222 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"223" 223 "Female" "Grammar" "A little" "Yes" "Would talk to them" "No" "No" NA "No" NA
+"224" 224 "Male" "Grammar" "A little" "No" NA "Don't know" "No" NA "No" NA
+"225" 225 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"226" 226 "Male" "Planned Integrated" "A little" "Don't know" NA "Don't know" "No" NA "No" NA
+"227" 227 "Female" "Grammar" "Not at all" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"228" 228 "Female" "Secondary" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"229" 229 "Female" "Secondary" "Don't know" "No" NA "Yes" "No" NA "No" NA
+"230" 230 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"231" 231 "Female" "Secondary" "A lot" "Yes" "It depends" "Yes" "Yes" "A little" "Yes" "A little"
+"232" 232 "Female" "Secondary" "A little" "Yes" "Would not talk to them" "Yes" "Yes" "Not at all" "Yes" "A little"
+"233" 233 "Female" "Grammar" "A little" "No" NA "Yes" "No" NA "No" NA
+"234" 234 "Female" "Secondary" "A lot" "Yes" "Would not talk to them" "No" "Yes" "A little" "No" NA
+"235" 235 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"236" 236 "Female" "Grammar" "Don't know" "Yes" "It depends" "Yes" "No" NA "No" NA
+"237" 237 "Female" "Secondary" "Don't know" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"238" 238 "Female" "Planned Integrated" "A little" "Yes" "It depends" "Yes" "Yes" "A little" "No" NA
+"239" 239 "Female" "Grammar" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"240" 240 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"241" 241 "Female" "Secondary" "A little" "No" NA "No" "No" NA "No" NA
+"242" 242 "Female" "Grammar" "Not at all" "Don't know" NA "Yes" "No" NA "No" NA
+"243" 243 "Male" "Grammar" "Not at all" "No" NA "Yes" "No" NA "No" NA
+"244" 244 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"245" 245 "Female" "Secondary" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"246" 246 "Male" "Other" "Not at all" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"247" 247 "Female" "Secondary" "A lot" "No" NA "No" "No" NA "Yes" "Not at all "
+"248" 248 "Female" "Secondary" "A lot" "Yes" "It depends" "Yes" "No" NA "No" NA
+"249" 249 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"250" 250 "Female" "Secondary" "A little" "No" NA "No" "No" NA "No" NA
+"251" 251 "Male" "Secondary" "A little" "No" NA "No" "Yes" "A little" "No" NA
+"252" 252 "Female" "Secondary" "A little" "No" NA "Yes" "No" NA "No" NA
+"253" 253 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"254" 254 "Female" "Grammar" "Don't know" "Don't know" NA "No" "No" NA "No" NA
+"255" 255 "Female" "Secondary" "Not at all" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"256" 256 "Female" "Grammar" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"257" 257 "Male" NA "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"258" 258 "Male" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "Yes" "Not at all" "No" NA
+"259" 259 "Male" "Secondary" "A lot" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"260" 260 "Male" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"261" 261 "Female" "Secondary" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"262" 262 "Male" "Secondary" "Don't know" "Don't know" NA "Yes" "No" NA "No" NA
+"263" 263 "Female" "Grammar" "A little" "Yes" "It depends" "No" "Yes" "Not at all" "No" NA
+"264" 264 "Female" "Secondary" "A little" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"265" 265 "Female" "Grammar" "A little" "Yes" "Would talk to them" "Yes" "Yes" "Not at all" "No" NA
+"266" 266 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"267" 267 "Female" "Grammar" "A little" "Don't know" NA "No" "Yes" "Not at all" "No" NA
+"268" 268 "Male" "Grammar" "A little" "Don't know" NA "Yes" "Yes" "Not at all" "Yes" "Not at all "
+"269" 269 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"270" 270 "Female" "Secondary" "A little" "No" NA "No" "No" NA "No" NA
+"271" 271 "Male" "Secondary" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"272" 272 "Female" "Grammar" "A little" "No" NA "Yes" "No" NA "No" NA
+"273" 273 "Female" "Secondary" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"274" 274 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"275" 275 "Female" "Grammar" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"276" 276 "Female" "Grammar" "A little" "No" NA "No" "Yes" "A little" "No" NA
+"277" 277 "Female" "Grammar" "A lot" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"278" 278 "Female" "Grammar" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"279" 279 NA "Grammar" "A little" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"280" 280 "Male" "Secondary" "A little" "Don't know" NA "Don't know" "No" NA "No" NA
+"281" 281 "Female" "Secondary" "A lot" "No" NA "Yes" "Yes" "A little" "No" NA
+"282" 282 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"283" 283 "Female" "Grammar" "A little" "Yes" "Would not talk to them" "No" "Yes" "Not at all" "No" NA
+"284" 284 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"285" 285 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "Yes" "A little"
+"286" 286 NA "Secondary" "Not at all" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"287" 287 "Female" "Secondary" "A lot" "Yes" "Would not talk to them" "No" "Yes" "Not at all" "No" NA
+"288" 288 "Male" "Secondary" "A little" "Yes" "Would not talk to them" "No" "Yes" "Not at all" "No" NA
+"289" 289 "Female" "Secondary" "A little" "Yes" "Would not talk to them" "Don't know" "No" NA "No" NA
+"290" 290 "Male" "Grammar" "A little" "Don't know" NA "Don't know" "No" NA "No" NA
+"291" 291 "Male" "Secondary" "A little" "No" NA "No" "No" NA "No" NA
+"292" 292 "Male" "Planned Integrated" "Not at all" "No" NA "Yes" "No" NA "No" NA
+"293" 293 "Female" "Grammar" "A little" "Don't know" NA "No" "Yes" "Not at all" "No" NA
+"294" 294 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"295" 295 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"296" 296 "Female" "Secondary" "Not at all" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"297" 297 "Female" "Planned Integrated" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"298" 298 "Male" "Secondary" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"299" 299 "Male" "Secondary" "A lot" "Yes" "Would not talk to them" "No" "Yes" "Not at all" "No" NA
+"300" 300 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "No" "Yes" "Not at all" "No" NA
+"301" 301 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "A little" "No" NA
+"302" 302 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"303" 303 "Male" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "A little" "No" NA
+"304" 304 "Male" "Grammar" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"305" 305 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "Don't know" "No" NA "No" NA
+"306" 306 "Male" "Planned Integrated" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"307" 307 "Female" "Secondary" "A lot" "Yes" "Would not talk to them" "Yes" "Yes" "Not at all" "No" NA
+"308" 308 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"309" 309 "Male" "Grammar" "Don't know" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"310" 310 "Male" "Secondary" "Not at all" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"311" 311 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"312" 312 "Male" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"313" 313 "Female" "Secondary" "A little" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"314" 314 "Male" NA NA NA NA NA NA NA NA NA
+"315" 315 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "No" "Yes" "Not at all" "No" NA
+"316" 316 "Female" "Secondary" "A little" "No" NA "Yes" "Yes" "Not at all" "No" NA
+"317" 317 "Male" "Secondary" "Not at all" "Yes" "Would not talk to them" "Yes" "Yes" "Not at all" "No" NA
+"318" 318 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"319" 319 "Female" "Secondary" "A lot" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"320" 320 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"321" 321 "Male" "Planned Integrated" "Not at all" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"322" 322 "Female" "Planned Integrated" "A lot" "Yes" "Would not talk to them" "No" "Yes" "A little" "No" NA
+"323" 323 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"324" 324 "Male" NA NA NA NA NA NA NA NA NA
+"325" 325 "Female" "Secondary" "A lot" "Yes" "Would talk to them" "Yes" "Yes" "Not at all" "No" NA
+"326" 326 "Male" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"327" 327 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"328" 328 "Female" "Grammar" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"329" 329 "Male" "Grammar" "Not at all" "No" NA "Yes" "No" NA "No" NA
+"330" 330 "Male" "Secondary" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"331" 331 "Male" "Grammar" "A little" "Don't know" NA "Don't know" "Yes" "Not at all" "No" NA
+"332" 332 "Female" "Secondary" "A little" "Yes" "Would not talk to them" "Yes" "Yes" "Not at all" "No" NA
+"333" 333 "Male" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"334" 334 "Male" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"335" 335 "Male" "Grammar" "A little" "Don't know" NA NA "No" NA "No" NA
+"336" 336 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "Yes" "Not at all" "No" NA
+"337" 337 "Female" "Secondary" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"338" 338 "Male" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "Yes" "Not at all" "No" NA
+"339" 339 "Male" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"340" 340 "Female" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "Yes" "Not at all" "No" NA
+"341" 341 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"342" 342 "Male" "Grammar" "A little" "Yes" "Don't know" "Don't know" "No" NA "No" NA
+"343" 343 "Male" "Secondary" "Not at all" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"344" 344 "Female" "Secondary" "Don't know" "Don't know" NA "Yes" "No" NA "No" NA
+"345" 345 "Male" "Planned Integrated" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "Yes" "Not at all "
+"346" 346 "Female" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"347" 347 "Female" "Secondary" "A lot" "Yes" "Would not talk to them" "No" "Yes" "Not at all" "No" NA
+"348" 348 "Male" "Secondary" "Don't know" "Yes" "Don't know" "Yes" "No" NA "No" NA
+"349" 349 "Male" "Secondary" "A little" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"350" 350 "Male" "Secondary" "A lot" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"351" 351 "Female" "Secondary" "A lot" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"352" 352 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"353" 353 "Male" "Grammar" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"354" 354 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"355" 355 "Female" "Grammar" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"356" 356 "Male" "Grammar" "A little" "Don't know" NA "Yes" "Yes" "Not at all" "No" NA
+"357" 357 "Male" "Grammar" "Not at all" "Don't know" NA "No" "No" NA "No" NA
+"358" 358 "Male" "Grammar" "A little" "No" NA "No" "No" NA "No" NA
+"359" 359 "Male" "Secondary" "A little" "No" NA "No" "No" NA "No" NA
+"360" 360 "Male" "Secondary" "A lot" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"361" 361 "Female" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"362" 362 "Female" "Secondary" "Not at all" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"363" 363 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"364" 364 "Female" NA "A little" "Yes" "Would talk to them" "No" "No" NA "No" NA
+"365" 365 "Male" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "Yes" "A little"
+"366" 366 "Female" "Secondary" "A little" "Yes" "Would talk to them" "No" "No" NA "No" NA
+"367" 367 "Female" "Grammar" "A little" "No" NA "No" "No" NA "No" NA
+"368" 368 "Female" "Secondary" "Not at all" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"369" 369 "Male" "Secondary" "A little" "Don't know" NA "Don't know" "Yes" "A little" "No" NA
+"370" 370 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"371" 371 "Female" "Secondary" "Don't know" "Yes" "It depends" "Yes" "No" NA "No" NA
+"372" 372 "Male" "Secondary" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"373" 373 "Female" "Grammar" "A lot" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"374" 374 "Female" "Secondary" "A little" "Don't know" NA "No" "Yes" "Not at all" "No" NA
+"375" 375 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"376" 376 "Female" "Planned Integrated" "A little" "Don't know" NA "No" "No" NA "No" NA
+"377" 377 "Male" "Grammar" "A little" "No" NA "Don't know" "No" NA "No" NA
+"378" 378 "Female" "Grammar" "A little" "Yes" "Would talk to them" "Yes" "Yes" "A little" "No" NA
+"379" 379 "Female" "Grammar" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"380" 380 "Female" "Grammar" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"381" 381 "Female" "Secondary" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"382" 382 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"383" 383 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"384" 384 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"385" 385 "Female" "Secondary" "Not at all" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"386" 386 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"387" 387 "Male" "Secondary" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"388" 388 "Male" "Grammar" "Don't know" "Yes" "Would not talk to them" "Don't know" "Yes" "Not at all" "No" NA
+"389" 389 "Male" "Secondary" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"390" 390 "Female" "Grammar" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"391" 391 "Female" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "Yes" "Not at all" "No" NA
+"392" 392 "Male" "Secondary" "Don't know" "Don't know" NA "Don't know" "No" NA "No" NA
+"393" 393 "Female" "Secondary" "A little" "No" NA "No" "No" NA "No" NA
+"394" 394 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"395" 395 "Female" "Secondary" "A little" "Don't know" NA "Don't know" "No" NA "No" NA
+"396" 396 "Female" "Secondary" "A little" "Don't know" NA "No" "Yes" "A little" "Yes" "A little"
+"397" 397 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"398" 398 "Male" "Grammar" "Don't know" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"399" 399 "Male" "Secondary" "A little" "No" NA "No" "Yes" "A lot" "No" NA
+"400" 400 "Female" "Secondary" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"401" 401 "Female" "Grammar" "A lot" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"402" 402 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"403" 403 "Female" "Secondary" "A lot" "No" NA "No" "Yes" "Not at all" "No" NA
+"404" 404 "Male" "Grammar" "A lot" "Yes" "Would talk to them" "No" "Yes" "Not at all" "Yes" "Not at all "
+"405" 405 "Female" "Secondary" "A lot" "No" NA "No" "Yes" "Not at all" "Yes" "Not at all "
+"406" 406 "Female" "Grammar" "A little" "No" NA "No" "No" NA "No" NA
+"407" 407 "Male" "Secondary" "A lot" NA NA "No" "No" NA "No" NA
+"408" 408 "Female" "Secondary" "Don't know" "Yes" "It depends" "Yes" "No" NA "No" NA
+"409" 409 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"410" 410 "Female" "Grammar" "A little" "Yes" "It depends" "No" "Yes" "Not at all" "No" NA
+"411" 411 "Female" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"412" 412 "Female" "Grammar" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"413" 413 "Female" "Secondary" "A little" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"414" 414 "Male" "Secondary" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"415" 415 "Female" "Grammar" "A little" "Yes" "Would talk to them" "Yes" "Yes" "Not at all" "No" NA
+"416" 416 "Female" "Grammar" "A little" "No" NA "No" "No" NA "No" NA
+"417" 417 "Female" "Secondary" "A little" "Don't know" NA "Don't know" "No" NA "No" NA
+"418" 418 "Male" "Grammar" "Not at all" "Yes" "Would talk to them" "Yes" "Yes" "Not at all" "No" NA
+"419" 419 "Female" "Grammar" "A little" "Don't know" NA "No" "No" NA "No" NA
+"420" 420 "Male" "Grammar" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"421" 421 "Female" "Grammar" "Don't know" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"422" 422 "Male" "Grammar" "Not at all" "Don't know" NA "Yes" "No" NA "No" NA
+"423" 423 "Male" "Grammar" "A little" "Yes" "It depends" "No" "Yes" "A little" "No" NA
+"424" 424 "Female" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "Yes" "Not at all" "No" NA
+"425" 425 "Female" "Grammar" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"426" 426 "Female" "Planned Integrated" "A little" "No" NA "No" "Yes" "Not at all" "Yes" "A little"
+"427" 427 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA NA NA
+"428" 428 "Female" "Secondary" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"429" 429 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"430" 430 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"431" 431 "Female" "Secondary" "A little" "Yes" "Would not talk to them" "Yes" "Yes" "Not at all" "No" NA
+"432" 432 "Female" "Grammar" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"433" 433 "Male" "Secondary" "A lot" "No" NA "No" "No" NA "Yes" "A little"
+"434" 434 "Male" "Grammar" "Not at all" "Yes" "It depends" "Yes" "No" NA NA NA
+"435" 435 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"436" 436 "Female" "Grammar" "A little" "Yes" "Would not talk to them" "No" "Yes" "A little" "No" NA
+"437" 437 "Male" "Grammar" "A little" "No" NA "Don't know" "No" NA "Yes" "Not at all "
+"438" 438 "Female" "Grammar" "Don't know" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"439" 439 "Female" "Secondary" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"440" 440 "Male" "Secondary" "A little" NA NA "Don't know" "No" NA "No" NA
+"441" 441 "Female" "Secondary" "A lot" "No" NA "No" "Yes" "Not at all" "No" NA
+"442" 442 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"443" 443 "Male" "Grammar" "Not at all" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"444" 444 "Male" "Grammar" "A little" "No" NA "Yes" "No" NA "No" NA
+"445" 445 "Male" "Secondary" "A lot" "No" NA "Don't know" "Yes" "A little" "No" NA
+"446" 446 "Female" "Secondary" "A little" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"447" 447 "Female" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "Yes" "Not at all" "No" NA
+"448" 448 "Male" "Secondary" "A little" "No" NA "No" "Yes" "Not at all" "No" NA
+"449" 449 "Male" "Grammar" "Don't know" "Yes" "It depends" "Yes" "No" NA "No" NA
+"450" 450 "Male" "Grammar" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"451" 451 "Female" "Grammar" "A little" "Yes" "Don't know" "Don't know" "No" NA "No" NA
+"452" 452 "Female" "Secondary" "A little" "Don't know" NA "No" "No" NA "No" NA
+"453" 453 "Female" "Secondary" "A little" "Yes" "It depends" "Don't know" "Yes" "A little" "No" NA
+"454" 454 "Male" "Secondary" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"455" 455 "Female" "Secondary" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"456" 456 "Female" "Grammar" "Don't know" "Don't know" NA "Yes" "No" NA "No" NA
+"457" 457 "Female" "Secondary" "A lot" "Yes" "It depends" "No" "No" NA "No" NA
+"458" 458 "Female" "Secondary" "A little" "Don't know" NA "No" "Yes" "A little" "No" NA
+"459" 459 "Male" "Secondary" "A little" "Don't know" NA "Don't know" "No" NA "No" NA
+"460" 460 "Female" "Secondary" "Not at all" "Yes" "Would talk to them" "Yes" "Yes" "A lot" "No" NA
+"461" 461 "Female" "Grammar" "A little" "Yes" "Would not talk to them" "No" "Yes" "Not at all" "No" NA
+"462" 462 "Female" "Secondary" "A little" "Don't know" NA "Yes" "Yes" "Not at all" "No" NA
+"463" 463 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"464" 464 "Female" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "Yes" "A little" "No" NA
+"465" 465 "Female" "Grammar" "A little" "Yes" "It depends" "Don't know" "Yes" "Not at all" "No" NA
+"466" 466 "Female" "Secondary" "A little" "Don't know" NA "No" "No" NA "No" NA
+"467" 467 "Female" "Grammar" "Not at all" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"468" 468 "Male" "Secondary" "A little" "Yes" "Would talk to them" "Don't know" "No" NA "No" NA
+"469" 469 "Female" "Grammar" "A little" "No" NA "Yes" "No" NA "No" NA
+"470" 470 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"471" 471 "Female" "Secondary" "A little" "Don't know" NA "Don't know" "Yes" "Not at all" "No" NA
+"472" 472 "Male" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"473" 473 "Female" "Secondary" "A lot" "Yes" "It depends" "Yes" "No" NA "No" NA
+"474" 474 "Female" "Secondary" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"475" 475 "Male" NA NA NA NA NA NA NA NA NA
+"476" 476 "Male" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"477" 477 "Female" "Other" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"478" 478 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"479" 479 "Male" "Grammar" "A little" "Don't know" NA "Yes" "Yes" "A little" "No" NA
+"480" 480 "Male" "Secondary" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"481" 481 "Female" NA NA NA NA NA NA NA NA NA
+"482" 482 "Male" "Grammar" "Don't know" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"483" 483 "Male" "Grammar" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"484" 484 "Female" "Secondary" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"485" 485 "Female" "Planned Integrated" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"486" 486 "Female" "Secondary" "A little" "Yes" "It depends" NA "No" NA "No" NA
+"487" 487 "Male" "Grammar" "Not at all" "Don't know" NA "Yes" "No" NA "No" NA
+"488" 488 "Female" "Grammar" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"489" 489 "Male" "Secondary" "A little" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"490" 490 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"491" 491 "Male" "Secondary" "A little" "Yes" "It depends" "Don't know" "Yes" "Not at all" "No" NA
+"492" 492 "Male" "Grammar" "A little" "No" NA "No" "Yes" "Not at all" "Yes" "Not at all "
+"493" 493 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"494" 494 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"495" 495 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"496" 496 "Female" "Secondary" "A little" "Don't know" NA "Don't know" "No" NA "No" NA
+"497" 497 "Female" "Grammar" "A little" "Don't know" NA "No" "Yes" "A lot" "No" NA
+"498" 498 "Female" "Secondary" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"499" 499 "Female" "Grammar" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"500" 500 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "Yes" "Not at all "
+"501" 501 "Male" "Secondary" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"502" 502 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"503" 503 "Female" "Secondary" "A little" "No" NA "No" "Yes" "Not at all" "Yes" "Not at all "
+"504" 504 "Male" "Secondary" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"505" 505 "Female" "Secondary" "A little" "Yes" "It depends" "No" "Yes" "Not at all" "No" NA
+"506" 506 "Male" "Secondary" "A little" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"507" 507 "Female" "Grammar" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"508" 508 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"509" 509 "Female" "Grammar" "Don't know" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"510" 510 "Female" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "Yes" "Not at all" "No" NA
+"511" 511 "Female" "Secondary" "A little" "Yes" "It depends" "No" "Yes" "Not at all" "No" NA
+"512" 512 "Male" "Grammar" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"513" 513 "Male" "Secondary" "Don't know" "Yes" "It depends" "Yes" "No" NA "No" NA
+"514" 514 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"515" 515 "Female" "Planned Integrated" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"516" 516 "Female" "Grammar" "A lot" "Don't know" NA "No" "Yes" "A little" "No" NA
+"517" 517 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"518" 518 "Female" "Secondary" "Not at all" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"519" 519 "Male" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"520" 520 "Female" "Secondary" "Not at all" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"521" 521 "Female" "Grammar" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"522" 522 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"523" 523 "Female" "Other" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"524" 524 "Female" "Grammar" "A little" "Yes" "Would not talk to them" "No" "Yes" "Not at all" "No" NA
+"525" 525 "Female" "Secondary" "A little" "Yes" "Would talk to them" "No" "No" NA "No" NA
+"526" 526 "Female" "Grammar" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"527" 527 "Male" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"528" 528 "Female" "Grammar" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"529" 529 "Female" "Secondary" "A little" "Don't know" NA "Yes" "Yes" "Not at all" "No" NA
+"530" 530 "Female" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"531" 531 "Female" "Grammar" "A little" "Don't know" NA "Don't know" "Yes" "Not at all" "No" NA
+"532" 532 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"533" 533 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"534" 534 "Male" "Grammar" "A lot" "No" NA "No" "Yes" "A little" "No" NA
+"535" 535 "Male" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "A little" "No" NA
+"536" 536 "Female" "Secondary" "Don't know" "Yes" "It depends" "Yes" "No" NA "No" NA
+"537" 537 "Female" "Planned Integrated" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"538" 538 "Male" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"539" 539 "Male" "Grammar" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"540" 540 "Female" "Secondary" "A lot" "Yes" "It depends" "No" "No" NA "No" NA
+"541" 541 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"542" 542 "Female" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"543" 543 "Male" "Secondary" "Don't know" "Don't know" NA "Don't know" "No" NA "No" NA
+"544" 544 "Female" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"545" 545 "Female" "Other" "A little" "Yes" "Would not talk to them" "Yes" "Yes" "Not at all" "No" NA
+"546" 546 "Female" "Grammar" "A little" "No" NA "No" "No" NA "No" NA
+"547" 547 "Female" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "Yes" "Not at all" "No" NA
+"548" 548 "Female" "Grammar" "Not at all" NA NA NA "No" NA "No" NA
+"549" 549 "Male" "Secondary" "Don't know" "Don't know" NA "Yes" "Yes" "A little" "Yes" "Not at all "
+"550" 550 "Female" "Grammar" "A little" "No" NA "No" "No" NA "No" NA
+"551" 551 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "Yes" "Not at all" "No" NA
+"552" 552 "Female" "Secondary" "A little" "Yes" "Would not talk to them" "No" "Yes" "A lot" "Yes" "Not at all "
+"553" 553 "Male" "Grammar" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"554" 554 "Female" "Secondary" "A lot" "No" NA "No" "No" NA "Yes" "A lot"
+"555" 555 "Female" "Secondary" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"556" 556 "Female" "Grammar" "A little" "Don't know" NA "No" "No" NA "No" NA
+"557" 557 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"558" 558 "Male" "Grammar" "A little" "No" NA "Yes" "Yes" "Not at all" "Yes" "Not at all "
+"559" 559 "Female" "Grammar" "A little" "Yes" "Would talk to them" "Don't know" "No" NA "No" NA
+"560" 560 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"561" 561 "Female" "Grammar" "A little" "No" NA "Yes" "No" NA "No" NA
+"562" 562 "Female" "Secondary" "A lot" "Yes" "It depends" "No" "No" NA "No" NA
+"563" 563 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"564" 564 "Female" "Grammar" "Don't know" "Yes" "It depends" "Yes" "No" NA "No" NA
+"565" 565 "Female" "Secondary" "A little" "Yes" "Would not talk to them" "No" "Yes" "Not at all" "No" NA
+"566" 566 "Male" "Grammar" "A lot" "Yes" "It depends" "Yes" "No" NA "No" NA
+"567" 567 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"568" 568 "Female" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "Yes" "Not at all" "No" NA
+"569" 569 "Female" "Secondary" "A lot" "No" NA "No" "Yes" "Not at all" "No" NA
+"570" 570 "Male" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"571" 571 "Female" "Secondary" "Don't know" "No" NA "Yes" "No" NA "No" NA
+"572" 572 "Female" "Secondary" "A little" "Don't know" NA "No" "No" NA "No" NA
+"573" 573 "Male" "Grammar" "Don't know" "Don't know" NA "Don't know" "No" NA "No" NA
+"574" 574 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA NA NA
+"575" 575 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"576" 576 "Male" "Grammar" "A little" "No" NA "No" "Yes" "A little" "No" NA
+"577" 577 "Male" "Grammar" "A little" "Don't know" NA "Don't know" "No" NA "No" NA
+"578" 578 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"579" 579 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "Yes" "A lot"
+"580" 580 "Male" "Grammar" "A little" "Yes" "It depends" "No" "Yes" "Not at all" "No" NA
+"581" 581 "Male" "Grammar" "A little" "No" NA "Yes" "No" NA "No" NA
+"582" 582 "Male" "Secondary" "A little" "Yes" "Would not talk to them" "No" "Yes" "A little" "No" NA
+"583" 583 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" NA NA NA NA
+"584" 584 "Male" "Secondary" "A little" "No" NA "Yes" "No" NA "Yes" "Not at all "
+"585" 585 "Male" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "Yes" "A little" "No" NA
+"586" 586 "Male" "Secondary" "A little" "Yes" "It depends" "Don't know" "Yes" "Not at all" "Yes" "A little"
+"587" 587 "Male" NA NA NA NA NA NA NA NA NA
+"588" 588 "Male" "Secondary" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"589" 589 "Female" "Planned Integrated" "A lot" "Don't know" NA "No" "Yes" "A lot" "No" NA
+"590" 590 "Female" "Grammar" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"591" 591 "Female" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "Yes" "Not at all" "No" NA
+"592" 592 "Female" "Secondary" "A lot" "No" NA "No" "Yes" "A lot" "No" NA
+"593" 593 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"594" 594 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"595" 595 "Male" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"596" 596 "Male" "Grammar" "A little" "No" NA "No" "No" NA "No" NA
+"597" 597 "Female" "Grammar" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"598" 598 "Male" "Secondary" "A lot" "Don't know" NA "Yes" "No" NA "No" NA
+"599" 599 "Female" "Grammar" "A little" "Yes" "It depends" "Don't know" "Yes" "A little" "No" NA
+"600" 600 "Female" "Grammar" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"601" 601 "Male" "Grammar" "A little" "Yes" "Don't know" "Don't know" "Yes" "Not at all" "No" NA
+"602" 602 "Male" "Grammar" "Not at all" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"603" 603 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"604" 604 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"605" 605 "Female" "Secondary" "A little" "No" NA "No" "No" NA "No" NA
+"606" 606 "Female" "Grammar" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"607" 607 "Female" "Grammar" "Don't know" "No" NA "Don't know" "No" NA "No" NA
+"608" 608 "Female" "Grammar" "Not at all" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"609" 609 "Female" "Grammar" "A little" "Yes" "It depends" "Don't know" "Yes" "Not at all" "No" NA
+"610" 610 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"611" 611 "Female" "Secondary" "A little" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"612" 612 "Female" "Other" "Don't know" "Don't know" NA "Don't know" "No" NA "No" NA
+"613" 613 "Female" "Grammar" "A lot" "Yes" "It depends" "Don't know" "Yes" "A little" "No" NA
+"614" 614 "Female" "Grammar" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"615" 615 "Male" "Secondary" "Don't know" "Don't know" NA "Don't know" "No" NA "No" NA
+"616" 616 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"617" 617 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"618" 618 "Male" "Grammar" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"619" 619 "Male" "Grammar" "A little" "Yes" "Don't know" "Don't know" "No" NA "Yes" "Not at all "
+"620" 620 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "A little" "No" NA
+"621" 621 "Female" "Secondary" "A lot" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"622" 622 "Female" "Secondary" "A little" "No" NA "Don't know" "Yes" "Not at all" "No" NA
+"623" 623 "Female" "Grammar" "Don't know" "Don't know" NA "Yes" "No" NA "No" NA
+"624" 624 "Female" "Secondary" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"625" 625 "Male" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"626" 626 "Female" "Grammar" "A little" "No" NA "Yes" "Yes" "Not at all" "Yes" "Not at all "
+"627" 627 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"628" 628 "Female" "Grammar" "A little" "Yes" "Would not talk to them" "No" "Yes" "Not at all" "No" NA
+"629" 629 "Female" "Secondary" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"630" 630 "Female" "Secondary" "Not at all" "No" NA "Yes" "No" NA "No" NA
+"631" 631 "Male" "Secondary" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"632" 632 "Male" "Secondary" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"633" 633 "Male" "Secondary" "A little" "Yes" "It depends" "Don't know" "No" NA "Yes" "A little"
+"634" 634 "Male" "Secondary" "A lot" "Don't know" NA "Don't know" "No" NA "No" NA
+"635" 635 "Female" "Secondary" "A little" "Yes" "Would not talk to them" "Don't know" "No" NA "No" NA
+"636" 636 "Male" "Grammar" "Not at all" "Don't know" NA "Don't know" "No" NA "No" NA
+"637" 637 "Female" "Secondary" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"638" 638 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "Yes" "A little"
+"639" 639 "Female" "Planned Integrated" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"640" 640 "Female" "Secondary" "Don't know" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"641" 641 "Male" "Secondary" "A little" "Don't know" NA "Don't know" "No" NA "No" NA
+"642" 642 "Male" "Secondary" "A little" "Yes" "Would not talk to them" "No" "No" NA "Yes" "Not at all "
+"643" 643 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"644" 644 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"645" 645 "Male" "Grammar" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"646" 646 "Male" "Secondary" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"647" 647 "Female" "Grammar" "Don't know" "No" NA "No" "No" NA "No" NA
+"648" 648 "Male" "Grammar" "Not at all" "Don't know" NA "Yes" "No" NA "No" NA
+"649" 649 "Male" "Planned Integrated" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"650" 650 "Female" "Grammar" "Don't know" "Yes" "It depends" "Yes" "No" NA "No" NA
+"651" 651 "Male" "Secondary" "Not at all" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"652" 652 "Female" "Grammar" "Don't know" "No" NA "Yes" "No" NA "No" NA
+"653" 653 "Female" "Grammar" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"654" 654 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"655" 655 "Female" "Secondary" "Don't know" "No" NA "No" "Yes" "Not at all" "No" NA
+"656" 656 "Female" NA NA NA NA NA NA NA NA NA
+"657" 657 "Female" "Secondary" "A lot" "Yes" "It depends" "Yes" "No" NA "No" NA
+"658" 658 "Female" "Secondary" "Don't know" "Don't know" NA "Yes" "No" NA "No" NA
+"659" 659 "Female" "Secondary" "Don't know" "Yes" "It depends" "Yes" "No" NA "No" NA
+"660" 660 "Female" "Secondary" "A little" "Don't know" NA "Don't know" "Yes" "Not at all" "No" NA
+"661" 661 "Female" "Grammar" "A lot" "Yes" "It depends" "No" "No" NA "No" NA
+"662" 662 "Male" "Grammar" "A little" "No" NA "Don't know" "Yes" "Not at all" "Yes" "Not at all "
+"663" 663 "Male" "Secondary" "A lot" "Don't know" NA "No" "No" NA "No" NA
+"664" 664 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"665" 665 "Male" "Grammar" "A little" "No" NA "No" "No" NA "No" NA
+"666" 666 "Male" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"667" 667 "Female" "Secondary" "A lot" "Yes" "It depends" "No" "Yes" "A lot" "No" NA
+"668" 668 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "No" "Yes" "Not at all" "No" NA
+"669" 669 "Male" "Planned Integrated" "A little" "No" NA "No" "No" NA "No" NA
+"670" 670 "Female" "Secondary" "A lot" "Yes" "Would not talk to them" "Yes" "Yes" "Not at all" "Yes" "Not at all "
+"671" 671 "Female" "Secondary" "A lot" "Yes" "Would not talk to them" "Yes" "Yes" "Not at all" "No" NA
+"672" 672 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "No" "Yes" "Not at all" "Yes" "Not at all "
+"673" 673 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"674" 674 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"675" 675 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"676" 676 "Male" NA NA NA NA NA NA NA NA NA
+"677" 677 "Male" "Secondary" "Don't know" "Yes" "It depends" "Yes" "No" NA "No" NA
+"678" 678 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"679" 679 "Male" "Grammar" "A lot" "Yes" "Would talk to them" "No" "Yes" "Not at all" "No" NA
+"680" 680 "Male" "Grammar" "A little" NA NA NA "No" NA "No" NA
+"681" 681 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "Don't know" "No" NA "No" NA
+"682" 682 "Male" "Secondary" "A little" "Yes" "Don't know" "Yes" "No" NA "No" NA
+"683" 683 "Male" "Planned Integrated" "Don't know" "Don't know" NA "Yes" "No" NA "Yes" "Not at all "
+"684" 684 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"685" 685 "Female" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"686" 686 "Female" "Planned Integrated" "Don't know" "Don't know" NA "No" "No" NA "No" NA
+"687" 687 "Female" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"688" 688 "Female" "Secondary" "A lot" "Yes" "Would not talk to them" "Yes" "Yes" "A little" "No" NA
+"689" 689 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"690" 690 "Male" "Secondary" "A lot" "Yes" "It depends" "Yes" "Yes" "A little" "No" NA
+"691" 691 "Female" "Secondary" "Don't know" "Yes" "It depends" "Yes" "No" NA "No" NA
+"692" 692 "Male" "Planned Integrated" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"693" 693 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"694" 694 "Male" "Grammar" "A little" "No" NA "No" "No" NA "No" NA
+"695" 695 "Female" "Grammar" "Don't know" "Yes" "It depends" "Yes" "No" NA "No" NA
+"696" 696 "Female" "Grammar" "A little" "No" NA "No" "No" NA "No" NA
+"697" 697 "Male" "Grammar" "A lot" "Yes" "Would not talk to them" "No" "Yes" "A little" "No" NA
+"698" 698 "Male" "Other" "A little" "Yes" "Would not talk to them" "Don't know" "No" NA "No" NA
+"699" 699 "Male" "Grammar" "A little" "Yes" "It depends" "No" "Yes" "Not at all" "No" NA
+"700" 700 "Female" "Secondary" "A little" "No" NA "Yes" "No" NA "No" NA
+"701" 701 "Male" "Grammar" "A lot" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"702" 702 "Female" "Secondary" "A little" "Yes" "Would talk to them" "Don't know" "Yes" "Not at all" "No" NA
+"703" 703 "Male" "Grammar" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"704" 704 "Female" "Grammar" "Don't know" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"705" 705 "Female" "Grammar" "A lot" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"706" 706 "Male" "Secondary" "A lot" NA NA NA "Yes" NA "No" NA
+"707" 707 "Male" "Secondary" "Not at all" "No" NA "Don't know" "No" NA "No" NA
+"708" 708 "Female" "Grammar" "Don't know" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"709" 709 "Male" "Secondary" "A little" "Yes" "Would not talk to them" "Don't know" "No" NA "Yes" "Not at all "
+"710" 710 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"711" 711 "Female" "Secondary" "A lot" "No" NA "No" "Yes" "Not at all" "Yes" "A little"
+"712" 712 "Male" "Grammar" "A little" "Don't know" NA "Don't know" "No" NA "No" NA
+"713" 713 "Female" "Secondary" "A little" NA NA NA "No" NA "No" NA
+"714" 714 "Female" NA NA NA NA NA NA NA NA NA
+"715" 715 "Female" "Grammar" "Don't know" "Don't know" NA "Don't know" "Yes" "Not at all" "No" NA
+"716" 716 "Male" "Grammar" "Don't know" "Don't know" NA "Don't know" "No" NA "No" NA
+"717" 717 "Male" "Secondary" "Don't know" "Don't know" NA "Yes" "No" NA "No" NA
+"718" 718 "Male" "Secondary" "A little" "Yes" "It depends" NA "No" NA "No" NA
+"719" 719 "Female" "Grammar" "A little" "Yes" "Would not talk to them" "No" "Yes" "A little" "No" NA
+"720" 720 "Male" "Secondary" "Not at all" "Don't know" NA "Yes" "No" NA "No" NA
+"721" 721 "Female" "Grammar" "Don't know" "Yes" "Would talk to them" "Don't know" "No" NA "No" NA
+"722" 722 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"723" 723 "Female" "Planned Integrated" "A lot" "Don't know" NA "No" "No" NA "No" NA
+"724" 724 "Female" "Secondary" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"725" 725 "Female" "Grammar" "A little" "Don't know" NA "Don't know" "Yes" "Not at all" "No" NA
+"726" 726 "Female" "Grammar" "A lot" "Don't know" NA "Don't know" "No" NA "No" NA
+"727" 727 "Male" "Grammar" "A little" "No" NA "Yes" "Yes" "Not at all" "No" NA
+"728" 728 "Female" "Grammar" "A little" "Yes" "Would not talk to them" "No" "Yes" "Not at all" "No" NA
+"729" 729 "Female" "Secondary" "A little" "Yes" "Would talk to them" NA "Yes" NA "No" NA
+"730" 730 "Male" "Grammar" "A little" "Don't know" NA "No" "No" NA "No" NA
+"731" 731 "Male" "Secondary" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"732" 732 "Female" "Grammar" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"733" 733 "Male" "Secondary" "A little" "Yes" "It depends" "No" "No" NA "No" NA
+"734" 734 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"735" 735 "Female" "Secondary" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"736" 736 "Female" "Secondary" "A lot" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"737" 737 "Female" "Secondary" "A little" "Yes" "Would talk to them" "Don't know" "Yes" "Not at all" "No" NA
+"738" 738 "Male" "Secondary" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"739" 739 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"740" 740 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"741" 741 "Male" "Secondary" "Don't know" "Don't know" NA "Don't know" "No" NA "No" NA
+"742" 742 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"743" 743 "Male" "Secondary" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"744" 744 "Male" "Other" "A lot" "Yes" "Would not talk to them" "Don't know" "Yes" "Not at all" "Yes" "A little"
+"745" 745 "Male" "Grammar" "Don't know" "Don't know" NA "Yes" "No" NA "No" NA
+"746" 746 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "Yes" "Not at all" "No" NA
+"747" 747 "Male" "Grammar" "A little" "Don't know" NA "Don't know" "No" NA "No" NA
+"748" 748 "Female" "Secondary" "A little" "Yes" "Would not talk to them" "Don't know" "Yes" "A little" "No" NA
+"749" 749 "Female" "Grammar" "A lot" "No" NA "No" "Yes" "Not at all" "No" NA
+"750" 750 "Female" "Planned Integrated" "A little" "No" NA "Yes" "Yes" "A little" "No" NA
+"751" 751 "Female" "Grammar" "A little" "Yes" "Would not talk to them" "Don't know" "No" NA "No" NA
+"752" 752 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"753" 753 "Female" "Grammar" "Don't know" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"754" 754 "Male" "Secondary" "A little" "Yes" "It depends" "Don't know" "Yes" "A little" "No" NA
+"755" 755 "Male" "Grammar" "Not at all" "No" NA "Yes" "No" NA "No" NA
+"756" 756 "Female" "Grammar" "A little" "Don't know" NA "Don't know" "No" NA "No" NA
+"757" 757 "Female" NA NA NA NA NA NA NA NA NA
+"758" 758 "Female" "Secondary" "Not at all" "No" NA "No" "No" NA "No" NA
+"759" 759 "Female" "Grammar" "Not at all" "Yes" "It depends" "Yes" "No" NA "No" NA
+"760" 760 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"761" 761 "Female" "Grammar" "Don't know" "Yes" "It depends" "Yes" "No" NA "No" NA
+"762" 762 "Male" "Secondary" "Not at all" "Don't know" NA "Yes" "No" NA "No" NA
+"763" 763 "Male" NA NA NA NA NA NA NA NA NA
+"764" 764 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"765" 765 "Male" "Grammar" "A little" "Don't know" NA "No" "Yes" "A little" "Yes" "A little"
+"766" 766 "Female" "Grammar" "A little" "Don't know" NA "Don't know" "No" NA "No" NA
+"767" 767 "Male" "Secondary" "A little" "Yes" "It depends" "Don't know" NA NA "No" NA
+"768" 768 "Male" "Grammar" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"769" 769 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"770" 770 "Male" "Secondary" "A little" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"771" 771 "Male" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"772" 772 "Male" "Secondary" "A lot" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"773" 773 "Female" "Secondary" "A little" "No" NA "No" "Yes" "A little" "No" NA
+"774" 774 "Male" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"775" 775 "Male" "Secondary" "A little" "No" NA "No" "No" NA "Yes" "A little"
+"776" 776 "Male" "Secondary" "A lot" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"777" 777 "Female" NA NA NA NA NA NA NA NA NA
+"778" 778 "Male" "Grammar" "Don't know" "Yes" "It depends" "No" "No" NA "No" NA
+"779" 779 "Male" "Grammar" "A little" "No" NA "No" "No" NA "No" NA
+"780" 780 "Male" "Grammar" "A little" "No" NA "Yes" "Yes" "Not at all" "Yes" "Not at all "
+"781" 781 "Male" "Secondary" "A lot" "Yes" "It depends" "Yes" "Yes" "Not at all" "Yes" "A little"
+"782" 782 "Male" "Secondary" "A little" "Yes" "It depends" "Don't know" "Yes" "Not at all" "Yes" "A little"
+"783" 783 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"784" 784 "Male" "Grammar" "A little" "No" NA "No" "Yes" "Not at all" "No" NA
+"785" 785 "Female" "Planned Integrated" "A little" "Yes" "It depends" "Yes" "No" NA "Yes" "A little"
+"786" 786 "Female" "Grammar" "A lot" "Yes" "It depends" "No" "Yes" "Not at all" "No" NA
+"787" 787 "Female" "Grammar" "Don't know" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"788" 788 "Female" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"789" 789 "Male" "Secondary" "A little" "Yes" "Would not talk to them" "Yes" "Yes" "Not at all" "No" NA
+"790" 790 "Male" "Secondary" "Not at all" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"791" 791 "Female" "Secondary" "A little" "Yes" "Would talk to them" "Yes" "No" NA "Yes" NA
+"792" 792 "Female" "Secondary" "A lot" "Yes" "It depends" "Yes" "No" NA "No" NA
+"793" 793 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"794" 794 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"795" 795 "Female" "Grammar" "Not at all" "Yes" "Would talk to them" "Yes" "No" NA "No" NA
+"796" 796 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"797" 797 "Male" "Planned Integrated" "A little" "Yes" "Would talk to them" "Yes" "No" NA "Yes" "A little"
+"798" 798 "Male" "Grammar" "A little" "Yes" "Would not talk to them" "Yes" "No" NA "No" NA
+"799" 799 "Male" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"800" 800 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"801" 801 "Male" "Grammar" "A little" "Don't know" NA "Don't know" "No" NA "No" NA
+"802" 802 "Male" "Planned Integrated" "A little" "Yes" "Would not talk to them" "Don't know" "Yes" "Not at all" "No" NA
+"803" 803 "Male" "Secondary" "Don't know" "Don't know" NA "Don't know" "No" NA "No" NA
+"804" 804 "Male" "Secondary" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"805" 805 "Female" "Secondary" "A little" "Don't know" NA "Yes" "No" NA "No" NA
+"806" 806 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"807" 807 "Female" "Secondary" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"808" 808 "Female" "Grammar" "A little" "Don't know" NA "Don't know" "Yes" "Not at all" "No" NA
+"809" 809 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "Yes" "Not at all" "No" NA
+"810" 810 "Male" "Grammar" "A little" "No" NA "Yes" "No" NA "Yes" "Not at all "
+"811" 811 "Female" "Grammar" "A little" "Yes" "Would talk to them" "Yes" "Yes" "Not at all" "Yes" "Not at all "
+"812" 812 "Male" "Grammar" "Not at all" "Yes" "Don't know" "Yes" "No" NA "No" NA
+"813" 813 "Male" "Grammar" "A little" "Yes" "It depends" "Don't know" "No" NA "No" NA
+"814" 814 "Female" "Secondary" "A little" "Yes" "Would not talk to them" "No" "No" NA "No" NA
+"815" 815 "Male" "Grammar" "A little" "No" NA "Yes" "No" NA "No" NA
+"816" 816 "Female" "Secondary" "Don't know" "Don't know" NA "Yes" "No" NA "No" NA
+"817" 817 "Male" "Grammar" "A little" "Don't know" NA "No" "No" NA "No" NA
+"818" 818 "Female" "Grammar" "A little" "Yes" "It depends" "Yes" "No" NA "No" NA
+"819" 819 "Male" "Secondary" "Not at all" "Yes" "Would not talk to them" "No" "No" NA "No" NA

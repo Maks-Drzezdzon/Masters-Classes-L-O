@@ -12,7 +12,7 @@ sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
 
 
 ###############
-# ^^ LOAD  ^^ #
+# ^^ Setup  ^^ #
 ###############
 
 
@@ -49,12 +49,8 @@ df = df %>% setnames(
 
 colnames(df)
 # inspect unique weather station names, 122 as the file suggests
-unique(df$wsnm , incomparables = FALSE)
-# saving file to feather format as its has faster I/O 
-# and is supported by both python and r
-# from here on out the feather file will be used instead
-# drawback is that its slightly larger than the original file
-# HDF5 would be better for a mix of I/O and size optimization
+unique(df$w_station_name , incomparables = FALSE)
+
 write_feather(df, 'weather-data.feather')
 df = read_feather('weather-data.feather')
 
@@ -71,11 +67,7 @@ df %>% mutate(observation_date_time = make_datetime(year, month, day, hour))
 df = df[,!names(df) %in% c("year", "month", "day", "hour")]
 head(df)
 colnames(df)
-# update feather file
-# cut off 300 Mb of data
-write_feather(df, 'weather-data.feather')
-df = read_feather('weather-data.feather')
-sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
+
 
 
 
@@ -84,11 +76,12 @@ sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
 ####################
 # this section focuses on exploring the data set
 # and provide some insights for the written report
+df = na.omit(df)
+write_feather(df, 'weather-data.feather')
+df = read_feather('weather-data.feather')
+sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
 
 
-
-# find empty values count for each col
-# (tidyverse function)
 # missing data
 map(df , ~sum(is.na(.)))
 # df[row,col]
@@ -100,8 +93,6 @@ glimpse(sao_goncalo)
 str(sao_goncalo)
 summary(df)
 summary(sao_goncalo$observation_date)
-
-# Look over this
 skim(sao_goncalo)
 
 plot(sao_goncalo$observation_date_time, sao_goncalo$air_temprature)
@@ -117,40 +108,113 @@ plot(sao_goncalo$observation_date_time, sao_goncalo$precipitation_last_hr_ml)
 plot(sao_goncalo$observation_date_time, sao_goncalo$relative_humidity)
 plot(sao_goncalo$observation_date_time, sao_goncalo$solar_radiation)
 
+# 12 month blocks
+sao_goncalo_2008 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2008-12-31" & observation_date_time >= "2008-01-01"), ])
+skim(sao_goncalo_2008)
 
-sao_goncalo_2008 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2008-12-31"), ])
-sao_goncalo_2009 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2012-12-31" & observation_date_time >= "2012-01-01"), ])
 sao_goncalo_2010 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2010-12-31" & observation_date_time >= "2010-01-01"), ])
+skim(sao_goncalo_2010)
 
-sao_goncalo2 = na.omit(sao_goncalo)
-sao_goncalo2 = with(sao_goncalo2, sao_goncalo2[(observation_date_time <= "2008-12-31"), ])
+sao_goncalo_2012 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2012-12-31" & observation_date_time >= "2012-01-01"), ])
+skim(sao_goncalo_2012)
 
-plot(sao_goncalo2$observation_date_time, sao_goncalo2$precipitation_last_hr_ml)
-plot(sao_goncalo2$observation_date_time, sao_goncalo2$relative_humidity)
-plot(sao_goncalo2$observation_date_time, sao_goncalo2$solar_radiation)
+help("plot")
+
+par(mfrow=c(2,2)) # 2x2 block per graph
+plot(type = "h", sao_goncalo_2008$observation_date_time, sao_goncalo_2008$dew_temp, xlab = "2008 12 month period" , ylab = "temperature in °C")
+plot(type = "b", sao_goncalo_2008$observation_date_time, sao_goncalo_2008$precipitation_last_hr_ml, xlab = "2008 12 month period", ylab = "rain fall in millimetres ")
+plot(type = "h", sao_goncalo_2008$observation_date_time, sao_goncalo_2008$relative_humidity, xlab = "2008 12 month period", ylab = "humidity as % out of 100")
+plot(type = "l", sao_goncalo_2008$observation_date_time, sao_goncalo_2008$solar_radiation, xlab = "2008 12 month period", ylab = "sunlight in  KJ/m2")
+
+plot(type = "h", sao_goncalo_2010$observation_date_time, sao_goncalo_2010$dew_temp, xlab = "2010 12 month period", ylab = "temperature in °C")
+plot(type = "b", sao_goncalo_2010$observation_date_time, sao_goncalo_2010$precipitation_last_hr_ml, xlab = "2010 12 month period", ylab = "rain fall in millimetres ")
+plot(type = "h", sao_goncalo_2010$observation_date_time, sao_goncalo_2010$relative_humidity, xlab = "2010 12 month period", ylab = "humidity as % out of 100")
+plot(type = "l", sao_goncalo_2010$observation_date_time, sao_goncalo_2010$solar_radiation, xlab = "2010 12 month period", ylab = "sunlight in  KJ/m2")
+
+plot(type = "h", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$dew_temp, xlab = "2012 12 month period", ylab = "temperature in °C")
+plot(type = "b", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$precipitation_last_hr_ml, xlab = "2012 12 month period", ylab = "rain fall in millimetres ")
+plot(type = "h", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$relative_humidity, xlab = "2012 12 month period", ylab = "humidity as % out of 100")
+plot(type = "l", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$solar_radiation, xlab = "2012 12 month period", ylab = "sunlight in  KJ/m2")
+
+help("ggplot")
+
+# quick inspection before forecasting
+ggplot(data=sao_goncalo_2008, aes(x=solar_radiation, y=observation_date_time)) + geom_point()
+ggplot(data=sao_goncalo_2008, aes(x=solar_radiation, y=relative_humidity)) + geom_point()
+
+ggplot(data=sao_goncalo_2010, aes(x=solar_radiation, y=observation_date_time)) + geom_point()
+ggplot(data=sao_goncalo_2010, aes(x=solar_radiation, y=relative_humidity)) + geom_point()
+
+ggplot(data=sao_goncalo_2012, aes(x=solar_radiation, y=observation_date_time)) + geom_point()
+ggplot(data=sao_goncalo_2012, aes(x=solar_radiation, y=relative_humidity)) + geom_point()
+
+# plot min max temp for station on one graph
+
+#################################
+# find coldest and warmest city # Done
+#################################
+
+sapply(df, max, na.rm = T)
+# max max temp is 42.4
+# max min temp is 37.6
+
+warmest_city = filter(df, max_temp_hr >= 42.4)
+skim(warmest_city)
+
+lest_warmest_city = filter(df, max_temp_hr >= 37.6)
+skim(lest_warmest_city)
 
 
-ggplot(sao_goncalo2, aes(observation_date_time, precipitation_last_hr_ml)) +
-  ggtitle("title")
+sapply(df, min, na.rm = T)
+# min max temp is - 2.9
+# min min temp is -2.5
 
-ggplot(sao_goncalo_2008) + geom_histogram(bins = 12, aes(x=observation_date_time)) # missing
-ggplot(sao_goncalo_2009) + geom_histogram(bins = 12, aes(x=observation_date_time)) # missing
-ggplot(sao_goncalo_2010) + geom_histogram(bins = 12, aes(x=observation_date_time)) # good year
+coldest_city = filter(df, max_temp_hr >= - 2.9)
+skim(coldest_city)
 
-sao_goncalo_2010 %>% group_by("observation_date_time")
+least_coldest_city = filter(df, max_temp_hr >= -2.5)
+skim(least_coldest_city)
 
-ggplot(data = sao_goncalo_2010) +
-  geom_sf() +
-  xlab("Longitude") + ylab("Latitude") +
-  ggtitle("World map", subtitle = paste0("(", length(unique(sao_goncalo_2010$w_station_name)), " w_station_name)"))
+##################################
+# find most and least rainy city #
+##################################
+# might be better to use group by here and graph it ?
 
-# use lat and log values to create map graph
-# find most rainy months in 2010
-# check lat long values with lat long of city
-# Air pressure and wind analysis
-# graph all stations, compare two that are far apart or close to each other ??
-# move to visualization 
+sapply(df, max, na.rm = T)
+# max  is 100
 
+most_rainy_city = filter(df, precipitation_last_hr_ml >= 100)
+skim(most_rainy_city)
+
+
+sapply(df, min, na.rm = T)
+# min 0
+
+least_rainy_city = filter(df, precipitation_last_hr_ml >= 0)
+skim(least_rainy_city)
+
+
+
+##################################
+# find most and least humid city #
+##################################
+# might be better to use group by here and graph it ?
+
+sapply(df, max, na.rm = T)
+# max 
+
+most_humid_city = filter(df, relative_humidity >= 100)
+skim(most_humid_city)
+
+
+sapply(df, min, na.rm = T)
+# min 
+
+least_humid_city = filter(df, relative_humidity >= 0)
+skim(least_humid_city)
+
+
+# Air pressure and wind analysis maybe ?
 
 
 ######################
@@ -159,7 +223,14 @@ ggplot(data = sao_goncalo_2010) +
 # this section focuses on generating visualizations
 # for the report along with exploring different methods 
 # of doing so
+# use meteorologist graphs to visualise findings and explain what its, should be a good wrap up
+# https://davetang.org/muse/2020/01/08/plotting-weather-data-using-r/
+# https://www.visualcrossing.com/resources/documentation/weather-data-tutorials/how-can-i-find-weather-forecast-data-for-analysis-in-r/
 
+# links
+# http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html
+# https://cengel.github.io/R-data-wrangling/data-visualization-with-ggplot2.html
+# https://community.rstudio.com/t/help-with-making-plot-with-multiple-columns/50763
 
 
 

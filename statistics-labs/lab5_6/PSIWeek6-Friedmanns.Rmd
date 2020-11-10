@@ -1,0 +1,36 @@
+---
+title: "Week 6 Friedmans"
+output:
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+### Friedmans ANOVA (non-parametric) for repeated measures
+## SETUP
+```{r setup}
+
+#We are using diet.dat (Taken from Discovering Statistics with R, Andy Field)
+#created from the .sav version available at https://studysites.uk.sagepub.com/dsur/study/default.htm
+#adapted to work as a dataframe on load
+
+#Does the 'andikins' diet work?
+#Variables
+#Outcome: weight (Kg)
+#Time since beginning the diet
+#At Baseline (start)
+#At 1 Month
+#At 2 Months
+
+#read in the data
+diet <- read.table("diet.dat")
+#treat our data as a matrix
+Responses <- na.omit(with(diet, cbind(month1, month2, start)))
+cat("\nMedians:\n")#display the heading Medians
+#print out the medians of each of our variables
+print(apply(Responses, 2, median)) 
+#conduct the friedman test
+stats::friedman.test(Responses)
+
+#Conduct post-hoc tests as needed
+```
