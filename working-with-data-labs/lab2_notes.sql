@@ -1,3 +1,4 @@
+/**/
 select regexp_substr(val, '[^/]+/[^/]+', 1, 1) as part1,
     regexp_substr(val, '[^/]+$', 1, 1) as part2
 from (select 'F/P/O' as val
