@@ -130,3 +130,22 @@ from STUDENT join COURSE_CODES on student.prog_code = course_codes.course_code;
 select count(*), course_description
 from STUDENT join COURSE_CODES on student.prog_code = course_codes.course_code
 group by course_description;
+
+select *
+from emp;
+
+select count(*), dname
+from emp join dept on emp.deptno = dept.deptno
+group by dname;
+
+select *
+from emp
+where job = 'MANAGER';
+
+select ename, hiredate
+from emp
+order by hiredate;
+
+select ename, dname
+from emp join dept on emp.deptno = dept.deptno
+where job = 'MANAGER';
