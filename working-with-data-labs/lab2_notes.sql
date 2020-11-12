@@ -1,8 +1,7 @@
-/**/
 select regexp_substr(val, '[^/]+/[^/]+', 1, 1) as part1,
     regexp_substr(val, '[^/]+$', 1, 1) as part2
 from (select 'F/P/O' as val
-    from dual) t
+    from dual) t;
 
 
 set feedback off
@@ -50,3 +49,10 @@ SELECT CONVERT(DATETIME, '2012-06-05', 102)
 from dual;
 SELECT TRY_CONVERT(DATETIME, 'ABC')
 from dual;
+
+
+select dob
+from student;
+select first_name, dob
+from student
+order by trunc(sysdate) - trunc(dob) desc;
