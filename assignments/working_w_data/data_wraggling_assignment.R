@@ -119,6 +119,12 @@ skim(sao_goncalo_2010)
 sao_goncalo_2012 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2012-12-31" & observation_date_time >= "2012-01-01"), ])
 skim(sao_goncalo_2012)
 
+sao_goncalo_2014 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2014-12-31" & observation_date_time >= "2014-01-01"), ])
+skim(sao_goncalo_2014)
+
+sao_goncalo_2016 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2016-12-31" & observation_date_time >= "2016-01-01"), ])
+sim(sao_goncalo_2016)
+
 par(mfrow=c(2,2)) # 2x2 block per graph
 plot(type = "b", sao_goncalo_2008$observation_date_time, sao_goncalo_2008$dew_temp, xlab = "2008 12 month period" , ylab = "temperature in °C")
 plot(type = "b", sao_goncalo_2008$observation_date_time, sao_goncalo_2008$precipitation_last_hr_ml, xlab = "2008 12 month period", ylab = "rain fall in millimetres ")
@@ -145,37 +151,36 @@ ggplot(data=sao_goncalo_2010, aes(x=solar_radiation, y=relative_humidity)) + geo
 ggplot(data=sao_goncalo_2012, aes(x=solar_radiation, y=observation_date_time)) + geom_point()
 ggplot(data=sao_goncalo_2012, aes(x=solar_radiation, y=relative_humidity)) + geom_point()
 
-# this forecast isnt very useful as it creates a flat line
+# this forecast isnt very useful as it creates a flat line, similar results for other years
 sao_goncalo_2008$precipitation_last_hr_ml %>% na.interp() %>% ets() %>% forecast(h=30) %>% autoplot()
 sao_goncalo_2008$relative_humidity %>% na.interp() %>% ets() %>% forecast(h=30) %>% autoplot()
 sao_goncalo_2008$solar_radiation %>% na.interp() %>% ets() %>% forecast(h=30) %>% autoplot()
 
-# plot min max temp for station on one graph
 
-#################################
-# find coldest and warmest city # Done
-#################################
+#################################################
+# find temperature changes in the same location # 
+#################################################
 
-sapply(df, max, na.rm = T)
-# max max temp is 42.4
-# max min temp is 37.6
+sapply(sao_goncalo_2008, max, na.rm = T)
+# highest max temp is 31.2
+# lowest max temp is 28.9
 
-warmest_city = filter(df, max_temp_hr >= 42.4)
-unique(warmest_city$w_station_name)
+sapply(sao_goncalo_2010, max, na.rm = T)
+# highest max temp is 33.5
+# lowest max temp is 31.8
 
-least_warmest_city = filter(df, max_temp_hr >= 37.6)
-unique(least_warmest_city$w_station_name)
+sapply(sao_goncalo_2012, max, na.rm = T)
+# highest max temp is 34.6
+# lowest max temp is 29
 
+sapply(sao_goncalo_2014, max, na.rm = T)
+# highest max temp is 35.6
+# lowest max temp is 31.5
 
-sapply(df, min, na.rm = T)
-# min max temp is - 2.9
-# min min temp is -2.5
+sapply(sao_goncalo_2016, max, na.rm = T)
+# highest max temp is 35.5
+# lowest max temp is 31.3
 
-coldest_city = filter(df, max_temp_hr >= - 2.9)
-skim(coldest_city)
-
-least_coldest_city = filter(df, max_temp_hr >= -2.5)
-skim(least_coldest_city)
 
 ##################################
 # find most and least rainy city #
