@@ -7,9 +7,8 @@ library(skimr) # summary statistics for larger data sets
 library(forecast)
 
 df = read_feather('weather-data.feather')
-sao_goncalo = as_tibble(filter(df, w_station_name == "SÃO GONÇALO"))
+sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
 itapira = as_tibble(filter(df, w_station_name == "ITAPIRA"))
-sample(sao_goncalo)
 
 ###############
 # ^^ Setup  ^^ #
@@ -137,7 +136,7 @@ plot(type = "h", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$relati
 plot(type = "l", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$solar_radiation, xlab = "2012 12 month period", ylab = "sunlight in  KJ/m2")
 
 # quick inspection before forecasting
-ggplot(data=sao_goncalo_2008, aes(x=solar_radiation, y=observation_date_time)) + geom_point() +
+ggplot(data=sao_goncalo_2008, aes(x=solar_radiation, y=observation_date_time)) + geom_point() 
 ggplot(data=sao_goncalo_2008, aes(x=solar_radiation, y=relative_humidity)) + geom_point()
 
 ggplot(data=sao_goncalo_2010, aes(x=solar_radiation, y=observation_date_time)) + geom_point()
@@ -162,10 +161,10 @@ sapply(df, max, na.rm = T)
 # max min temp is 37.6
 
 warmest_city = filter(df, max_temp_hr >= 42.4)
-skim(warmest_city)
+unique(warmest_city$w_station_name)
 
-lest_warmest_city = filter(df, max_temp_hr >= 37.6)
-skim(lest_warmest_city)
+least_warmest_city = filter(df, max_temp_hr >= 37.6)
+unique(least_warmest_city$w_station_name)
 
 
 sapply(df, min, na.rm = T)
@@ -205,7 +204,6 @@ skim(least_rainy_city)
 
 sapply(df, max, na.rm = T)
 # max 
-
 most_humid_city = filter(df, relative_humidity >= 100)
 skim(most_humid_city)
 
@@ -218,25 +216,4 @@ skim(least_humid_city)
 
 
 # Air pressure and wind analysis maybe ?
-
-
-######################
-# data visualization #
-######################
-# this section focuses on generating visualizations
-# for the report along with exploring different methods 
-# of doing so
-# use meteorologist graphs to visualise findings and explain what its, should be a good wrap up
-# https://davetang.org/muse/2020/01/08/plotting-weather-data-using-r/
-# https://www.visualcrossing.com/resources/documentation/weather-data-tutorials/how-can-i-find-weather-forecast-data-for-analysis-in-r/
-
-# links
-# http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html
-# https://cengel.github.io/R-data-wrangling/data-visualization-with-ggplot2.html
-# https://community.rstudio.com/t/help-with-making-plot-with-multiple-columns/50763
-
-
-
-
-
 
