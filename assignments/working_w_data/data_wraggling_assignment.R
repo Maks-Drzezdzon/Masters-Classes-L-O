@@ -137,7 +137,7 @@ plot(type = "h", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$relati
 plot(type = "l", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$solar_radiation, xlab = "2012 12 month period", ylab = "sunlight in  KJ/m2")
 
 # quick inspection before forecasting
-ggplot(data=sao_goncalo_2008, aes(x=solar_radiation, y=observation_date_time)) + geom_point()
+ggplot(data=sao_goncalo_2008, aes(x=solar_radiation, y=observation_date_time)) + geom_point() +
 ggplot(data=sao_goncalo_2008, aes(x=solar_radiation, y=relative_humidity)) + geom_point()
 
 ggplot(data=sao_goncalo_2010, aes(x=solar_radiation, y=observation_date_time)) + geom_point()
@@ -147,9 +147,9 @@ ggplot(data=sao_goncalo_2012, aes(x=solar_radiation, y=observation_date_time)) +
 ggplot(data=sao_goncalo_2012, aes(x=solar_radiation, y=relative_humidity)) + geom_point()
 
 # this forecast isnt very useful as it creates a flat line
-sao_goncalo_2008$precipitation_last_hr_ml %>% na.interp() %>% ets() %>% forecast(h=36) %>% autoplot()
-sao_goncalo_2008$relative_humidity %>% na.interp() %>% ets() %>% forecast(h=36) %>% autoplot()
-sao_goncalo_2008$solar_radiation %>% na.interp() %>% ets() %>% forecast(h=36) %>% autoplot()
+sao_goncalo_2008$precipitation_last_hr_ml %>% na.interp() %>% ets() %>% forecast(h=30) %>% autoplot()
+sao_goncalo_2008$relative_humidity %>% na.interp() %>% ets() %>% forecast(h=30) %>% autoplot()
+sao_goncalo_2008$solar_radiation %>% na.interp() %>% ets() %>% forecast(h=30) %>% autoplot()
 
 # plot min max temp for station on one graph
 
