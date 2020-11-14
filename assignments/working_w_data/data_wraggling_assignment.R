@@ -8,6 +8,7 @@ library(forecast)
 
 df = read_feather('weather-data.feather')
 sao_goncalo = as_tibble(filter(df, w_station_name == "SÃO GONÇALO"))
+itapira = as_tibble(filter(df, w_station_name == "ITAPIRA"))
 sample(sao_goncalo)
 
 ###############
@@ -78,12 +79,12 @@ df = na.omit(df)
 write_feather(df, 'weather-data.feather')
 df = read_feather('weather-data.feather')
 sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
-sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
 
 
 # missing data
 map(df , ~sum(is.na(.)))
-map(sao_goncalo_2008 , ~sum(is.na(.)))
+map(sao_goncalo , ~sum(is.na(.)))
+map(itapira, ~sum(is.na(.)))
 # df[row,col]
 # explore data of one city 
 View(sao_goncalo)
@@ -110,7 +111,6 @@ plot(sao_goncalo$observation_date_time, sao_goncalo$solar_radiation)
 
 # 12 month blocks
 sao_goncalo_2008 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2008-12-31" & observation_date_time >= "2008-01-01"), ])
-
 skim(sao_goncalo_2008)
 
 sao_goncalo_2010 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2010-12-31" & observation_date_time >= "2010-01-01"), ])
@@ -120,10 +120,8 @@ skim(sao_goncalo_2010)
 sao_goncalo_2012 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2012-12-31" & observation_date_time >= "2012-01-01"), ])
 skim(sao_goncalo_2012)
 
-help("plot")
-
 par(mfrow=c(2,2)) # 2x2 block per graph
-plot(type = "h", sao_goncalo_2008$observation_date_time, sao_goncalo_2008$dew_temp, xlab = "2008 12 month period" , ylab = "temperature in °C")
+plot(type = "b", sao_goncalo_2008$observation_date_time, sao_goncalo_2008$dew_temp, xlab = "2008 12 month period" , ylab = "temperature in °C")
 plot(type = "b", sao_goncalo_2008$observation_date_time, sao_goncalo_2008$precipitation_last_hr_ml, xlab = "2008 12 month period", ylab = "rain fall in millimetres ")
 plot(type = "h", sao_goncalo_2008$observation_date_time, sao_goncalo_2008$relative_humidity, xlab = "2008 12 month period", ylab = "humidity as % out of 100")
 plot(type = "l", sao_goncalo_2008$observation_date_time, sao_goncalo_2008$solar_radiation, xlab = "2008 12 month period", ylab = "sunlight in  KJ/m2")
