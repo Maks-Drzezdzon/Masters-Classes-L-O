@@ -6,9 +6,7 @@ library(reticulate) # embed python inside R code
 library(skimr) # summary statistics for larger data sets
 
 df = read_feather('weather-data.feather')
-sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
-
-
+sao_goncalo = as_tibble(filter(df, w_station_name == "SÃO GONÇALO"))
 
 
 ###############
