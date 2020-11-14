@@ -161,26 +161,48 @@ sao_goncalo_2008$solar_radiation %>% na.interp() %>% ets() %>% forecast(h=30) %>
 # find temperature changes in the same location # 
 #################################################
 
-sapply(sao_goncalo_2008, max, na.rm = T)
+temp_2008 = sapply(sao_goncalo_2008, max, na.rm = T)
+highest_max_temp_2008 = getElement(temp_2008, "max_temp_hr")             
+lowest_max_temp_2008 = getElement(temp_2008, "min_temp_hr")
 # highest max temp is 31.2
 # lowest max temp is 28.9
 
-sapply(sao_goncalo_2010, max, na.rm = T)
+temp_2010 = sapply(sao_goncalo_2010, max, na.rm = T)
+highest_max_temp_2010 = getElement(temp_2010, "max_temp_hr")
+lowest_max_temp_2010 = getElement(temp_2010, "min_temp_hr")
 # highest max temp is 33.5
 # lowest max temp is 31.8
 
-sapply(sao_goncalo_2012, max, na.rm = T)
+temp_2012 = sapply(sao_goncalo_2012, max, na.rm = T)
+highest_max_temp_2012 = getElement(temp_2012, "max_temp_hr")
+lowest_max_temp_2012 = getElement(temp_2012, "min_temp_hr")
 # highest max temp is 34.6
 # lowest max temp is 29
 
-sapply(sao_goncalo_2014, max, na.rm = T)
+temp_2014 = sapply(sao_goncalo_2014, max, na.rm = T)
+highest_max_temp_2014 = getElement(temp_2014, "max_temp_hr")
+lowest_max_temp_2014 = getElement(temp_2014, "min_temp_hr")
 # highest max temp is 35.6
 # lowest max temp is 31.5
 
-sapply(sao_goncalo_2016, max, na.rm = T)
+temp_2016 = sapply(sao_goncalo_2016, max, na.rm = T)
+highest_max_temp_2016 = getElement(temp_2016, "max_temp_hr")
+lowest_max_temp_2016 = getElement(temp_2016, "min_temp_hr")
 # highest max temp is 35.5
 # lowest max temp is 31.3
+highest_temps =  c(highest_max_temp_2008, highest_max_temp_2010, highest_max_temp_2012, highest_max_temp_2014, highest_max_temp_2016)
+names(highest_temps) = c("2008", "2010", "2012", "2014", "2016")
 
+lowest_temps = c(lowest_max_temp_2008, lowest_max_temp_2010, lowest_max_temp_2012, lowest_max_temp_2014, lowest_max_temp_2016)
+names(lowest_temps) = c("2008", "2010", "2012", "2014", "2016")
+
+# Graph it and compare changes
+
+plot(lowest_temps, xaxt="n", xlab = "Lowest Temperature recorded every 2 years", ylab = "Degrees in Celsius")
+axis(1, at = 1:5, labels = names(lowest_temps))
+
+plot(highest_temps, xaxt="n", xlab = "Lowest Temperature recorded every 2 years", ylab = "Degrees in Celsius")
+axis(1, at = 1:5, labels = names(highest_temps))
 
 ##################################
 # find most and least rainy city #
