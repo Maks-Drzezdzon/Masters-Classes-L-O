@@ -66,16 +66,14 @@ df = df[,!names(df) %in% c("year", "month", "day", "hour")]
 head(df)
 colnames(df)
 
-# its difficult to make assertions about weather data to change or drop anything other than N/A values 
-# since values can vary, other than basic assumptions
-
-
+df = na.omit(df)
+sao_goncalo[sao_goncalo$tem]
 ####################
 # data exploration #
 ####################
 # this section focuses on exploring the data set
 # and provide some insights for the written report
-df = na.omit(df)
+
 write_feather(df, 'weather-data.feather')
 df = read_feather('weather-data.feather')
 sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
@@ -162,45 +160,45 @@ sao_goncalo_2008$solar_radiation %>% na.interp() %>% ets() %>% forecast(h=30) %>
 # find temperature changes in the same location # 
 #################################################
 
-avg_temp_2008 = mean(sao_goncalo_2008$max_temp_hr)
+avg_temp_2008 = mean(sao_goncalo_2008$air_temprature)
 temp_2008 = sapply(sao_goncalo_2008, max, na.rm = T)
 highest_max_temp_2008 = getElement(temp_2008, "max_temp_hr")             
 lowest_max_temp_2008 = getElement(temp_2008, "min_temp_hr")
-# avg is 10.42
 # highest max temp is 31.2
 # lowest max temp is 28.9
+# avg is 9.87
 
-avg_temp_2010 = mean(sao_goncalo_2010$max_temp_hr)
+avg_temp_2010 = mean(sao_goncalo_2010$air_temprature)
 temp_2010 = sapply(sao_goncalo_2010, max, na.rm = T)
 highest_max_temp_2010 = getElement(temp_2010, "max_temp_hr")
 lowest_max_temp_2010 = getElement(temp_2010, "min_temp_hr")
 # highest max temp is 33.5
 # lowest max temp is 31.8
-# avg is 17.52
+# avg is 16.87
 
-avg_temp_2012 = mean(sao_goncalo_2012$max_temp_hr)
+avg_temp_2012 = mean(sao_goncalo_2012$air_temprature)
 temp_2012 = sapply(sao_goncalo_2012, max, na.rm = T)
 highest_max_temp_2012 = getElement(temp_2012, "max_temp_hr")
 lowest_max_temp_2012 = getElement(temp_2012, "min_temp_hr")
 # highest max temp is 34.6
 # lowest max temp is 29
-# avg is 23.29
+# avg is 21.65
 
-avg_temp_2014 = mean(sao_goncalo_2014$max_temp_hr)
+avg_temp_2014 = mean(sao_goncalo_2014$air_temprature)
 temp_2014 = sapply(sao_goncalo_2014, max, na.rm = T)
 highest_max_temp_2014 = getElement(temp_2014, "max_temp_hr")
 lowest_max_temp_2014 = getElement(temp_2014, "min_temp_hr")
 # highest max temp is 35.6
 # lowest max temp is 31.5
-# avg is 26
+# avg is 24.48
 
-avg_temp_2016 = mean(sao_goncalo_2016$max_temp_hr)
+avg_temp_2016 = mean(sao_goncalo_2016$air_temprature)
 temp_2016 = sapply(sao_goncalo_2016, max, na.rm = T)
 highest_max_temp_2016 = getElement(temp_2016, "max_temp_hr")
 lowest_max_temp_2016 = getElement(temp_2016, "min_temp_hr")
 # highest max temp is 35.5
 # lowest max temp is 31.3
-# avg is 26.88
+# avg is 25.51
 
 avg_temps =  c(avg_temp_2008, avg_temp_2010, avg_temp_2012, avg_temp_2014, avg_temp_2016)
 names(avg_temps) = c("2008", "2010", "2012", "2014", "2016")
@@ -222,6 +220,9 @@ axis(1, at = 1:5, labels = names(avg_temps))
 
 plot(type = "b", highest_temps, xaxt="n", xlab = "Highest Max Temperature Recorded Every 2 Years", ylab = "Degrees in Celsius", col="blue")
 axis(1, at = 1:5, labels = names(highest_temps))
+
+sao_goncalo$max_temp_hr %>% na.interp() %>% ets() %>% forecast(h=39) %>% autoplot()
+highest_temps %>% na.interp() %>% ets() %>% forecast(h=30) %>% autoplot()
 
 
 ##################################
