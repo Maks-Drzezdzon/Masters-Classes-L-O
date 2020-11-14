@@ -66,7 +66,8 @@ df = df[,!names(df) %in% c("year", "month", "day", "hour")]
 head(df)
 colnames(df)
 
-
+# its difficult to make assertions about weather data to change or drop anything other than N/A values 
+# since values can vary, other than basic assumptions
 
 
 ####################
@@ -123,7 +124,7 @@ sao_goncalo_2014 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2014
 skim(sao_goncalo_2014)
 
 sao_goncalo_2016 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2016-12-31" & observation_date_time >= "2016-01-01"), ])
-sim(sao_goncalo_2016)
+skim(sao_goncalo_2016)
 
 par(mfrow=c(2,2)) # 2x2 block per graph
 plot(type = "b", sao_goncalo_2008$observation_date_time, sao_goncalo_2008$dew_temp, xlab = "2008 12 month period" , ylab = "temperature in °C")
@@ -161,35 +162,49 @@ sao_goncalo_2008$solar_radiation %>% na.interp() %>% ets() %>% forecast(h=30) %>
 # find temperature changes in the same location # 
 #################################################
 
+avg_temp_2008 = mean(sao_goncalo_2008$max_temp_hr)
 temp_2008 = sapply(sao_goncalo_2008, max, na.rm = T)
 highest_max_temp_2008 = getElement(temp_2008, "max_temp_hr")             
 lowest_max_temp_2008 = getElement(temp_2008, "min_temp_hr")
+# avg is 10.42
 # highest max temp is 31.2
 # lowest max temp is 28.9
 
+avg_temp_2010 = mean(sao_goncalo_2010$max_temp_hr)
 temp_2010 = sapply(sao_goncalo_2010, max, na.rm = T)
 highest_max_temp_2010 = getElement(temp_2010, "max_temp_hr")
 lowest_max_temp_2010 = getElement(temp_2010, "min_temp_hr")
 # highest max temp is 33.5
 # lowest max temp is 31.8
+# avg is 17.52
 
+avg_temp_2012 = mean(sao_goncalo_2012$max_temp_hr)
 temp_2012 = sapply(sao_goncalo_2012, max, na.rm = T)
 highest_max_temp_2012 = getElement(temp_2012, "max_temp_hr")
 lowest_max_temp_2012 = getElement(temp_2012, "min_temp_hr")
 # highest max temp is 34.6
 # lowest max temp is 29
+# avg is 23.29
 
+avg_temp_2014 = mean(sao_goncalo_2014$max_temp_hr)
 temp_2014 = sapply(sao_goncalo_2014, max, na.rm = T)
 highest_max_temp_2014 = getElement(temp_2014, "max_temp_hr")
 lowest_max_temp_2014 = getElement(temp_2014, "min_temp_hr")
 # highest max temp is 35.6
 # lowest max temp is 31.5
+# avg is 26
 
+avg_temp_2016 = mean(sao_goncalo_2016$max_temp_hr)
 temp_2016 = sapply(sao_goncalo_2016, max, na.rm = T)
 highest_max_temp_2016 = getElement(temp_2016, "max_temp_hr")
 lowest_max_temp_2016 = getElement(temp_2016, "min_temp_hr")
 # highest max temp is 35.5
 # lowest max temp is 31.3
+# avg is 26.88
+
+avg_temps =  c(avg_temp_2008, avg_temp_2010, avg_temp_2012, avg_temp_2014, avg_temp_2016)
+names(avg_temps) = c("2008", "2010", "2012", "2014", "2016")
+
 highest_temps =  c(highest_max_temp_2008, highest_max_temp_2010, highest_max_temp_2012, highest_max_temp_2014, highest_max_temp_2016)
 names(highest_temps) = c("2008", "2010", "2012", "2014", "2016")
 
@@ -198,11 +213,16 @@ names(lowest_temps) = c("2008", "2010", "2012", "2014", "2016")
 
 # Graph it and compare changes
 
-plot(lowest_temps, xaxt="n", xlab = "Lowest Temperature recorded every 2 years", ylab = "Degrees in Celsius")
+plot(type = "b", lowest_temps, xaxt="n", xlab = "Lowest Max Temperature Recorded Every 2 Years", ylab = "Degrees in Celsius", col="red")
 axis(1, at = 1:5, labels = names(lowest_temps))
 
-plot(highest_temps, xaxt="n", xlab = "Lowest Temperature recorded every 2 years", ylab = "Degrees in Celsius")
+par(mfrow=c(1,2))
+plot(type = "b", avg_temps, xaxt="n", xlab = "Average Temperature Recorded Every 2 Years", ylab = "Degrees in Celsius", col="orange")
+axis(1, at = 1:5, labels = names(avg_temps))
+
+plot(type = "b", highest_temps, xaxt="n", xlab = "Highest Max Temperature Recorded Every 2 Years", ylab = "Degrees in Celsius", col="blue")
 axis(1, at = 1:5, labels = names(highest_temps))
+
 
 ##################################
 # find most and least rainy city #
