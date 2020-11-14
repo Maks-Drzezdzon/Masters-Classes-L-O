@@ -65,9 +65,11 @@ df %>% mutate(observation_date_time = make_datetime(year, month, day, hour))
 df = df[,!names(df) %in% c("year", "month", "day", "hour")]
 head(df)
 colnames(df)
-
+# ToDo
+# make decision whether to save this change to the dataset and think of other values that need to be cleaned
+df$air_temprature[df$air_temprature < 1] = NA
 df = na.omit(df)
-sao_goncalo[sao_goncalo$tem]
+
 ####################
 # data exploration #
 ####################
@@ -101,7 +103,6 @@ hist( sao_goncalo$observation_date_time, sao_goncalo$air_temprature)
 # some data missing for 2009-2010, similar blip for 2011-2012
 # there is also lots of 0 values during that time too
 # there is very little data here, probably there was little rainfall
-sao_goncalo_2008$precipitation_last_hr_ml %>% na.interp() %>% ets() %>% forecast(h=36) %>% autoplot()
 
 plot(sao_goncalo$observation_date_time, sao_goncalo$precipitation_last_hr_ml)
 plot(sao_goncalo$observation_date_time, sao_goncalo$relative_humidity)
@@ -161,12 +162,13 @@ sao_goncalo_2008$solar_radiation %>% na.interp() %>% ets() %>% forecast(h=30) %>
 #################################################
 
 avg_temp_2008 = mean(sao_goncalo_2008$air_temprature)
+avg_temp_2008
 temp_2008 = sapply(sao_goncalo_2008, max, na.rm = T)
 highest_max_temp_2008 = getElement(temp_2008, "max_temp_hr")             
 lowest_max_temp_2008 = getElement(temp_2008, "min_temp_hr")
 # highest max temp is 31.2
 # lowest max temp is 28.9
-# avg is 9.87
+# avg is 9.87 # post purge of 0 values its 23.83
 
 avg_temp_2010 = mean(sao_goncalo_2010$air_temprature)
 temp_2010 = sapply(sao_goncalo_2010, max, na.rm = T)
