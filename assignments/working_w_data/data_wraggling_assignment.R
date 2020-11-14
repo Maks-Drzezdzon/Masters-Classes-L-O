@@ -141,14 +141,14 @@ plot(type = "h", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$relati
 plot(type = "l", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$solar_radiation, xlab = "2012 12 month period", ylab = "sunlight in  KJ/m2")
 
 # quick inspection before forecasting
-ggplot(data=sao_goncalo_2008, aes(x=solar_radiation, y=observation_date_time)) + geom_point() 
-ggplot(data=sao_goncalo_2008, aes(x=solar_radiation, y=relative_humidity)) + geom_point()
+ggplot(data=sao_goncalo_2008, aes(y=solar_radiation, x=observation_date_time)) + geom_point() 
+ggplot(data=sao_goncalo_2008, aes(y=solar_radiation, x=relative_humidity)) + geom_point()
 
-ggplot(data=sao_goncalo_2010, aes(x=solar_radiation, y=observation_date_time)) + geom_point()
-ggplot(data=sao_goncalo_2010, aes(x=solar_radiation, y=relative_humidity)) + geom_point()
+ggplot(data=sao_goncalo_2010, aes(y=solar_radiation, x=observation_date_time)) + geom_point()
+ggplot(data=sao_goncalo_2010, aes(y=solar_radiation, x=relative_humidity)) + geom_point()
 
-ggplot(data=sao_goncalo_2012, aes(x=solar_radiation, y=observation_date_time)) + geom_point()
-ggplot(data=sao_goncalo_2012, aes(x=solar_radiation, y=relative_humidity)) + geom_point()
+ggplot(data=sao_goncalo_2012, aes(y=solar_radiation, x=observation_date_time)) + geom_point()
+ggplot(data=sao_goncalo_2012, aes(y=solar_radiation, x=relative_humidity)) + geom_point()
 
 # this forecast isnt very useful as it creates a flat line, similar results for other years
 sao_goncalo_2008$precipitation_last_hr_ml %>% na.interp() %>% ets() %>% forecast(h=30) %>% autoplot()
@@ -231,19 +231,39 @@ highest_temps %>% na.interp() %>% ets() %>% forecast(h=30) %>% autoplot()
 # might be better to use group by here and graph it ?
 
 sapply(df, max, na.rm = T)
-# max  is 100
+# precipitation_last_hr_ml
 
-most_rainy_city = filter(df, precipitation_last_hr_ml >= 100)
-skim(most_rainy_city)
-
-
-sapply(df, min, na.rm = T)
-# min 0
-
-least_rainy_city = filter(df, precipitation_last_hr_ml >= 0)
-skim(least_rainy_city)
+avg_rainfall_2008 = mean(sao_goncalo_2008$precipitation_last_hr_ml)
+highest_rainfall_2008 = getElement(temp_2008, "precipitation_last_hr_ml")             
 
 
+avg_rainfall_2010 = mean(sao_goncalo_2010$precipitation_last_hr_ml)
+highest_rainfall_2010 = getElement(temp_2010, "precipitation_last_hr_ml")
+
+
+avg_rainfall_2012 = mean(sao_goncalo_2012$precipitation_last_hr_ml)
+highest_rainfall_2012 = getElement(temp_2012, "precipitation_last_hr_ml")
+
+
+avg_rainfall_2014 = mean(sao_goncalo_2014$precipitation_last_hr_ml)
+highest_rainfall_2014 = getElement(temp_2014, "precipitation_last_hr_ml")
+
+
+avg_rainfall_2016 = mean(sao_goncalo_2016$precipitation_last_hr_ml)
+highest_rainfall_2016 = getElement(temp_2016, "precipitation_last_hr_ml")
+
+avg_rainfall =  c(avg_rainfall_2008, avg_rainfall_2010, avg_rainfall_2012, avg_rainfall_2014, avg_rainfall_2016)
+names(avg_rainfall) = c("2008", "2010", "2012", "2014", "2016")
+
+highest_rainfall =  c(highest_rainfall_2008, highest_rainfall_2010, highest_rainfall_2012, highest_rainfall_2014, highest_rainfall_2016)
+names(highest_rainfall) = c("2008", "2010", "2012", "2014", "2016")
+
+par(mfrow=c(1,2))
+plot(type = "b", avg_rainfall, xaxt="n", xlab = "Average Rainfall Recorded Every 2 Years", ylab = "Milliliters", col="orange")
+axis(1, at = 1:5, labels = names(avg_rainfall))
+
+plot(type = "b", highest_rainfall, xaxt="n", xlab = "Highest Rainfall Recorded Every 2 Years", ylab = "Milliliters", col="blue")
+axis(1, at = 1:5, labels = names(highest_rainfall))
 
 ##################################
 # find most and least humid city #
@@ -251,16 +271,9 @@ skim(least_rainy_city)
 # might be better to use group by here and graph it ?
 
 sapply(df, max, na.rm = T)
-# max 
 most_humid_city = filter(df, relative_humidity >= 100)
-skim(most_humid_city)
-
-
-sapply(df, min, na.rm = T)
-# min 
 
 least_humid_city = filter(df, relative_humidity >= 0)
-skim(least_humid_city)
 
 
 # Air pressure and wind analysis maybe ?
