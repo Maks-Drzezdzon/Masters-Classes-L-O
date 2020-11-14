@@ -4,10 +4,11 @@ library(feather) # file format lib
 library(lubridate) # date transformation 
 library(reticulate) # embed python inside R code
 library(skimr) # summary statistics for larger data sets
+library(forecast)
 
 df = read_feather('weather-data.feather')
 sao_goncalo = as_tibble(filter(df, w_station_name == "SÃO GONÇALO"))
-
+sample(sao_goncalo)
 
 ###############
 # ^^ Setup  ^^ #
@@ -30,7 +31,6 @@ sao_goncalo = as_tibble(filter(df, w_station_name == "SÃO GONÇALO"))
 # to produce a feather file used in further sections
 
 df = read_csv('weather-data.csv')
-# inspect df data types and cols
 spec(df)
 
 # rename cols to be more descriptive 
@@ -78,10 +78,12 @@ df = na.omit(df)
 write_feather(df, 'weather-data.feather')
 df = read_feather('weather-data.feather')
 sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
+sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
 
 
 # missing data
 map(df , ~sum(is.na(.)))
+map(sao_goncalo_2008 , ~sum(is.na(.)))
 # df[row,col]
 # explore data of one city 
 View(sao_goncalo)
@@ -100,7 +102,7 @@ hist( sao_goncalo$observation_date_time, sao_goncalo$air_temprature)
 # some data missing for 2009-2010, similar blip for 2011-2012
 # there is also lots of 0 values during that time too
 # there is very little data here, probably there was little rainfall
-
+sao_goncalo_2008$precipitation_last_hr_ml %>% na.interp() %>% ets() %>% forecast(h=36) %>% autoplot()
 
 plot(sao_goncalo$observation_date_time, sao_goncalo$precipitation_last_hr_ml)
 plot(sao_goncalo$observation_date_time, sao_goncalo$relative_humidity)
@@ -108,9 +110,11 @@ plot(sao_goncalo$observation_date_time, sao_goncalo$solar_radiation)
 
 # 12 month blocks
 sao_goncalo_2008 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2008-12-31" & observation_date_time >= "2008-01-01"), ])
+
 skim(sao_goncalo_2008)
 
 sao_goncalo_2010 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2010-12-31" & observation_date_time >= "2010-01-01"), ])
+
 skim(sao_goncalo_2010)
 
 sao_goncalo_2012 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2012-12-31" & observation_date_time >= "2012-01-01"), ])
@@ -134,8 +138,6 @@ plot(type = "b", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$precip
 plot(type = "h", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$relative_humidity, xlab = "2012 12 month period", ylab = "humidity as % out of 100")
 plot(type = "l", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$solar_radiation, xlab = "2012 12 month period", ylab = "sunlight in  KJ/m2")
 
-help("ggplot")
-
 # quick inspection before forecasting
 ggplot(data=sao_goncalo_2008, aes(x=solar_radiation, y=observation_date_time)) + geom_point()
 ggplot(data=sao_goncalo_2008, aes(x=solar_radiation, y=relative_humidity)) + geom_point()
@@ -145,6 +147,11 @@ ggplot(data=sao_goncalo_2010, aes(x=solar_radiation, y=relative_humidity)) + geo
 
 ggplot(data=sao_goncalo_2012, aes(x=solar_radiation, y=observation_date_time)) + geom_point()
 ggplot(data=sao_goncalo_2012, aes(x=solar_radiation, y=relative_humidity)) + geom_point()
+
+# this forecast isnt very useful as it creates a flat line
+sao_goncalo_2008$precipitation_last_hr_ml %>% na.interp() %>% ets() %>% forecast(h=36) %>% autoplot()
+sao_goncalo_2008$relative_humidity %>% na.interp() %>% ets() %>% forecast(h=36) %>% autoplot()
+sao_goncalo_2008$solar_radiation %>% na.interp() %>% ets() %>% forecast(h=36) %>% autoplot()
 
 # plot min max temp for station on one graph
 
