@@ -143,7 +143,7 @@ plot(type = "l", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$solar_
 ```
 
 
-```{r Attempt at forecasting}
+```{r Attempt at forecasting rainfall, humidity and solar radiaiton in Sao Goncalo}
 # quick inspection before forecasting
 ggplot(data=sao_goncalo_2008, aes(y=solar_radiation, x=observation_date_time)) + geom_point() 
 ggplot(data=sao_goncalo_2008, aes(y=solar_radiation, x=relative_humidity)) + geom_point()
@@ -161,7 +161,7 @@ sao_goncalo_2008$solar_radiation %>% na.interp() %>% ets() %>% forecast(h=30) %>
 ```
 
 
-```{r Assessing temperature changes}
+```{r Assessing temperature changes in Sao Goncalo}
 avg_temp_2008 = mean(sao_goncalo_2008$air_temprature)
 avg_temp_2008
 temp_2008 = sapply(sao_goncalo_2008, max, na.rm = T)
