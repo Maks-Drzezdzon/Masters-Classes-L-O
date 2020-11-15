@@ -331,13 +331,44 @@ temp_brazil = sapply(df, max, na.rm = T)
 
 
 avg_humidity_brazil = mean(df$relative_humidity)
-highest_humidity_brazil = getElement(temp_brazil, "relative_humidity") 
+highest_humidity_brazil = getElement(temp_brazil, "relative_humidity")
+# avg is 83.7
+# highest is 100
 
-avg_rainfall_brazil = mean(df$precipitation_last_hr_ml)
-highest_rainfall_brazil = getElement(temp_brazil, "precipitation_last_hr_ml") 
 
 avg_temp_brazil = mean(df$max_temp_hr)
-highest_temp_brazil = getElement(temp_brazil, "max_temp_hr") 
+highest_temp_brazil = getElement(temp_brazil, "max_temp_hr")
+# avg is 22
+# highest is 42.4
+
+
+avg_rainfall_brazil_2008 = mean(brazil_2008$precipitation_last_hr_ml)
+highest_rainfall_brazil_2008 = getElement(temp_2008, "precipitation_last_hr_ml") 
+
+avg_rainfall_brazil_2010 = mean(brazil_2010$precipitation_last_hr_ml)
+highest_rainfall_brazil_2010 = getElement(temp_2010, "precipitation_last_hr_ml") 
+
+avg_rainfall_brazil_2012 = mean(brazil_2012$precipitation_last_hr_ml)
+highest_rainfall_brazil_2012 = getElement(temp_2012, "precipitation_last_hr_ml") 
+
+avg_rainfall_brazil_2014 = mean(brazil_2014$precipitation_last_hr_ml)
+highest_rainfall_brazil_2014 = getElement(temp_2014, "precipitation_last_hr_ml") 
+
+avg_rainfall_brazil_2016 = mean(brazil_2016$precipitation_last_hr_ml)
+highest_rainfall_brazil_2016 = getElement(temp_2016, "precipitation_last_hr_ml") 
+
+avg_rainfall_brazil =  c(avg_rainfall_brazil_2008, avg_rainfall_brazil_2010, avg_rainfall_brazil_2012, avg_rainfall_brazil_2014, avg_rainfall_brazil_2016)
+names(avg_rainfall_brazil) = c("2008", "2010", "2012", "2014", "2016")
+
+highest_rainfall_brazil =  c(highest_rainfall_brazil_2008, highest_rainfall_brazil_2010, highest_rainfall_brazil_2012, highest_rainfall_brazil_2014, highest_rainfall_brazil_2016)
+names(highest_rainfall_brazil) = c("2008", "2010", "2012", "2014", "2016")
+
+par(mfrow=c(1,2))
+plot(type = "b", avg_rainfall_brazil, xaxt="n", xlab = "Average Rainfall in Brazil Recorded Every 2 Years", ylab = "Milliliters", col="orange")
+axis(1, at = 1:5, labels = names(avg_rainfall_brazil))
+
+plot(type = "b", highest_rainfall_brazil, xaxt="n", xlab = "Highest Rainfall in Brazil Recorded Every 2 Years", ylab = "Milliliters", col="blue")
+axis(1, at = 1:5, labels = names(highest_rainfall_brazil))
 
 
 

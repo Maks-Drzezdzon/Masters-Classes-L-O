@@ -319,4 +319,5 @@ axis(1, at = 1:5, labels = names(highest_humidity))
 
 ```{r Assesing humidity, temperature and rainfall changes in Brazil between 2008 and mid 2016}
 
+
 ```
