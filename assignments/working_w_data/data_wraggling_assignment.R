@@ -173,13 +173,12 @@ sao_goncalo_2008$solar_radiation %>% na.interp() %>% ets() %>% forecast(h=30) %>
 #################################################
 
 avg_temp_2008 = mean(sao_goncalo_2008$air_temprature)
-avg_temp_2008
 temp_2008 = sapply(sao_goncalo_2008, max, na.rm = T)
 highest_max_temp_2008 = getElement(temp_2008, "max_temp_hr")             
 lowest_max_temp_2008 = getElement(temp_2008, "min_temp_hr")
 # highest max temp is 31.2
 # lowest max temp is 28.9
-# avg is 9.87 # post purge of 0 values its 23.83
+# avg is 24.68
 
 avg_temp_2010 = mean(sao_goncalo_2010$air_temprature)
 temp_2010 = sapply(sao_goncalo_2010, max, na.rm = T)
@@ -187,7 +186,7 @@ highest_max_temp_2010 = getElement(temp_2010, "max_temp_hr")
 lowest_max_temp_2010 = getElement(temp_2010, "min_temp_hr")
 # highest max temp is 33.5
 # lowest max temp is 31.8
-# avg is 16.87
+# avg is 24.6
 
 avg_temp_2012 = mean(sao_goncalo_2012$air_temprature)
 temp_2012 = sapply(sao_goncalo_2012, max, na.rm = T)
@@ -195,7 +194,7 @@ highest_max_temp_2012 = getElement(temp_2012, "max_temp_hr")
 lowest_max_temp_2012 = getElement(temp_2012, "min_temp_hr")
 # highest max temp is 34.6
 # lowest max temp is 29
-# avg is 21.65
+# avg is 23.45
 
 avg_temp_2014 = mean(sao_goncalo_2014$air_temprature)
 temp_2014 = sapply(sao_goncalo_2014, max, na.rm = T)
@@ -211,7 +210,7 @@ highest_max_temp_2016 = getElement(temp_2016, "max_temp_hr")
 lowest_max_temp_2016 = getElement(temp_2016, "min_temp_hr")
 # highest max temp is 35.5
 # lowest max temp is 31.3
-# avg is 25.51
+# avg is 25.58
 
 avg_temps =  c(avg_temp_2008, avg_temp_2010, avg_temp_2012, avg_temp_2014, avg_temp_2016)
 names(avg_temps) = c("2008", "2010", "2012", "2014", "2016")
