@@ -7,8 +7,8 @@ library(skimr) # summary statistics for larger data sets
 library(forecast)
 
 df = read_feather('weather-data.feather')
-sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
-itapira = as_tibble(filter(df, w_station_name == "ITAPIRA"))
+sao_goncalo = as_tibble(filter(df, w_station_name == "SÃO GONÇALO"))
+sao_paulo = as_tibble(filter(df, w_station_name == "São Paulo"))
 
 ###############
 # ^^ Setup  ^^ #
@@ -66,7 +66,7 @@ df = df[,!names(df) %in% c("year", "month", "day", "hour")]
 head(df)
 colnames(df)
 # after further analysis there were so many 0 values in air temperature that it skewed the average to below 10 degrees
-# the decision was made to treat this as noise and remove it from the dataset
+# the decision was made to treat this as noise and remove it from the data set
 df$air_temprature[df$air_temprature < 1] = NA
 df = na.omit(df)
 
@@ -81,19 +81,21 @@ df = read_feather('weather-data.feather')
 sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
 
 
-# missing data
+# checking missing data 
+
 map(df , ~sum(is.na(.)))
 map(sao_goncalo , ~sum(is.na(.)))
-map(itapira, ~sum(is.na(.)))
-# df[row,col]
-# explore data of one city 
+map(sao_paulo, ~sum(is.na(.)))
 View(sao_goncalo)
-# dyplyr function, data set is too big for table()
+
+# dyplyr function, data set was too big for table()
 glimpse(sao_goncalo)
-# exploring other options
+glimpse(sao_paulo)
 str(sao_goncalo)
+str(sao_paulo)
 summary(df)
 summary(sao_goncalo$observation_date)
+summary(sao_paulo$precipitation_last_hr_ml)
 skim(sao_goncalo)
 
 plot(sao_goncalo$observation_date_time, sao_goncalo$air_temprature)
@@ -113,6 +115,7 @@ sao_goncalo_2008 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2008
 sao_goncalo_2010 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2010-12-31" & observation_date_time >= "2010-01-01"), ])
 sao_goncalo_2012 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2012-12-31" & observation_date_time >= "2012-01-01"), ])
 sao_goncalo_2014 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2014-12-31" & observation_date_time >= "2014-01-01"), ])
+# only contains 7 months block
 sao_goncalo_2016 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2016-12-31" & observation_date_time >= "2016-01-01"), ])
 
 skim(sao_goncalo_2008)
@@ -215,8 +218,10 @@ lowest_max_temp_2016 = getElement(temp_2016, "min_temp_hr")
 avg_temps =  c(avg_temp_2008, avg_temp_2010, avg_temp_2012, avg_temp_2014, avg_temp_2016)
 names(avg_temps) = c("2008", "2010", "2012", "2014", "2016")
 
+
 highest_temps =  c(highest_max_temp_2008, highest_max_temp_2010, highest_max_temp_2012, highest_max_temp_2014, highest_max_temp_2016)
 names(highest_temps) = c("2008", "2010", "2012", "2014", "2016")
+
 
 lowest_temps = c(lowest_max_temp_2008, lowest_max_temp_2010, lowest_max_temp_2012, lowest_max_temp_2014, lowest_max_temp_2016)
 names(lowest_temps) = c("2008", "2010", "2012", "2014", "2016")
@@ -226,9 +231,11 @@ names(lowest_temps) = c("2008", "2010", "2012", "2014", "2016")
 plot(type = "b", lowest_temps, xaxt="n", xlab = "Lowest Max Temperature Recorded Every 2 Years", ylab = "Degrees in Celsius", col="red")
 axis(1, at = 1:5, labels = names(lowest_temps))
 
+
 par(mfrow=c(1,2))
 plot(type = "b", avg_temps, xaxt="n", xlab = "Average Temperature Recorded Every 2 Years", ylab = "Degrees in Celsius", col="orange")
 axis(1, at = 1:5, labels = names(avg_temps))
+
 
 plot(type = "b", highest_temps, xaxt="n", xlab = "Highest Max Temperature Recorded Every 2 Years", ylab = "Degrees in Celsius", col="blue")
 axis(1, at = 1:5, labels = names(highest_temps))
@@ -262,11 +269,14 @@ highest_rainfall_2014 = getElement(temp_2014, "precipitation_last_hr_ml")
 avg_rainfall_2016 = mean(sao_goncalo_2016$precipitation_last_hr_ml)
 highest_rainfall_2016 = getElement(temp_2016, "precipitation_last_hr_ml")
 
+
 avg_rainfall =  c(avg_rainfall_2008, avg_rainfall_2010, avg_rainfall_2012, avg_rainfall_2014, avg_rainfall_2016)
 names(avg_rainfall) = c("2008", "2010", "2012", "2014", "2016")
 
+
 highest_rainfall =  c(highest_rainfall_2008, highest_rainfall_2010, highest_rainfall_2012, highest_rainfall_2014, highest_rainfall_2016)
 names(highest_rainfall) = c("2008", "2010", "2012", "2014", "2016")
+
 
 par(mfrow=c(1,2))
 plot(type = "b", avg_rainfall, xaxt="n", xlab = "Average Rainfall Recorded Every 2 Years", ylab = "Milliliters", col="orange")
@@ -300,11 +310,14 @@ highest_humidity_2014 = getElement(temp_2014, "max_relative_humidity")
 avg_humidity_2016 = mean(sao_goncalo_2016$relative_humidity)
 highest_humidity_2016 = getElement(temp_2016, "max_relative_humidity")
 
+
 avg_humidity =  c(avg_humidity_2008, avg_humidity_2010, avg_humidity_2012, avg_humidity_2014, avg_humidity_2016)
 names(avg_humidity) = c("2008", "2010", "2012", "2014", "2016")
 
+
 highest_humidity =  c(highest_humidity_2008, highest_humidity_2010, highest_humidity_2012, highest_humidity_2014, highest_humidity_2016)
 names(highest_humidity) = c("2008", "2010", "2012", "2014", "2016")
+
 
 par(mfrow=c(1,2))
 plot(type = "b", avg_humidity, xaxt="n", xlab = "Average Humidity Recorded Every 2 Years", ylab = "Grams of Water Vapor per Kilogram", col="orange")
@@ -342,23 +355,30 @@ highest_temp_brazil = getElement(temp_brazil, "max_temp_hr")
 avg_rainfall_brazil_2008 = mean(brazil_2008$precipitation_last_hr_ml)
 highest_rainfall_brazil_2008 = getElement(temp_2008, "precipitation_last_hr_ml") 
 
+
 avg_rainfall_brazil_2010 = mean(brazil_2010$precipitation_last_hr_ml)
 highest_rainfall_brazil_2010 = getElement(temp_2010, "precipitation_last_hr_ml") 
+
 
 avg_rainfall_brazil_2012 = mean(brazil_2012$precipitation_last_hr_ml)
 highest_rainfall_brazil_2012 = getElement(temp_2012, "precipitation_last_hr_ml") 
 
+
 avg_rainfall_brazil_2014 = mean(brazil_2014$precipitation_last_hr_ml)
 highest_rainfall_brazil_2014 = getElement(temp_2014, "precipitation_last_hr_ml") 
+
 
 avg_rainfall_brazil_2016 = mean(brazil_2016$precipitation_last_hr_ml)
 highest_rainfall_brazil_2016 = getElement(temp_2016, "precipitation_last_hr_ml") 
 
+
 avg_rainfall_brazil =  c(avg_rainfall_brazil_2008, avg_rainfall_brazil_2010, avg_rainfall_brazil_2012, avg_rainfall_brazil_2014, avg_rainfall_brazil_2016)
 names(avg_rainfall_brazil) = c("2008", "2010", "2012", "2014", "2016")
 
+
 highest_rainfall_brazil =  c(highest_rainfall_brazil_2008, highest_rainfall_brazil_2010, highest_rainfall_brazil_2012, highest_rainfall_brazil_2014, highest_rainfall_brazil_2016)
 names(highest_rainfall_brazil) = c("2008", "2010", "2012", "2014", "2016")
+
 
 par(mfrow=c(1,2))
 plot(type = "b", avg_rainfall_brazil, xaxt="n", xlab = "Average Rainfall in Brazil Recorded Every 2 Years", ylab = "Milliliters", col="orange")
@@ -369,6 +389,47 @@ axis(1, at = 1:5, labels = names(highest_rainfall_brazil))
 
 
 
+###################################################
+# Assessing rainfall and temperature in Sao Paulo #
+###################################################
+sao_paulo_2008 = with(sao_paulo, sao_paulo[(observation_date_time <= "2008-12-31" & observation_date_time >= "2008-01-01"), ])
+sao_paulo_2010 = with(sao_paulo, sao_paulo[(observation_date_time <= "2010-12-31" & observation_date_time >= "2010-01-01"), ])
+sao_paulo_2012 = with(sao_paulo, sao_paulo[(observation_date_time <= "2012-12-31" & observation_date_time >= "2012-01-01"), ])
+sao_paulo_2014 = with(sao_paulo, sao_paulo[(observation_date_time <= "2014-12-31" & observation_date_time >= "2014-01-01"), ])
+sao_paulo_2016 = with(sao_paulo, sao_paulo[(observation_date_time <= "2016-12-31" & observation_date_time >= "2016-01-01"), ])
+
+avg_rainfall_sao_paulo_2008 = mean(sao_paulo_2008$precipitation_last_hr_ml)
+highest_rainfall_sao_paulo_2008 = getElement(temp_2008, "precipitation_last_hr_ml") 
 
 
+avg_rainfall_sao_paulo_2010 = mean(sao_paulo_2010$precipitation_last_hr_ml)
+highest_rainfall_sao_paulo_2010 = getElement(temp_2010, "precipitation_last_hr_ml") 
+
+
+avg_rainfall_sao_paulo_2012 = mean(sao_paulo_2012$precipitation_last_hr_ml)
+highest_rainfall_sao_paulo_2012 = getElement(temp_2012, "precipitation_last_hr_ml") 
+
+
+avg_rainfall_sao_paulo_2014 = mean(sao_paulo_2014$precipitation_last_hr_ml)
+highest_rainfall_sao_paulo_2014 = getElement(temp_2014, "precipitation_last_hr_ml") 
+
+
+avg_rainfall_sao_paulo_2016 = mean(sao_paulo_2016$precipitation_last_hr_ml)
+highest_rainfall_sao_paulo_2016 = getElement(temp_2016, "precipitation_last_hr_ml") 
+
+
+avg_rainfall_sao_paulo =  c(avg_rainfall_sao_paulo_2008, avg_rainfall_sao_paulo_2010, avg_rainfall_sao_paulo_2012, avg_rainfall_sao_paulo_2014, avg_rainfall_sao_paulo_2016)
+names(avg_rainfall_sao_paulo) = c("2008", "2010", "2012", "2014", "2016")
+
+
+highest_rainfall_sao_paulo =  c(highest_rainfall_sao_paulo_2008, highest_rainfall_sao_paulo_2010, highest_rainfall_sao_paulo_2012, highest_rainfall_sao_paulo_2014, highest_rainfall_sao_paulo_2016)
+names(highest_rainfall_sao_paulo) = c("2008", "2010", "2012", "2014", "2016")
+
+
+par(mfrow=c(1,2))
+plot(type = "b", avg_rainfall_sao_paulo, xaxt="n", xlab = "Average Rainfall in Sao Paulo Recorded Every 2 Years", ylab = "Milliliters", col="orange")
+axis(1, at = 1:5, labels = names(avg_rainfall_sao_paulo))
+
+plot(type = "b", highest_rainfall_sao_paulo, xaxt="n", xlab = "Highest Rainfall in Sao Paulo in Brazil Recorded Every 2 Years", ylab = "Milliliters", col="blue")
+axis(1, at = 1:5, labels = names(highest_rainfall_sao_paulo))
 
