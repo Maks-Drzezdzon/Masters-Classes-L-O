@@ -110,19 +110,15 @@ plot(sao_goncalo$observation_date_time, sao_goncalo$solar_radiation)
 
 # 12 month blocks
 sao_goncalo_2008 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2008-12-31" & observation_date_time >= "2008-01-01"), ])
-skim(sao_goncalo_2008)
-
 sao_goncalo_2010 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2010-12-31" & observation_date_time >= "2010-01-01"), ])
-
-skim(sao_goncalo_2010)
-
 sao_goncalo_2012 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2012-12-31" & observation_date_time >= "2012-01-01"), ])
-skim(sao_goncalo_2012)
-
 sao_goncalo_2014 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2014-12-31" & observation_date_time >= "2014-01-01"), ])
-skim(sao_goncalo_2014)
-
 sao_goncalo_2016 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2016-12-31" & observation_date_time >= "2016-01-01"), ])
+
+skim(sao_goncalo_2008)
+skim(sao_goncalo_2010)
+skim(sao_goncalo_2012)
+skim(sao_goncalo_2014)
 skim(sao_goncalo_2016)
 
 par(mfrow=c(2,2)) # 2x2 block per graph
@@ -131,15 +127,30 @@ plot(type = "b", sao_goncalo_2008$observation_date_time, sao_goncalo_2008$precip
 plot(type = "h", sao_goncalo_2008$observation_date_time, sao_goncalo_2008$relative_humidity, xlab = "2008 12 month period", ylab = "humidity as % out of 100")
 plot(type = "l", sao_goncalo_2008$observation_date_time, sao_goncalo_2008$solar_radiation, xlab = "2008 12 month period", ylab = "sunlight in  KJ/m2")
 
+
 plot(type = "h", sao_goncalo_2010$observation_date_time, sao_goncalo_2010$dew_temp, xlab = "2010 12 month period", ylab = "temperature in °C")
 plot(type = "b", sao_goncalo_2010$observation_date_time, sao_goncalo_2010$precipitation_last_hr_ml, xlab = "2010 12 month period", ylab = "rain fall in millimetres ")
 plot(type = "h", sao_goncalo_2010$observation_date_time, sao_goncalo_2010$relative_humidity, xlab = "2010 12 month period", ylab = "humidity as % out of 100")
 plot(type = "l", sao_goncalo_2010$observation_date_time, sao_goncalo_2010$solar_radiation, xlab = "2010 12 month period", ylab = "sunlight in  KJ/m2")
 
+
 plot(type = "h", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$dew_temp, xlab = "2012 12 month period", ylab = "temperature in °C")
 plot(type = "b", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$precipitation_last_hr_ml, xlab = "2012 12 month period", ylab = "rain fall in millimetres ")
 plot(type = "h", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$relative_humidity, xlab = "2012 12 month period", ylab = "humidity as % out of 100")
 plot(type = "l", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$solar_radiation, xlab = "2012 12 month period", ylab = "sunlight in  KJ/m2")
+
+
+plot(type = "h", sao_goncalo_2014$observation_date_time, sao_goncalo_2014$dew_temp, xlab = "2014 12 month period", ylab = "temperature in °C")
+plot(type = "b", sao_goncalo_2014$observation_date_time, sao_goncalo_2014$precipitation_last_hr_ml, xlab = "2014 12 month period", ylab = "rain fall in millimetres ")
+plot(type = "h", sao_goncalo_2014$observation_date_time, sao_goncalo_2014$relative_humidity, xlab = "2014 12 month period", ylab = "humidity as % out of 100")
+plot(type = "l", sao_goncalo_2014$observation_date_time, sao_goncalo_2014$solar_radiation, xlab = "2014 12 month period", ylab = "sunlight in  KJ/m2")
+
+
+plot(type = "h", sao_goncalo_2016$observation_date_time, sao_goncalo_2016$dew_temp, xlab = "2016 7 month period", ylab = "temperature in °C")
+plot(type = "b", sao_goncalo_2016$observation_date_time, sao_goncalo_2016$precipitation_last_hr_ml, xlab = "2016 7 month period", ylab = "rain fall in millimetres ")
+plot(type = "h", sao_goncalo_2016$observation_date_time, sao_goncalo_2016$relative_humidity, xlab = "2016 7 month period", ylab = "humidity as % out of 100")
+plot(type = "l", sao_goncalo_2016$observation_date_time, sao_goncalo_2016$solar_radiation, xlab = "2016 7 month period", ylab = "sunlight in  KJ/m2")
+
 
 # quick inspection before forecasting
 ggplot(data=sao_goncalo_2008, aes(y=solar_radiation, x=observation_date_time)) + geom_point() 
