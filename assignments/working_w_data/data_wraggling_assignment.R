@@ -285,23 +285,23 @@ axis(1, at = 1:5, labels = names(highest_rainfall))
 sapply(df, max, na.rm = T)
 
 avg_humidity_2008 = mean(sao_goncalo_2008$relative_humidity)
-highest_humidity_2008 = getElement(temp_2008, "relative_humidity")             
+highest_humidity_2008 = getElement(temp_2008, "max_relative_humidity")             
 
 
 avg_humidity_2010 = mean(sao_goncalo_2010$relative_humidity)
-highest_humidity_2010 = getElement(temp_2010, "relative_humidity")
+highest_humidity_2010 = getElement(temp_2010, "max_relative_humidity")
 
 
 avg_humidity_2012 = mean(sao_goncalo_2012$relative_humidity)
-highest_humidity_2012 = getElement(temp_2012, "relative_humidity")
+highest_humidity_2012 = getElement(temp_2012, "max_relative_humidity")
 
 
 avg_humidity_2014 = mean(sao_goncalo_2014$relative_humidity)
-highest_humidity_2014 = getElement(temp_2014, "relative_humidity")
+highest_humidity_2014 = getElement(temp_2014, "max_relative_humidity")
 
 
 avg_humidity_2016 = mean(sao_goncalo_2016$relative_humidity)
-highest_humidity_2016 = getElement(temp_2016, "relative_humidity")
+highest_humidity_2016 = getElement(temp_2016, "max_relative_humidity")
 
 avg_humidity =  c(avg_humidity_2008, avg_humidity_2010, avg_humidity_2012, avg_humidity_2014, avg_humidity_2016)
 names(avg_humidity) = c("2008", "2010", "2012", "2014", "2016")
@@ -315,4 +315,32 @@ axis(1, at = 1:5, labels = names(avg_humidity))
 
 plot(type = "b", highest_humidity, xaxt="n", xlab = "Highest Humidity Recorded Every 2 Years", ylab = "Grams of Water Vapor per Kilogram", col="blue")
 axis(1, at = 1:5, labels = names(highest_humidity))
+
+##########################################################
+# Assessing humidity, rainfall and temperature in Brazil #
+##########################################################
+
+brazil_2008 = with(df, df[(observation_date_time <= "2008-12-31" & observation_date_time >= "2008-01-01"), ])
+brazil_2010 = with(df, df[(observation_date_time <= "2010-12-31" & observation_date_time >= "2010-01-01"), ])
+brazil_2012 = with(df, df[(observation_date_time <= "2012-12-31" & observation_date_time >= "2012-01-01"), ])
+brazil_2014 = with(df, df[(observation_date_time <= "2014-12-31" & observation_date_time >= "2014-01-01"), ])
+brazil_2016 = with(df, df[(observation_date_time <= "2016-12-31" & observation_date_time >= "2016-01-01"), ])
+
+
+temp_brazil = sapply(df, max, na.rm = T)
+
+
+avg_humidity_brazil = mean(df$relative_humidity)
+highest_humidity_brazil = getElement(temp_brazil, "relative_humidity") 
+
+avg_rainfall_brazil = mean(df$precipitation_last_hr_ml)
+highest_rainfall_brazil = getElement(temp_brazil, "precipitation_last_hr_ml") 
+
+avg_temp_brazil = mean(df$max_temp_hr)
+highest_temp_brazil = getElement(temp_brazil, "max_temp_hr") 
+
+
+
+
+
 
