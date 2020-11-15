@@ -168,9 +168,9 @@ sao_goncalo_2008$relative_humidity %>% na.interp() %>% ets() %>% forecast(h=30) 
 sao_goncalo_2008$solar_radiation %>% na.interp() %>% ets() %>% forecast(h=30) %>% autoplot()
 
 
-#################################################
-# find temperature changes in the same location # 
-#################################################
+##########################################################################
+# Assessing temperature changes in Sao Goncalo between 2008 and mid 2016 # 
+##########################################################################
 
 avg_temp_2008 = mean(sao_goncalo_2008$air_temprature)
 temp_2008 = sapply(sao_goncalo_2008, max, na.rm = T)
@@ -237,13 +237,11 @@ sao_goncalo$max_temp_hr %>% na.interp() %>% ets() %>% forecast(h=39) %>% autoplo
 highest_temps %>% na.interp() %>% ets() %>% forecast(h=30) %>% autoplot()
 
 
-##################################
-# find most and least rainy city #
-##################################
-# might be better to use group by here and graph it ?
+#######################################################################
+# Assessing rainfall changes in Sao Goncalo between 2008 and mid 2016 #
+#######################################################################
 
 sapply(df, max, na.rm = T)
-# precipitation_last_hr_ml
 
 avg_rainfall_2008 = mean(sao_goncalo_2008$precipitation_last_hr_ml)
 highest_rainfall_2008 = getElement(temp_2008, "precipitation_last_hr_ml")             
@@ -277,10 +275,9 @@ axis(1, at = 1:5, labels = names(avg_rainfall))
 plot(type = "b", highest_rainfall, xaxt="n", xlab = "Highest Rainfall Recorded Every 2 Years", ylab = "Milliliters", col="blue")
 axis(1, at = 1:5, labels = names(highest_rainfall))
 
-##################################
-# find most and least humid city #
-##################################
-# might be better to use group by here and graph it ?
+#######################################################################
+# Assessing humidity changes in Sao Goncalo between 2008 and mid 2016 #
+#######################################################################
 
 sapply(df, max, na.rm = T)
 
