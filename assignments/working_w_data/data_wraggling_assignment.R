@@ -1,3 +1,10 @@
+needed_packages <- c("tidyverse", "data.table", "feather", "lubridate", "reticulate", "skimr", "forecast")                      
+# Extract not installed packages
+not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
+# Install not installed packages
+if(length(not_installed)) install.packages(not_installed)
+
+
 library(tidyverse)
 library(data.table)
 library(feather) # file format lib
@@ -169,6 +176,9 @@ ggplot(data=sao_goncalo_2012, aes(y=solar_radiation, x=relative_humidity)) + geo
 sao_goncalo_2008$precipitation_last_hr_ml %>% na.interp() %>% ets() %>% forecast(h=30) %>% autoplot()
 sao_goncalo_2008$relative_humidity %>% na.interp() %>% ets() %>% forecast(h=30) %>% autoplot()
 sao_goncalo_2008$solar_radiation %>% na.interp() %>% ets() %>% forecast(h=30) %>% autoplot()
+
+summary(sao_goncalo$precipitation_last_hr_ml)
+summary(sao_paulo$precipitation_last_hr_ml)
 
 
 ##########################################################################
