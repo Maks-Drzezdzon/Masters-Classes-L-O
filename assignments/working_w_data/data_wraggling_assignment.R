@@ -65,8 +65,8 @@ df %>% mutate(observation_date_time = make_datetime(year, month, day, hour))
 df = df[,!names(df) %in% c("year", "month", "day", "hour")]
 head(df)
 colnames(df)
-# ToDo
-# make decision whether to save this change to the data set and think of other values that need to be cleaned
+# after further analysis there were so many 0 values in air temperature that it skewed the average to below 10 degrees
+# the decision was made to treat this as noise and remove it from the dataset
 df$air_temprature[df$air_temprature < 1] = NA
 df = na.omit(df)
 
