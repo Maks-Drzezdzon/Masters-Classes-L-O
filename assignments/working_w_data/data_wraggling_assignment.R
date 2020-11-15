@@ -66,7 +66,7 @@ df = df[,!names(df) %in% c("year", "month", "day", "hour")]
 head(df)
 colnames(df)
 # ToDo
-# make decision whether to save this change to the dataset and think of other values that need to be cleaned
+# make decision whether to save this change to the data set and think of other values that need to be cleaned
 df$air_temprature[df$air_temprature < 1] = NA
 df = na.omit(df)
 
