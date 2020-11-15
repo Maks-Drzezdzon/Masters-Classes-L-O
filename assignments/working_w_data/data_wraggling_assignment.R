@@ -283,10 +283,36 @@ axis(1, at = 1:5, labels = names(highest_rainfall))
 # might be better to use group by here and graph it ?
 
 sapply(df, max, na.rm = T)
-most_humid_city = filter(df, relative_humidity >= 100)
 
-least_humid_city = filter(df, relative_humidity >= 0)
+avg_humidity_2008 = mean(sao_goncalo_2008$relative_humidity)
+highest_humidity_2008 = getElement(temp_2008, "relative_humidity")             
 
 
-# Air pressure and wind analysis maybe ?
+avg_humidity_2010 = mean(sao_goncalo_2010$relative_humidity)
+highest_humidity_2010 = getElement(temp_2010, "relative_humidity")
+
+
+avg_humidity_2012 = mean(sao_goncalo_2012$relative_humidity)
+highest_humidity_2012 = getElement(temp_2012, "relative_humidity")
+
+
+avg_humidity_2014 = mean(sao_goncalo_2014$relative_humidity)
+highest_humidity_2014 = getElement(temp_2014, "relative_humidity")
+
+
+avg_humidity_2016 = mean(sao_goncalo_2016$relative_humidity)
+highest_humidity_2016 = getElement(temp_2016, "relative_humidity")
+
+avg_humidity =  c(avg_humidity_2008, avg_humidity_2010, avg_humidity_2012, avg_humidity_2014, avg_humidity_2016)
+names(avg_humidity) = c("2008", "2010", "2012", "2014", "2016")
+
+highest_humidity =  c(highest_humidity_2008, highest_humidity_2010, highest_humidity_2012, highest_humidity_2014, highest_humidity_2016)
+names(highest_humidity) = c("2008", "2010", "2012", "2014", "2016")
+
+par(mfrow=c(1,2))
+plot(type = "b", avg_humidity, xaxt="n", xlab = "Average Humidity Recorded Every 2 Years", ylab = "Grams of Water Vapor per Kilogram", col="orange")
+axis(1, at = 1:5, labels = names(avg_humidity))
+
+plot(type = "b", highest_humidity, xaxt="n", xlab = "Highest Humidity Recorded Every 2 Years", ylab = "Grams of Water Vapor per Kilogram", col="blue")
+axis(1, at = 1:5, labels = names(highest_humidity))
 
