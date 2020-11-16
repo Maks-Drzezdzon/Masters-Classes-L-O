@@ -150,7 +150,13 @@ temp_df = na.omit(temp_df)
 temp_df_two = na.omit(temp_df_two)
 
 
-
+###############################################
+# Merge dataset 3 and amalgimation of 1 and 2 #
+###############################################
+weather_codes_stations = read_feather("weather_codes_stations.feather")
+df = read_feather('weather-data.feather')
+head(df)
+head(weather_codes_stations)
 
 
 ####################
