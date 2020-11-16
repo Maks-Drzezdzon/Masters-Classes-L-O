@@ -17,17 +17,9 @@ df = read_feather('weather-data.feather')
 sao_goncalo = as_tibble(filter(df, w_station_name == "SÃO GONÇALO"))
 sao_paulo = as_tibble(filter(df, w_station_name == "São Paulo"))
 
-###############
+################
 # ^^ Setup  ^^ #
-###############
-
-
-
-
-# main repo # https://github.com/Maks-Drzezdzon/Masters-Classes-L-O/tree/master/assignments/working_w_data
-# file is small enough to hold in memory ~2gigs
-# https://www.kaggle.com/PROPPG-PPG/hourly-weather-surface-brazil-southeast-region
-
+################
 
 
 
@@ -37,8 +29,71 @@ sao_paulo = as_tibble(filter(df, w_station_name == "São Paulo"))
 # this section focuses on wrangling a csv file
 # to produce a feather file used in further sections
 
+#############
+# Dataset 1 #
+#############
+
+weather_stations_codes = read.table('weather_stations_codes.csv',  header = T, sep = ";")
+
+colnames(weather_stations_codes)
+weather_stations_codes = weather_stations_codes %>% setnames(
+ c("w_station_name", "station_id", "drop_me", "drop_me_2", "drop_me_3", "drop_me_4", "observation_date_time")
+  
+)
+# drop cols
+weather_stations_codes = weather_stations_codes[,!names(weather_stations_codes) %in% c("drop_me", "drop_me_2", "drop_me_3", "drop_me_4")]
+colnames(weather_stations_codes)
+weather_stations_codes = na.omit(weather_stations_codes)
+write_feather(weather_stations_codes, 'weather_stations_codes.csv.feather')
+weather_stations_codes = read_feather('weather_stations_codes.csv.feather')
+
+#############
+# Dataset 2 #
+#############
+
+conventional_weather_stations = read.table('conventional_weather_stations_inmet_brazil_1961_2019.csv', header = T , sep = ";")
+
+colnames(conventional_weather_stations)
+head(conventional_weather_stations)
+
+conventional_weather_stations = conventional_weather_stations %>% setnames(
+  old = c(colnames(conventional_weather_stations)),
+  new = c("station_id", "observation_date_time", "hour", 
+          "precipitation_last_hr_ml", "dry_temp", "wet_temp",
+          "max_temp_hr", "min_temp_hr", "relative_humidity", "pressure",
+          "pressure_sea_level", "wind_direction", "wind_speed", "insolation",
+          "cloudiness", "evaporation", "avg_temp_compensated", "avg_rel_humidity",
+          "avg_wind_speed", "temp")
+  
+)
+colnames(conventional_weather_stations)
+head(conventional_weather_stations)
+conventional_weather_stations = conventional_weather_stations[,!names(conventional_weather_stations) %in% c("hour", "dry_temp", "wet_temp", 
+                                                                                       "relative_humidity", "pressure", "pressure_sea_level",
+                                                                                       "wind_direction", "wind_speed", "insolation",
+                                                                                       "cloudiness", "evaporation", "avg_temp_compensated", "avg_rel_humidity",
+                                                                                       "avg_wind_speed", "temp")]
+
+colnames(conventional_weather_stations)
+head(conventional_weather_stations)
+write_feather(conventional_weather_stations, 'conventional_weather_stations.feather')
+weather_stations = read_feather('conventional_weather_stations.feather')
+
+
+######################
+# Combine DS 1 and 2 #
+######################
+weather_stations_codes = read_feather('weather_stations_codes.csv.feather')
+weather_stations = read_feather('conventional_weather_stations.feather')
+head(weather_stations_codes)
+head(weather_stations)
+
+
+#############
+# Dataset 3 #
+#############
+
 df = read_csv('weather-data.csv')
-spec(df)
 
 # rename cols to be more descriptive 
 df = df %>% setnames( 
@@ -49,7 +104,8 @@ df = df %>% setnames(
            "air_pressure_hr_hPa", "max_air_pressure_hr_hPa", "min_air_pressure_hr_hPa", 
            "solar_radiation", "air_temprature", "dew_temp", "max_temp_hr", "max_dew_temp", 
            "min_temp_hr", "min_dew_temp", "relative_humidity", "max_relative_humidity", 
-           "min_relative_humidity", "wind_speed", "wind_direction_rdegrees", "wind_gust_mps")
+           "min_relative_humidity", "wind_speed", "wind_direction_rdegrees", "wind_gust_mps",
+           "dew_temp")
 )
 
 colnames(df)
@@ -69,13 +125,26 @@ typeof(df$observation_date_time) # double
 df %>% mutate(observation_date = make_date(year, month, day))
 df %>% mutate(observation_date_time = make_datetime(year, month, day, hour)) 
 # drop cols in c()
-df = df[,!names(df) %in% c("year", "month", "day", "hour")]
+df = df[,!names(df) %in% c("year", "month", "day", "hour", 
+                           "max_relative_humidity", "drop_me", 
+                           "air_pressure_hr_hPa",
+                           "max_air_pressure_hr_hPa", "min_air_pressure_hr_hPa",
+                           "elevation", "lat", "long", "preassure", "province",
+                           "city", "max_dew_temp", "min_dew_temp", "observation_date_time",
+                           "station_id", "wind_direction_rdegrees", "wind_gust_mps",
+                           "wind_speed", "station_num", "min_relative_humidity")]
 head(df)
 colnames(df)
 # after further analysis there were so many 0 values in air temperature that it skewed the average to below 10 degrees
 # the decision was made to treat this as noise and remove it from the data set
 df$air_temprature[df$air_temprature < 1] = NA
 df = na.omit(df)
+temp_df = na.omit(temp_df)
+temp_df_two = na.omit(temp_df_two)
+
+
+
+
 
 ####################
 # data exploration #
