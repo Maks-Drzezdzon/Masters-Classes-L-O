@@ -32,6 +32,8 @@ sao_paulo = as_tibble(filter(df, w_station_name == "São Paulo"))
 #############
 # Dataset 1 #
 #############
+# there was a 4th csv that i didnt load because the data from it was not needed, only to be dropped later in the 3rd data set
+# it contained wind metrics that i didnt use in this analysis 
 
 weather_stations_codes = read.table('weather_stations_codes.csv',  header = T, sep = ";")
 
@@ -107,11 +109,11 @@ colnames(df)
 df = df %>% setnames( 
   old = c(colnames(df)), 
   new = c( "station_id", "w_station_name", "elevation", "lat", "long", 
-           "station_num", "city", "province", "observation_date_time", 
+           "station_num", "city", "province", "observation_date", 
            "observation_date", "year", "month", "day", "hour", "precipitation_last_hr_mm",
            "air_pressure_hr_hPa", "max_air_pressure_hr_hPa", "min_air_pressure_hr_hPa", 
-           "solar_radiation", "air_temprature", "dew_temp", "max_temp_hr", "max_dew_temp", 
-           "min_temp_hr", "min_dew_temp", "relative_humidity", "max_relative_humidity", 
+           "solar_radiation", "air_temprature", "air_temprature", "max_temp_hr", "max_air_temprature", 
+           "min_temp_hr", "min_air_temprature", "relative_humidity", "max_relative_humidity", 
            "min_relative_humidity", "wind_speed", "wind_direction_rdegrees", "wind_gust_mps")
 )
 
@@ -126,18 +128,18 @@ head(df)
 colnames(df)
 # need to fix time formats
 typeof(df$observation_date) # integer
-typeof(df$observation_date_time) # double
+typeof(df$observation_date) # double
 
 # construct dates/times and fill out any gaps then drop them as they arent needed
 df %>% mutate(observation_date = make_date(year, month, day))
-df %>% mutate(observation_date_time = make_datetime(year, month, day, hour)) 
+df %>% mutate(observation_date = make_datetime(year, month, day, hour)) 
 # drop cols in c()
 df = df[,!names(df) %in% c("year", "month", "day", "hour", 
                            "max_relative_humidity", "drop_me", 
                            "air_pressure_hr_hPa",
                            "max_air_pressure_hr_hPa", "min_air_pressure_hr_hPa",
                            "elevation", "lat", "long", "preassure", "province",
-                           "city", "max_dew_temp", "min_dew_temp", "observation_date_time",
+                           "city", "max_air_temprature", "min_air_temprature", "observation_date",
                            "station_id", "wind_direction_rdegrees", "wind_gust_mps",
                            "wind_speed", "station_num", "min_relative_humidity")]
 head(df)
@@ -198,25 +200,25 @@ summary(sao_goncalo$observation_date)
 summary(sao_paulo$precipitation_last_hr_mm)
 skim(sao_goncalo)
 
-plot(sao_goncalo$observation_date_time, sao_goncalo$air_temprature)
-hist( sao_goncalo$observation_date_time, sao_goncalo$air_temprature)
+plot(sao_goncalo$observation_date, sao_goncalo$air_temprature)
+hist( sao_goncalo$observation_date, sao_goncalo$air_temprature)
 
 # this station has been in operation since 2008 more or less
 # some data missing for 2009-2010, similar blip for 2011-2012
 # there is also lots of 0 values during that time too
 # there is very little data here, probably there was little rainfall
 
-plot(sao_goncalo$observation_date_time, sao_goncalo$precipitation_last_hr_mm)
-plot(sao_goncalo$observation_date_time, sao_goncalo$relative_humidity)
-plot(sao_goncalo$observation_date_time, sao_goncalo$solar_radiation)
+plot(sao_goncalo$observation_date, sao_goncalo$precipitation_last_hr_mm)
+plot(sao_goncalo$observation_date, sao_goncalo$relative_humidity)
+plot(sao_goncalo$observation_date, sao_goncalo$solar_radiation)
 
 # 12 month blocks
-sao_goncalo_2008 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2008-12-31" & observation_date_time >= "2008-01-01"), ])
-sao_goncalo_2010 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2010-12-31" & observation_date_time >= "2010-01-01"), ])
-sao_goncalo_2012 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2012-12-31" & observation_date_time >= "2012-01-01"), ])
-sao_goncalo_2014 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2014-12-31" & observation_date_time >= "2014-01-01"), ])
+sao_goncalo_2008 = with(sao_goncalo, sao_goncalo[(observation_date <= "2008-12-31" & observation_date >= "2008-01-01"), ])
+sao_goncalo_2010 = with(sao_goncalo, sao_goncalo[(observation_date <= "2010-12-31" & observation_date >= "2010-01-01"), ])
+sao_goncalo_2012 = with(sao_goncalo, sao_goncalo[(observation_date <= "2012-12-31" & observation_date >= "2012-01-01"), ])
+sao_goncalo_2014 = with(sao_goncalo, sao_goncalo[(observation_date <= "2014-12-31" & observation_date >= "2014-01-01"), ])
 # only contains 7 months block
-sao_goncalo_2016 = with(sao_goncalo, sao_goncalo[(observation_date_time <= "2016-12-31" & observation_date_time >= "2016-01-01"), ])
+sao_goncalo_2016 = with(sao_goncalo, sao_goncalo[(observation_date <= "2016-12-31" & observation_date >= "2016-01-01"), ])
 
 skim(sao_goncalo_2008)
 skim(sao_goncalo_2010)
@@ -225,44 +227,44 @@ skim(sao_goncalo_2014)
 skim(sao_goncalo_2016)
 
 par(mfrow=c(2,2)) # 2x2 block per graph
-plot(type = "b", sao_goncalo_2008$observation_date_time, sao_goncalo_2008$dew_temp, xlab = "2008 12 month period" , ylab = "temperature in °C")
-plot(type = "b", sao_goncalo_2008$observation_date_time, sao_goncalo_2008$precipitation_last_hr_mm, xlab = "2008 12 month period", ylab = "rain fall in millimetres ")
-plot(type = "h", sao_goncalo_2008$observation_date_time, sao_goncalo_2008$relative_humidity, xlab = "2008 12 month period", ylab = "humidity as % out of 100")
-plot(type = "l", sao_goncalo_2008$observation_date_time, sao_goncalo_2008$solar_radiation, xlab = "2008 12 month period", ylab = "sunlight in  KJ/m2")
+plot(type = "b", sao_goncalo_2008$observation_date, sao_goncalo_2008$air_temprature, xlab = "2008 12 month period" , ylab = "temperature in °C")
+plot(type = "b", sao_goncalo_2008$observation_date, sao_goncalo_2008$precipitation_last_hr_mm, xlab = "2008 12 month period", ylab = "rain fall in millimetres ")
+plot(type = "h", sao_goncalo_2008$observation_date, sao_goncalo_2008$relative_humidity, xlab = "2008 12 month period", ylab = "humidity as % out of 100")
+plot(type = "l", sao_goncalo_2008$observation_date, sao_goncalo_2008$solar_radiation, xlab = "2008 12 month period", ylab = "sunlight in  KJ/m2")
 
 
-plot(type = "h", sao_goncalo_2010$observation_date_time, sao_goncalo_2010$dew_temp, xlab = "2010 12 month period", ylab = "temperature in °C")
-plot(type = "b", sao_goncalo_2010$observation_date_time, sao_goncalo_2010$precipitation_last_hr_mm, xlab = "2010 12 month period", ylab = "rain fall in millimetres ")
-plot(type = "h", sao_goncalo_2010$observation_date_time, sao_goncalo_2010$relative_humidity, xlab = "2010 12 month period", ylab = "humidity as % out of 100")
-plot(type = "l", sao_goncalo_2010$observation_date_time, sao_goncalo_2010$solar_radiation, xlab = "2010 12 month period", ylab = "sunlight in  KJ/m2")
+plot(type = "h", sao_goncalo_2010$observation_date, sao_goncalo_2010$air_temprature, xlab = "2010 12 month period", ylab = "temperature in °C")
+plot(type = "b", sao_goncalo_2010$observation_date, sao_goncalo_2010$precipitation_last_hr_mm, xlab = "2010 12 month period", ylab = "rain fall in millimetres ")
+plot(type = "h", sao_goncalo_2010$observation_date, sao_goncalo_2010$relative_humidity, xlab = "2010 12 month period", ylab = "humidity as % out of 100")
+plot(type = "l", sao_goncalo_2010$observation_date, sao_goncalo_2010$solar_radiation, xlab = "2010 12 month period", ylab = "sunlight in  KJ/m2")
 
 
-plot(type = "h", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$dew_temp, xlab = "2012 12 month period", ylab = "temperature in °C")
-plot(type = "b", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$precipitation_last_hr_mm, xlab = "2012 12 month period", ylab = "rain fall in millimetres ")
-plot(type = "h", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$relative_humidity, xlab = "2012 12 month period", ylab = "humidity as % out of 100")
-plot(type = "l", sao_goncalo_2012$observation_date_time, sao_goncalo_2012$solar_radiation, xlab = "2012 12 month period", ylab = "sunlight in  KJ/m2")
+plot(type = "h", sao_goncalo_2012$observation_date, sao_goncalo_2012$air_temprature, xlab = "2012 12 month period", ylab = "temperature in °C")
+plot(type = "b", sao_goncalo_2012$observation_date, sao_goncalo_2012$precipitation_last_hr_mm, xlab = "2012 12 month period", ylab = "rain fall in millimetres ")
+plot(type = "h", sao_goncalo_2012$observation_date, sao_goncalo_2012$relative_humidity, xlab = "2012 12 month period", ylab = "humidity as % out of 100")
+plot(type = "l", sao_goncalo_2012$observation_date, sao_goncalo_2012$solar_radiation, xlab = "2012 12 month period", ylab = "sunlight in  KJ/m2")
 
 
-plot(type = "h", sao_goncalo_2014$observation_date_time, sao_goncalo_2014$dew_temp, xlab = "2014 12 month period", ylab = "temperature in °C")
-plot(type = "b", sao_goncalo_2014$observation_date_time, sao_goncalo_2014$precipitation_last_hr_mm, xlab = "2014 12 month period", ylab = "rain fall in millimetres ")
-plot(type = "h", sao_goncalo_2014$observation_date_time, sao_goncalo_2014$relative_humidity, xlab = "2014 12 month period", ylab = "humidity as % out of 100")
-plot(type = "l", sao_goncalo_2014$observation_date_time, sao_goncalo_2014$solar_radiation, xlab = "2014 12 month period", ylab = "sunlight in  KJ/m2")
+plot(type = "h", sao_goncalo_2014$observation_date, sao_goncalo_2014$air_temprature, xlab = "2014 12 month period", ylab = "temperature in °C")
+plot(type = "b", sao_goncalo_2014$observation_date, sao_goncalo_2014$precipitation_last_hr_mm, xlab = "2014 12 month period", ylab = "rain fall in millimetres ")
+plot(type = "h", sao_goncalo_2014$observation_date, sao_goncalo_2014$relative_humidity, xlab = "2014 12 month period", ylab = "humidity as % out of 100")
+plot(type = "l", sao_goncalo_2014$observation_date, sao_goncalo_2014$solar_radiation, xlab = "2014 12 month period", ylab = "sunlight in  KJ/m2")
 
 
-plot(type = "h", sao_goncalo_2016$observation_date_time, sao_goncalo_2016$dew_temp, xlab = "2016 7 month period", ylab = "temperature in °C")
-plot(type = "b", sao_goncalo_2016$observation_date_time, sao_goncalo_2016$precipitation_last_hr_mm, xlab = "2016 7 month period", ylab = "rain fall in millimetres ")
-plot(type = "h", sao_goncalo_2016$observation_date_time, sao_goncalo_2016$relative_humidity, xlab = "2016 7 month period", ylab = "humidity as % out of 100")
-plot(type = "l", sao_goncalo_2016$observation_date_time, sao_goncalo_2016$solar_radiation, xlab = "2016 7 month period", ylab = "sunlight in  KJ/m2")
+plot(type = "h", sao_goncalo_2016$observation_date, sao_goncalo_2016$air_temprature, xlab = "2016 7 month period", ylab = "temperature in °C")
+plot(type = "b", sao_goncalo_2016$observation_date, sao_goncalo_2016$precipitation_last_hr_mm, xlab = "2016 7 month period", ylab = "rain fall in millimetres ")
+plot(type = "h", sao_goncalo_2016$observation_date, sao_goncalo_2016$relative_humidity, xlab = "2016 7 month period", ylab = "humidity as % out of 100")
+plot(type = "l", sao_goncalo_2016$observation_date, sao_goncalo_2016$solar_radiation, xlab = "2016 7 month period", ylab = "sunlight in  KJ/m2")
 
 
 # quick inspection before forecasting
-ggplot(data=sao_goncalo_2008, aes(y=solar_radiation, x=observation_date_time)) + geom_point() 
+ggplot(data=sao_goncalo_2008, aes(y=solar_radiation, x=observation_date)) + geom_point() 
 ggplot(data=sao_goncalo_2008, aes(y=solar_radiation, x=relative_humidity)) + geom_point()
 
-ggplot(data=sao_goncalo_2010, aes(y=solar_radiation, x=observation_date_time)) + geom_point()
+ggplot(data=sao_goncalo_2010, aes(y=solar_radiation, x=observation_date)) + geom_point()
 ggplot(data=sao_goncalo_2010, aes(y=solar_radiation, x=relative_humidity)) + geom_point()
 
-ggplot(data=sao_goncalo_2012, aes(y=solar_radiation, x=observation_date_time)) + geom_point()
+ggplot(data=sao_goncalo_2012, aes(y=solar_radiation, x=observation_date)) + geom_point()
 ggplot(data=sao_goncalo_2012, aes(y=solar_radiation, x=relative_humidity)) + geom_point()
 
 # this forecast isnt very useful as it creates a flat line, similar results for other years
@@ -433,11 +435,11 @@ axis(1, at = 1:5, labels = names(highest_humidity))
 # Assessing humidity, rainfall and temperature in Brazil #
 ##########################################################
 
-brazil_2008 = with(df, df[(observation_date_time <= "2008-12-31" & observation_date_time >= "2008-01-01"), ])
-brazil_2010 = with(df, df[(observation_date_time <= "2010-12-31" & observation_date_time >= "2010-01-01"), ])
-brazil_2012 = with(df, df[(observation_date_time <= "2012-12-31" & observation_date_time >= "2012-01-01"), ])
-brazil_2014 = with(df, df[(observation_date_time <= "2014-12-31" & observation_date_time >= "2014-01-01"), ])
-brazil_2016 = with(df, df[(observation_date_time <= "2016-12-31" & observation_date_time >= "2016-01-01"), ])
+brazil_2008 = with(df, df[(observation_date <= "2008-12-31" & observation_date >= "2008-01-01"), ])
+brazil_2010 = with(df, df[(observation_date <= "2010-12-31" & observation_date >= "2010-01-01"), ])
+brazil_2012 = with(df, df[(observation_date <= "2012-12-31" & observation_date >= "2012-01-01"), ])
+brazil_2014 = with(df, df[(observation_date <= "2014-12-31" & observation_date >= "2014-01-01"), ])
+brazil_2016 = with(df, df[(observation_date <= "2016-12-31" & observation_date >= "2016-01-01"), ])
 
 
 temp_brazil = sapply(df, max, na.rm = T)
@@ -495,11 +497,11 @@ axis(1, at = 1:5, labels = names(highest_rainfall_brazil))
 ###################################################
 # Assessing rainfall and temperature in Sao Paulo #
 ###################################################
-sao_paulo_2008 = with(sao_paulo, sao_paulo[(observation_date_time <= "2008-12-31" & observation_date_time >= "2008-01-01"), ])
-sao_paulo_2010 = with(sao_paulo, sao_paulo[(observation_date_time <= "2010-12-31" & observation_date_time >= "2010-01-01"), ])
-sao_paulo_2012 = with(sao_paulo, sao_paulo[(observation_date_time <= "2012-12-31" & observation_date_time >= "2012-01-01"), ])
-sao_paulo_2014 = with(sao_paulo, sao_paulo[(observation_date_time <= "2014-12-31" & observation_date_time >= "2014-01-01"), ])
-sao_paulo_2016 = with(sao_paulo, sao_paulo[(observation_date_time <= "2016-12-31" & observation_date_time >= "2016-01-01"), ])
+sao_paulo_2008 = with(sao_paulo, sao_paulo[(observation_date <= "2008-12-31" & observation_date >= "2008-01-01"), ])
+sao_paulo_2010 = with(sao_paulo, sao_paulo[(observation_date <= "2010-12-31" & observation_date >= "2010-01-01"), ])
+sao_paulo_2012 = with(sao_paulo, sao_paulo[(observation_date <= "2012-12-31" & observation_date >= "2012-01-01"), ])
+sao_paulo_2014 = with(sao_paulo, sao_paulo[(observation_date <= "2014-12-31" & observation_date >= "2014-01-01"), ])
+sao_paulo_2016 = with(sao_paulo, sao_paulo[(observation_date <= "2016-12-31" & observation_date >= "2016-01-01"), ])
 
 avg_rainfall_sao_paulo_2008 = mean(sao_paulo_2008$precipitation_last_hr_mm)
 highest_rainfall_sao_paulo_2008 = getElement(temp_2008, "precipitation_last_hr_mm") 
