@@ -38,7 +38,7 @@ weather_stations_codes = read.table('weather_stations_codes.csv',  header = T, s
 colnames(weather_stations_codes)
 # isolating important cols
 weather_stations_codes = weather_stations_codes %>% setnames(
- c("w_station_name", "station_id", "drop_me", "drop_me_2", "drop_me_3", "drop_me_4", "observation_date_time")
+ c("w_station_name", "station_id", "drop_me", "drop_me_2", "drop_me_3", "drop_me_4", "observation_date")
   
 )
 # drop redundant cols
@@ -60,7 +60,7 @@ head(conventional_weather_stations)
 
 conventional_weather_stations = conventional_weather_stations %>% setnames(
   old = c(colnames(conventional_weather_stations)),
-  new = c("station_id", "observation_date_time", "hour", 
+  new = c("station_id", "observation_date", "hour", 
           "precipitation_last_hr_mm", "dry_temp", "wet_temp",
           "max_temp_hr", "min_temp_hr", "relative_humidity", "pressure",
           "pressure_sea_level", "wind_direction", "wind_speed", "insolation",
@@ -90,7 +90,7 @@ weather_stations = read_feather('conventional_weather_stations.feather')
 head(weather_stations_codes)
 head(weather_stations)
 
-weather_codes_stations = merge(weather_stations_codes, weather_stations, by = c("station_id", "observation_date_time"))
+weather_codes_stations = merge(weather_stations_codes, weather_stations, by = c("station_id", "observation_date"))
 # final clean up before merg with 3rd data set
 weather_codes_stations = weather_codes_stations[,!names(weather_codes_stations) %in% c("station_id", "max_temp_hr", "min_temp_hr")]
 
@@ -102,7 +102,8 @@ write_feather(weather_codes_stations, "weather_codes_stations.feather")
 
 df = read_csv('weather-data.csv')
 
-# rename cols to be more descriptive 
+# rename cols to be more descriptive
+colnames(df)
 df = df %>% setnames( 
   old = c(colnames(df)), 
   new = c( "station_id", "w_station_name", "elevation", "lat", "long", 
@@ -111,8 +112,7 @@ df = df %>% setnames(
            "air_pressure_hr_hPa", "max_air_pressure_hr_hPa", "min_air_pressure_hr_hPa", 
            "solar_radiation", "air_temprature", "dew_temp", "max_temp_hr", "max_dew_temp", 
            "min_temp_hr", "min_dew_temp", "relative_humidity", "max_relative_humidity", 
-           "min_relative_humidity", "wind_speed", "wind_direction_rdegrees", "wind_gust_mps",
-           "dew_temp")
+           "min_relative_humidity", "wind_speed", "wind_direction_rdegrees", "wind_gust_mps")
 )
 
 colnames(df)
@@ -146,19 +146,30 @@ colnames(df)
 # the decision was made to treat this as noise and remove it from the data set
 df$air_temprature[df$air_temprature < 1] = NA
 df = na.omit(df)
-temp_df = na.omit(temp_df)
-temp_df_two = na.omit(temp_df_two)
+write_feather(df, 'weather-data.feather')
+df = read_feather('weather-data.feather')
 
 
 ###############################################
 # Merge dataset 3 and amalgimation of 1 and 2 #
 ###############################################
-# todo
+
 weather_codes_stations = read_feather("weather_codes_stations.feather")
 df = read_feather('weather-data.feather')
-head(df)
-head(weather_codes_stations)
 
+# strsplit(weather_codes_stations$w_station_name, " ")[[1]][1]
+weather_codes_stations=separate(weather_codes_stations, w_station_name, sep = " ", into = c("w_station_name","drop_2","drop_3"))
+na.omit(weather_codes_stations)
+weather_codes_stations = weather_codes_stations[,!names(weather_codes_stations) %in% c("drop_2","drop_3")]
+weather_codes_stations
+
+temp = merge(weather_codes_stations, df, by = c("w_station_name", "observation_date", "precipitation_last_hr_mm"), all = T)
+na.omit(temp)
+
+write_feather(df, 'backup-weather-data.feather')
+write_feather(temp, 'weather-data.feather')
+
+df = read_feather('weather-data.feather')
 
 ####################
 # data exploration #
@@ -166,10 +177,9 @@ head(weather_codes_stations)
 # this section focuses on exploring the data set
 # and provide some insights for the written report
 
-write_feather(df, 'weather-data.feather')
 df = read_feather('weather-data.feather')
 sao_goncalo = filter(df, w_station_name == "SÃO GONÇALO")
-
+head(sao_goncalo)
 
 # checking missing data 
 
