@@ -1,0 +1,164 @@
+---
+title: "Probability and Statistics Week 8 Lab"
+output: 
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+
+## Install and load libraries needed
+```{r prelim}
+needed_packages <- c("foreign", "stats", "lm.beta", "stargazer", "ggplot2", "car", "ppcor")                      
+# Extract not installed packages
+not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
+# Install not installed packages
+if(length(not_installed)) install.packages(not_installed) 
+
+library(car)
+library(stats)
+library(ggplot2)
+library(foreign) #To work with SPSS data
+library(lm.beta) #Will allow us to isolate the beta co-efficient
+library(stargazer)#For formatting outputs/tables
+library(ppcor)#for partial correlation
+
+```
+## Setup Files needed
+```{r setup}
+#We are using a .dat file (survey.dat) created from the SPSS file survey.sav  taken from SPSS Survival Manual 6th Edition Julie Pallant
+#http://spss.allenandunwin.com.s3-website-ap-southeast-2.amazonaws.com/data-files.html#.Wb0vvnWP-po
+#Results on a survey on well being. 
+
+#We need to load the file so that we can use it in R.
+survey <- read.table("survey.dat")
+#Setting the column names to be that used in the dataset
+colnames(survey) <- tolower(colnames(survey))
+
+
+#We are using an spss file  taken from SPSS Survival Manual 6th Edition Julie Pallant
+#http://spss.allenandunwin.com.s3-website-ap-southeast-2.amazonaws.com/data-files.html#.Wb0vvnWP-po
+#a real data file condensed from a study conducted to explore the prevalence and impact of sleep problems on various aspects of people’s lives. Staff from a university in Melbourne, Australia were invited to complete a questionnaire containing questions about their sleep behaviour (e.g. hours slept per night), sleep problems (e.g. difficulty getting to sleep) and the impact that these problems have on aspects of their lives (work, driving, relationships). The sample consisted of 271 respondents (55% female, 45% male) ranging in age from 18 to 84 years (mean=44yrs).
+
+sleep<- foreign::read.spss("sleep.sav", use.value.labels=TRUE, max.value.labels=Inf, to.data.frame=TRUE)
+```
+
+
+### Explore relationship between tpstress and toptim
+```{r Step 3 correlation}
+
+#Simple scatterplot of toptim and normexam
+#aes(x,y)
+scatter <- ggplot2::ggplot(survey, aes(toptim, tpstress))
+#Add a survey line
+scatter + geom_point() + geom_smooth(method = "lm", colour = "Red", se = F) + labs(x = "Total Optimism", y = "Total Perceived Stress") 
+
+#Note: When running this in RStudio the output will appear in the Plots tab on the right hand side, if not visible click the Plots tab
+
+
+#Pearson Correlation
+stats::cor.test(survey$toptim, survey$tpstress, method='pearson')
+```
+
+## Simple Linear regression Step 3 -tpstress predicted by toptim
+### Note: This is equivalent to doing a Pearson correlation
+```{r Step3 lr}
+model1<-lm(survey$tpstress~survey$toptim)
+anova(model1)
+summary(model1)
+lm.beta::lm.beta(model1)
+stargazer(model1, type="text") #Tidy output of all the required stats
+```
+
+
+## Multuplie Linear regression Step 3- tpstress predicted by toptim including dummy variable for gender to investigate a differential effect by gender 
+#### Explore differences in tpstress for different genders
+```{r Step 3 differencetest}
+car::leveneTest(tpstress ~ sex, data=survey)
+#Pr(>F) is your probability - in this case it is not statistically significant so we can assume homogeneity
+
+
+#Conduct the t-test from package stats
+#In this case we can use the var.equal = TRUE option to specify equal variances and a pooled variance estimate
+stats::t.test(tpstress~sex,var.equal=TRUE,data=survey)
+#There is a statistically significant difference
+
+```
+
+```{r Step3 mlr}
+#Note: R automatically recodes categorical to be dummy variable 0 = reference (females), 1 category of interest (males)
+model2<-lm(survey$tpstress~survey$toptim+survey$sex)
+anova(model2)
+summary(model2)
+stargazer(model2, type="text") #Tidy output of all the required stats
+lm.beta(model2)
+stargazer(model1, model2, type="text") #Quick model comparison
+```
+### Remember that for the categorical variable the possible values are 0 and 1 - it will be dummy coded in the model. 1 is the value of the category of interest (in this case MALE), 0 reference category (in this case female). If you want to change the reference category to be male and category of interest to be female you need to add a new variable to the dataset which recodes the existing variable to have these values.
+
+## Investigating partial correlation including an interaction effect
+```{r Step3 partialcor}
+myvars <- c("tpstress", "toptim", "tposaff", "sex")
+ydata <-na.omit(survey[myvars])
+ppcor::spcor.test(ydata$tpstress,ydata$toptim,ydata$tposaff)
+ydata$interaction<-ydata$toptim*ydata$tposaff
+model3<-lm(ydata$tpstress~ydata$toptim+ydata$sex+ydata$interaction)
+anova(model3)
+summary(model3)
+stargazer(model3, type="text") #Tidy output of all the required stats
+lm.beta(model3)
+stargazer(model2, model3, type="text") #Quick model comparison
+```
+
+
+
+## Step 4 using the sleep dataset
+###Explore releationship between totsas and anxiety
+```{r Step4 correlation}
+
+#Simple scatterplot of totsas and anxiety
+#aes(x,y)
+scatter <- ggplot2::ggplot(sleep, aes(anxiety, totsas))
+#Add a survey line
+scatter + geom_point() + geom_smooth(method = "lm", colour = "Red", se = F) + labs(x = "Anxiety", y = "Total Sleepiness and Associated Sensation Score") 
+
+#Note: When running this in RStudio the output will appear in the Plots tab on the right hand side, if not visible click the Plots tab
+
+
+#Pearson Correlation
+stats::cor.test(sleep$anxiety, sleep$totsas, method='pearson')
+```
+### Simple Linear regression- Totsas predicted by anxiety
+### Note: This is equivalent to doing a Pearson correlation
+```{r Step 4 lr}
+slpmodel1<-lm(sleep$totsas~sleep$anxiety)
+anova(slpmodel1)
+summary(slpmodel1)
+lm.beta::lm.beta(slpmodel1)
+stargazer(slpmodel1, type="text") #Tidy output of all the required stats
+```
+
+
+### Multuplie Linear regression - Totsas predicted by anxiety including dummy variable for trubslep to investigate a differential effect  of whether a respondent reported that they have difficulty getting to sleep
+## Exploring diffrences
+```{r Step 4 differencetest}
+car::leveneTest(totsas ~ sex, data=sleep)
+#Pr(>F) is your probability - in this case it is statistically significant so we cannot assume homogeneity
+
+
+#Conduct the t-test from package stats
+#In this case we can use the var.equal = FALSE option to specify unequal variances and a pooled variance estimate
+stats::t.test(totsas~sex,var.equal=FALSE,data=sleep)
+#There is a statistically significant difference
+
+```
+```{r Step 4 mlr}
+#Note: R automatically recodes categorical to be dummy variable 0 = reference (yes), 1 category of interest (no)
+slpmodel2<-lm(sleep$totsas~sleep$anxiety+sleep$trubslep)
+anova(slpmodel2)
+summary(slpmodel2)
+stargazer(slpmodel2, type="text") #Tidy output of all the required stats
+lm.beta(slpmodel2)
+stargazer(slpmodel1, slpmodel2, type="text") #Quick model comparison
+```
