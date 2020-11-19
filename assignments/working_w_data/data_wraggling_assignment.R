@@ -16,6 +16,7 @@ library(forecast)
 df = read_feather('weather-data.feather')
 sao_goncalo = as_tibble(filter(df, w_station_name == "SÃO GONÇALO"))
 sao_paulo = as_tibble(filter(df, w_station_name == "São Paulo"))
+df = read_feather('backup-weather-data.feather')
 
 ################
 # ^^ Setup  ^^ #
@@ -219,6 +220,7 @@ sao_goncalo_2012 = with(sao_goncalo, sao_goncalo[(observation_date <= "2012-12-3
 sao_goncalo_2014 = with(sao_goncalo, sao_goncalo[(observation_date <= "2014-12-31" & observation_date >= "2014-01-01"), ])
 # only contains 7 months block
 sao_goncalo_2016 = with(sao_goncalo, sao_goncalo[(observation_date <= "2016-12-31" & observation_date >= "2016-01-01"), ])
+ppPlot(sao_goncalo_2014, sao_goncalo_2016)
 
 skim(sao_goncalo_2008)
 skim(sao_goncalo_2010)
