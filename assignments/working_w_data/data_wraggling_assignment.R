@@ -18,9 +18,9 @@ sao_goncalo = as_tibble(filter(df, w_station_name == "SÃO GONÇALO"))
 sao_paulo = as_tibble(filter(df, w_station_name == "São Paulo"))
 df = read_feather('backup-weather-data.feather')
 
-################
-# ^^ Setup  ^^ #
-################
+########################################
+# ^^ Quick Setup for me to run code ^^ #
+########################################
 
 
 
@@ -496,9 +496,9 @@ axis(1, at = 1:5, labels = names(highest_rainfall_brazil))
 
 
 
-###################################################
-# Assessing rainfall and temperature in Sao Paulo #
-###################################################
+###################################
+# Assessing rainfall in Sao Paulo #
+###################################
 sao_paulo_2008 = with(sao_paulo, sao_paulo[(observation_date <= "2008-12-31" & observation_date >= "2008-01-01"), ])
 sao_paulo_2010 = with(sao_paulo, sao_paulo[(observation_date <= "2010-12-31" & observation_date >= "2010-01-01"), ])
 sao_paulo_2012 = with(sao_paulo, sao_paulo[(observation_date <= "2012-12-31" & observation_date >= "2012-01-01"), ])
