@@ -34,13 +34,16 @@ colnames(student_pref)
 # your sample is now based on that websites demographic alone
 # only people that use said website will see that job ad
 
-library(tidyverse)
-library(skimr)
-library(ggplot2)
-library(pastecs)
-library(psych)
 library(semTools) #For skewness and kurtosis
-
+library(tidyverse) # useful tooling
+library(skimr) # for descriptions
+library(ggplot2) # plots
+library(pastecs) # for descriptive statistic summaries
+library(psych) # useful descriptive functions
+library(semTools) #For skewness and kurtosis
+library(FSA) #For percentage
+library(car) # For Levene's test for homogeneity of variance 
+library(effectsize) #To calculate effect size for t-test
 
 ####################
 # Data exploration #
@@ -192,16 +195,6 @@ boxplot(student_pref$mG3)
 # shapiro-wilks for small sampls
 # kolmogorov-smirnov for large smaples > 50
 
-
-library(tidyverse) # useful tooling
-library(skimr) # for descriptions
-library(ggplot2) # plots
-library(pastecs) # for descriptive statistic summaries
-library(psych) # useful descriptive functions
-library(semTools) #For skewness and kurtosis
-library(FSA) #For percentage
-library(car) # For Levene's test for homogeneity of variance 
-library(effectsize) #To calculate effect size for t-test
 
 #Get descriptive stastitics by group - output as a matrix
 psych::describeBy(student_pref$Medu, student_pref$mG3, mat=TRUE)

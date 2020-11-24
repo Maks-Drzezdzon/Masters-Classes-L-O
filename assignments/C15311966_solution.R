@@ -13,7 +13,7 @@ df = read_table("read-data.csv")
 
 # 1.) 1 file containing all code written during exam
 # 2.) 1 much shorter file containing only the code to perform the 3 specific tasks.
-
+# https://www.statmethods.net/graphs/scatterplot.html
 ############
 # Cleaning #
 ############
@@ -33,6 +33,8 @@ df = df[,!names(df) %in% c("col_name", "col_name")]
 # Exploration #
 ###############
 fivenum()
+head()
+tail()
 plot()
 qqplot()
 boxplot()
