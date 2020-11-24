@@ -75,14 +75,7 @@ colnames(df)
 ###############
 # Exploration #
 ###############
-<<<<<<< HEAD
-fivenum()
-head()
-tail()
-plot()
-qqplot()
-boxplot()
-=======
+
 correlation_matrix_data = df[,!names(df) %in% c("season_start_year", "season_end_year", "player_name", "position", "team_name")]
 correlation_matrix_data = cor(correlation_matrix_data)
 head(correlation_matrix_data)
@@ -102,7 +95,6 @@ boxplot(df$player_age)
 
 help(heatmap)
 heatmap(correlation_matrix_data, na.rm = T, main = "MBA correlation heat map")
->>>>>>> 770d1beeb47344b6612652d03d6b6dd4d0310ef2
 
 ############
 # Analysis #

@@ -200,8 +200,6 @@ boxplot(student_pref$mG3)
 psych::describeBy(student_pref$Medu, student_pref$mG3, mat=TRUE)
 
 
-## these dont work because they arent compatible
-
 #Conduct Levene's test for homogeneity of variance in library car - the null hypothesis is that variances in groups are equal so to assume homogeneity we woudl expect probaility to not be statistically significant.
 car::leveneTest(Medu ~ mG3, data=student_pref)
 #Pr(>F) is your probability - in this case it is not statistically significant so we can assume homogeneity
@@ -213,17 +211,15 @@ stats::t.test(Medu ~ mG3, var.equal=TRUE, data=student_pref)
 #No statistically significant difference was found
 res = stats::t.test(Medu ~ mG3,var.equal=TRUE,data=student_pref)
 
-#Calculate Cohen's d
-#artithmetically
-effcd = round((2*res$statistic)/sqrt(res$parameter), 2)
+correlation_matrix_data = student_pref[,!names(student_pref) %in% c("school", "sex", "address", 
+                                                                    "Pstatus", "Mjob", "Fjob", 
+                                                                    "reason", "romantic", "internet", 
+                                                                    "higher", "nursery", "activities", 
+                                                                    "paid", "famsup", "schoolsup", 
+                                                                    "guardian", "reason")]
+matrix = cor(correlation_matrix_data)
+heatmap(matrix)
 
-#Using function from effectsize package
-effectsize::t_to_d(t = res$statistic, res$parameter)
-
-
-#Eta squared calculation
-effes=round((res$statistic*res$statistic)/((res$statistic*res$statistic)+(res$parameter)),3)
-effes
 
 
 ###########
