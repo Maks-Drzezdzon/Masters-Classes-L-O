@@ -2,6 +2,16 @@ library(tidyverse)
 library(lubridate)
 library(data.table)
 
+df = read.table("bank/bank-full.csv", header = T, sep = ";")
+write.csv(df, "bank-full-updated.csv", row.names = F)
+
+df = read.table("Autism_data.arff", header = T, sep = ",")
+df
+write.csv(df, "Autism_data.csv", row.names = F)
+
+df = read.table("bank/bank-full.csv", header = T, sep = ";")
+write.csv(df, "bank-full-updated.csv", row.names = F)
+
 df = read_csv("dataset.csv")
 df = read_csv("dataset-updated.csv")
 
