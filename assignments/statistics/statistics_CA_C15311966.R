@@ -34,13 +34,16 @@ colnames(student_pref)
 # your sample is now based on that websites demographic alone
 # only people that use said website will see that job ad
 
-library(tidyverse)
-library(skimr)
-library(ggplot2)
-library(pastecs)
-library(psych)
 library(semTools) #For skewness and kurtosis
-
+library(tidyverse) # useful tooling
+library(skimr) # for descriptions
+library(ggplot2) # plots
+library(pastecs) # for descriptive statistic summaries
+library(psych) # useful descriptive functions
+library(semTools) #For skewness and kurtosis
+library(FSA) #For percentage
+library(car) # For Levene's test for homogeneity of variance 
+library(effectsize) #To calculate effect size for t-test
 
 ####################
 # Data exploration #
@@ -193,21 +196,9 @@ boxplot(student_pref$mG3)
 # kolmogorov-smirnov for large smaples > 50
 
 
-library(tidyverse) # useful tooling
-library(skimr) # for descriptions
-library(ggplot2) # plots
-library(pastecs) # for descriptive statistic summaries
-library(psych) # useful descriptive functions
-library(semTools) #For skewness and kurtosis
-library(FSA) #For percentage
-library(car) # For Levene's test for homogeneity of variance 
-library(effectsize) #To calculate effect size for t-test
-
 #Get descriptive stastitics by group - output as a matrix
 psych::describeBy(student_pref$Medu, student_pref$mG3, mat=TRUE)
 
-
-## these dont work because they arent compatible
 
 #Conduct Levene's test for homogeneity of variance in library car - the null hypothesis is that variances in groups are equal so to assume homogeneity we woudl expect probaility to not be statistically significant.
 car::leveneTest(Medu ~ mG3, data=student_pref)
@@ -220,17 +211,15 @@ stats::t.test(Medu ~ mG3, var.equal=TRUE, data=student_pref)
 #No statistically significant difference was found
 res = stats::t.test(Medu ~ mG3,var.equal=TRUE,data=student_pref)
 
-#Calculate Cohen's d
-#artithmetically
-effcd = round((2*res$statistic)/sqrt(res$parameter), 2)
+correlation_matrix_data = student_pref[,!names(student_pref) %in% c("school", "sex", "address", 
+                                                                    "Pstatus", "Mjob", "Fjob", 
+                                                                    "reason", "romantic", "internet", 
+                                                                    "higher", "nursery", "activities", 
+                                                                    "paid", "famsup", "schoolsup", 
+                                                                    "guardian", "reason")]
+matrix = cor(correlation_matrix_data)
+heatmap(matrix)
 
-#Using function from effectsize package
-effectsize::t_to_d(t = res$statistic, res$parameter)
-
-
-#Eta squared calculation
-effes=round((res$statistic*res$statistic)/((res$statistic*res$statistic)+(res$parameter)),3)
-effes
 
 
 ###########
