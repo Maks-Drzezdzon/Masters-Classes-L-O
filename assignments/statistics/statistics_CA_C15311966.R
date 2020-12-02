@@ -215,13 +215,29 @@ str(correlation_matrix_data)
 matrix = cor(correlation_matrix_data)
 heatmap(matrix)
 
-correlation_matrix_data$Medu = as.factor(correlation_matrix_data$Medu)
-correlation_matrix_data$Medu = factor(correlation_matrix_data$Medu, labels = c("no education",
-                                                                               "primary education 4th grade", 
-                                                                               "primary eduction 5th to 9th grade", 
-                                                                               "secondary education", 
-                                                                               "higher education"))
 
+result = manova(cbind(mG1, mG2, mG3) ~ Medu, data = student_pref)
+summary(result)
+# http://www.sthda.com/english/wiki/manova-test-in-r-multivariate-analysis-of-variance
+
+
+
+
+anova_data = student_pref[,names(student_pref) %in% c("mG1", "mG2", "mG3", "Medu")]
+anova_data$Medu = as.factor(anova_data$Medu)
+anova_data$Medu = factor(anova_data$Medu, labels = c("no education", 
+                                                     "primary education 4th grade",
+                                                     "primary eduction 5th to 9th grade",
+                                                     "secondary education", 
+                                                     "higher education"))
+
+group1 = subset(anova_data, Medu == "no education")
+group2 = subset(anova_data, Medu == "primary education 4th grade")
+group3 = subset(anova_data, Medu == "primary eduction 5th to 9th grade")
+group4 = subset(anova_data, Medu == "secondary education")
+group5 = subset(anova_data, Medu == "higher education")
+
+bartlett.test(Medu ~ mG3, data = anova_data)
 
 ###########
 ## NOTES ##
