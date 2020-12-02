@@ -1,7 +1,3 @@
-# .m represents for maths tables and .p represents Portuguese  
-student_pref = read_csv("sperformance-dataset.csv")
-colnames(student_pref)
-
 #################################### Hypothesis Question ######################################
 # Does a student's parents' level of education influence their level of academic achievement? #
 ###############################################################################################
@@ -34,6 +30,9 @@ colnames(student_pref)
 # your sample is now based on that websites demographic alone
 # only people that use said website will see that job ad
 
+# .m represents for maths tables and .p represents Portuguese  
+
+
 library(semTools) #For skewness and kurtosis
 library(tidyverse) # useful tooling
 library(skimr) # for descriptions
@@ -51,8 +50,8 @@ library(effectsize) #To calculate effect size for t-test
 student_pref = read_csv("sperformance-dataset.csv")
 student_pref = na.omit(student_pref)
 
-getmode <- function(v) {
-        uniqv <- unique(v)
+getmode = function(v) {
+        uniqv = unique(v)
         uniqv[which.max(tabulate(match(v, uniqv)))]
 }
 
@@ -211,15 +210,17 @@ stats::t.test(Medu ~ mG3, var.equal=TRUE, data=student_pref)
 #No statistically significant difference was found
 res = stats::t.test(Medu ~ mG3,var.equal=TRUE,data=student_pref)
 
-correlation_matrix_data = student_pref[,!names(student_pref) %in% c("school", "sex", "address", 
-                                                                    "Pstatus", "Mjob", "Fjob", 
-                                                                    "reason", "romantic", "internet", 
-                                                                    "higher", "nursery", "activities", 
-                                                                    "paid", "famsup", "schoolsup", 
-                                                                    "guardian", "reason")]
+correlation_matrix_data = student_pref[,names(student_pref) %in% c("mG1", "mG2", "mG3", "Medu")]
+str(correlation_matrix_data)
 matrix = cor(correlation_matrix_data)
 heatmap(matrix)
 
+correlation_matrix_data$Medu = as.factor(correlation_matrix_data$Medu)
+correlation_matrix_data$Medu = factor(correlation_matrix_data$Medu, labels = c("no education",
+                                                                               "primary education 4th grade", 
+                                                                               "primary eduction 5th to 9th grade", 
+                                                                               "secondary education", 
+                                                                               "higher education"))
 
 
 ###########

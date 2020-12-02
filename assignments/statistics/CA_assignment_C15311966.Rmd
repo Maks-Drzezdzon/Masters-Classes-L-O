@@ -29,8 +29,8 @@ library(car) # For Levene's test for homogeneity of variance
 library(effectsize) #To calculate effect size for t-test
 
 student_pref = read_csv("sperformance-dataset.csv")
-getmode <- function(v) {
-        uniqv <- unique(v)
+getmode = function(v) {
+        uniqv = unique(v)
         uniqv[which.max(tabulate(match(v, uniqv)))]
 }
 # Hypothesis Question: Does a student’s parents’ level of education influence their level of academic achievement?
