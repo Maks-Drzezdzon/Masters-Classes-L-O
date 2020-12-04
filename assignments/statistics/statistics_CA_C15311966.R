@@ -51,8 +51,8 @@ student_pref = read_csv("sperformance-dataset.csv")
 student_pref = na.omit(student_pref)
 
 getmode = function(v) {
-        uniqv = unique(v)
-        uniqv[which.max(tabulate(match(v, uniqv)))]
+        uniq_val = unique(v)
+        uniq_val[which.max(tabulate(match(v, uniq_val)))]
 }
 
 # exploring data
