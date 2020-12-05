@@ -221,8 +221,11 @@ correlation_plot_matrix_data = cor(correlation_matrix_data)
 
 # generating correlation statistics
 cor(correlation_matrix_data)
+corr.test(correlation_matrix_data)
+
 # plotting
 chart.Correlation(correlation_matrix_data)
+
 corrplot(correlation_plot_matrix_data, type="upper", order="hclust")
 
 # checking data
@@ -233,19 +236,14 @@ heatmap(matrix)
 
 
 result = manova(cbind(mG1, mG2, mG3) ~ Medu, data = student_pref)
-plot(result)
 summary(result)
 summary.aov(result)
+
 
 
 ###########
 ## NOTES ##
 ###########
-
-# How do you use the t distribution and test statistic to determine whether to reject a null hypothesis?
-# How do you use the normal distribution and a test statistic to determine whether to reject a null hypothesis?
-# How do you use a probability distribution, a test statistic and critical values when trying to test a hypothesis?
-
 
 # ctr+shift+c in windows
 

@@ -194,17 +194,27 @@ summary.aov(result)
 ```{r Correlations}
 # preparing data
 correlation_matrix_data = student_pref[,names(student_pref) %in% c("mG1", "mG2", "mG3", "Medu")]
+correlation_plot_matrix_data = cor(correlation_matrix_data)
 
 # generating correlation statistics
 cor(correlation_matrix_data)
+corr.test(correlation_matrix_data)
+
 # plotting
-corrplot(correlation_matrix_data, type="upper", order="hclust")
 chart.Correlation(correlation_matrix_data)
+
+corrplot(correlation_plot_matrix_data, type="upper", order="hclust")
+
 # checking data
 str(correlation_matrix_data)
 # creating a matrix for a heatmap
 matrix = cor(correlation_matrix_data)
 heatmap(matrix)
+
+
+result = manova(cbind(mG1, mG2, mG3) ~ Medu, data = student_pref)
+summary(result)
+summary.aov(result)
 
 ```
 
