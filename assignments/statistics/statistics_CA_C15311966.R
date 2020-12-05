@@ -133,8 +133,6 @@ hist(student_pref$Medu,
      xlab = "Mothers education",
      prob = F)
 
-# adding density curve
-lines(density(student_pref$Medu), lwd = 2, col = "red")
 # descriptive statistics 
 mean(student_pref$Medu)
 getmode(as.integer(student_pref$Medu))
