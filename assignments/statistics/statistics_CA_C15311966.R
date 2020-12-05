@@ -43,13 +43,16 @@ library(semTools) #For skewness and kurtosis
 library(FSA) #For percentage
 library(car) # For Levene's test for homogeneity of variance 
 library(effectsize) #To calculate effect size for t-test
+library(ggpubr) # enhancements to ggplot
+
 
 ####################
 # Data exploration #
 ####################
 student_pref = read_csv("sperformance-dataset.csv")
 student_pref = na.omit(student_pref)
-
+head(student_pref)
+help(boot)
 getmode = function(v) {
         uniq_val = unique(v)
         uniq_val[which.max(tabulate(match(v, uniq_val)))]
@@ -126,9 +129,9 @@ hist(student_pref$Medu,
      breaks = 5,
      col = "cornflowerblue", 
      main = "Mothers education levels", 
-     ylab = "% of People", 
+     ylab = "Frequency", 
      xlab = "Mothers education",
-     prob = T)
+     prob = F)
 
 # adding density curve
 lines(density(student_pref$Medu), lwd = 2, col = "red")
@@ -238,6 +241,9 @@ group4 = subset(anova_data, Medu == "secondary education")
 group5 = subset(anova_data, Medu == "higher education")
 
 bartlett.test(Medu ~ mG3, data = anova_data)
+head(student_pref$Medu)
+
+
 
 ###########
 ## NOTES ##
