@@ -44,6 +44,10 @@ library(FSA) #For percentage
 library(car) # For Levene's test for homogeneity of variance 
 library(effectsize) #To calculate effect size for t-test
 library(ggpubr) # enhancements to ggplot
+library(corrplot) # for graphing a correlation plot
+library(PerformanceAnalytics) # generates graphs for each variable
+
+
 
 
 ####################
@@ -211,36 +215,27 @@ stats::t.test(Medu ~ mG3, var.equal=TRUE, data=student_pref)
 #No statistically significant difference was found
 res = stats::t.test(Medu ~ mG3,var.equal=TRUE,data=student_pref)
 
+# preparing data
 correlation_matrix_data = student_pref[,names(student_pref) %in% c("mG1", "mG2", "mG3", "Medu")]
+correlation_plot_matrix_data = cor(correlation_matrix_data)
+
+# generating correlation statistics
+cor(correlation_matrix_data)
+# plotting
+chart.Correlation(correlation_matrix_data)
+corrplot(correlation_plot_matrix_data, type="upper", order="hclust")
+
+# checking data
 str(correlation_matrix_data)
+# creating a matrix for a heatmap
 matrix = cor(correlation_matrix_data)
 heatmap(matrix)
 
 
 result = manova(cbind(mG1, mG2, mG3) ~ Medu, data = student_pref)
+plot(result)
 summary(result)
-# http://www.sthda.com/english/wiki/manova-test-in-r-multivariate-analysis-of-variance
-
-
-
-
-anova_data = student_pref[,names(student_pref) %in% c("mG1", "mG2", "mG3", "Medu")]
-anova_data$Medu = as.factor(anova_data$Medu)
-anova_data$Medu = factor(anova_data$Medu, labels = c("no education", 
-                                                     "primary education 4th grade",
-                                                     "primary eduction 5th to 9th grade",
-                                                     "secondary education", 
-                                                     "higher education"))
-
-group1 = subset(anova_data, Medu == "no education")
-group2 = subset(anova_data, Medu == "primary education 4th grade")
-group3 = subset(anova_data, Medu == "primary eduction 5th to 9th grade")
-group4 = subset(anova_data, Medu == "secondary education")
-group5 = subset(anova_data, Medu == "higher education")
-
-bartlett.test(Medu ~ mG3, data = anova_data)
-head(student_pref$Medu)
-
+summary.aov(result)
 
 
 ###########

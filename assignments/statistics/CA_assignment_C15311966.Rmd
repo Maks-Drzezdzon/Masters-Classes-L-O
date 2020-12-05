@@ -9,9 +9,13 @@ editor_options:
 ---
 
 ## Setup
-```{r}
+```{r Setup}
 
-needed_packages <- c("pastecs","skimr", "ggplot2", "psych", "semTools", "FSA", "car", "coin", "rstatix", "effectsize", "tidyverse")                      
+needed_packages <- c("pastecs","skimr", "ggplot2", "psych",
+                     "semTools", "FSA", "car", "coin",
+                     "rstatix", "effectsize", "tidyverse",
+                     "ggpubr", "corrplot", "PerformanceAnalytics")
+
 # Extract not installed packages
 not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
 # Install not installed packages
@@ -23,10 +27,13 @@ library(skimr) # for descriptions
 library(ggplot2) # plots
 library(pastecs) # for descriptive statistic summaries
 library(psych) # useful descriptive functions
-library(semTools) #For skewness and kurtosis
-library(FSA) #For percentage
+library(semTools) # For skewness and kurtosis
+library(FSA) # For percentage
 library(car) # For Levene's test for homogeneity of variance 
 library(effectsize) #To calculate effect size for t-test
+library(ggpubr) # enhancements to ggplot
+library(corrplot) # for graphing a correlation plot
+library(PerformanceAnalytics) # generates graphs for each variable
 
 student_pref = read_csv("sperformance-dataset.csv")
 getmode = function(v) {
@@ -177,13 +184,30 @@ Students final grades can be considered to follow a normal distribution, 100% of
 ##### Describe Life Satisfaction by group (have children v do not have children - variable child)
 ```{r H-Tests}
 # Use MANOVA
-
-
-
-
+result = manova(cbind(mG1, mG2, mG3) ~ Medu, data = student_pref)
+summary(result)
+summary.aov(result)
 
 
 ```
+
+```{r Correlations}
+# preparing data
+correlation_matrix_data = student_pref[,names(student_pref) %in% c("mG1", "mG2", "mG3", "Medu")]
+
+# generating correlation statistics
+cor(correlation_matrix_data)
+# plotting
+corrplot(correlation_matrix_data, type="upper", order="hclust")
+chart.Correlation(correlation_matrix_data)
+# checking data
+str(correlation_matrix_data)
+# creating a matrix for a heatmap
+matrix = cor(correlation_matrix_data)
+heatmap(matrix)
+
+```
+
 Apply your understanding to the dataset provided**<br>
 Provide an example of each general type of descriptive and visual for variables from the dataset
 Assess at least one variable for normality
