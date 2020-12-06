@@ -255,6 +255,12 @@ both_parents = manova(cbind(mG1, mG2, mG3) ~ Fedu*Medu, data = student_pref)
 summary(both_parents)
 summary.aov(both_parents)
 
+##############
+# Regression #
+##############
+
+model = lm(student_pref$Medu ~ student_pref$pG3)
+summary(model)
 ###########
 ## NOTES ##
 ###########
