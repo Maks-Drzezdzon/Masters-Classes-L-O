@@ -54,7 +54,13 @@ library(PerformanceAnalytics) # generates graphs for each variable
 # Data exploration #
 ####################
 student_pref = read_csv("sperformance-dataset.csv")
+NROW(student_pref$Fedu)
+NROW(student_pref$Medu)
 student_pref = na.omit(student_pref)
+# making sure that there is an equal amount of data representation for each student
+NROW(student_pref$Fedu)
+NROW(student_pref$Medu)
+
 head(student_pref)
 help(boot)
 getmode = function(v) {
@@ -216,15 +222,16 @@ stats::t.test(Medu ~ mG3, var.equal=TRUE, data=student_pref)
 res = stats::t.test(Medu ~ mG3,var.equal=TRUE,data=student_pref)
 
 # preparing data
-correlation_matrix_data = student_pref[,names(student_pref) %in% c("mG1", "mG2", "mG3", "Medu")]
-correlation_plot_matrix_data = cor(correlation_matrix_data)
+correlation_matrix_mdata = student_pref[,names(student_pref) %in% c("mG1", "mG2", "mG3", "Medu")]
+correlation_matrix_fdata = student_pref[,names(student_pref) %in% c("mG1", "mG2", "mG3", "Fedu")]
+correlation_plot_matrix_data = cor(correlation_matrix_mdata)
 
 # generating correlation statistics
-cor(correlation_matrix_data)
-corr.test(correlation_matrix_data)
+cor(correlation_matrix_mdata)
+corr.test(correlation_matrix_mdata)
 
 # plotting
-chart.Correlation(correlation_matrix_data)
+chart.Correlation(correlation_matrix_mdata)
 
 corrplot(correlation_plot_matrix_data, type="upper", order="hclust")
 
@@ -235,11 +242,18 @@ matrix = cor(correlation_matrix_data)
 heatmap(matrix)
 
 
-result = manova(cbind(mG1, mG2, mG3) ~ Medu, data = student_pref)
-summary(result)
-summary.aov(result)
 
+result_m = manova(cbind(mG1, mG2, mG3) ~ Medu, data = student_pref)
+summary(result_m)
+summary.aov(result_m)
 
+result_f = manova(cbind(mG1, mG2, mG3) ~ Fedu, data = student_pref)
+summary(result_f)
+summary.aov(result_f)
+
+both_parents = manova(cbind(mG1, mG2, mG3) ~ Fedu*Medu, data = student_pref)
+summary(both_parents)
+summary.aov(both_parents)
 
 ###########
 ## NOTES ##
