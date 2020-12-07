@@ -193,6 +193,8 @@ summary(result)
 summary.aov(result)
 
 
+# report here
+
 ```
 
 ```{r Correlations}
@@ -256,6 +258,20 @@ confint.default(reg_model_father)
 confint.default(reg_model_mother)
 # results from these two reg lines are not significant as p > 0.05
 
+```
 
+
+```{r Dimension Reduction}
+# reset back to normal ds/ had factors previously 
+student_pref = read_csv("sperformance-dataset.csv")
+#######################
+# Dimension Reduction #
+#######################
+# isolate data
+matrix_data = student_pref[,names(student_pref) %in% c("mG1", "mG2", "mG3", "Medu")]
+na.omit(matrix_data)
+matrix_temp = cor(matrix_data)
+round(matrix_temp, 2)
+Hmisc::rcorr(as.matrix(matrix_data))
 
 ```
