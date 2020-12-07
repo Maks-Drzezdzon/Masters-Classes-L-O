@@ -261,6 +261,23 @@ summary.aov(both_parents)
 
 model = lm(student_pref$Medu ~ student_pref$pG3)
 summary(model)
+
+# Lin reg
+# create factor for variables so they are treated like categories
+student_pref$Fedu = factor(student_pref$Fedu)
+student_pref$Medu = factor(student_pref$Medu)
+
+# asses model
+reg_model_father = glm(Fedu ~ mG1 + mG2 + mG3, data = student_pref, family = "binomial")
+summary(reg_model_father)
+
+reg_model_mother = glm(Medu ~ mG1 + mG2 + mG3, data = student_pref, family = "binomial")
+summary(reg_model_mother)
+
+confint.default(reg_model_father)
+confint.default(reg_model_mother)
+# results from these two reg lines are not significant as p > 0.05
+
 ###########
 ## NOTES ##
 ###########
