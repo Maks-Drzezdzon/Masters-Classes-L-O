@@ -230,10 +230,15 @@ correlation_plot_matrix_data = cor(correlation_matrix_mdata)
 cor(correlation_matrix_mdata)
 corr.test(correlation_matrix_mdata)
 
+cor(correlation_matrix_fdata)
+corr.test(correlation_matrix_fdata)
+
 # plotting
 chart.Correlation(correlation_matrix_mdata)
+corrplot(cor(correlation_matrix_mdata), type="upper", order="hclust")
 
-corrplot(correlation_plot_matrix_data, type="upper", order="hclust")
+chart.Correlation(correlation_matrix_fdata)
+corrplot(cor(correlation_matrix_fdata), type="upper", order="hclust")
 
 # checking data
 str(correlation_matrix_data)
@@ -285,6 +290,7 @@ anova(reg_model_father, reg_model_mother, test='LR')
 # Dimension Reduction #
 #######################
 # isolate data
+# not attempted here
 matrix_data = student_pref[,names(student_pref) %in% c("mG1", "mG2", "mG3", "Medu")]
 na.omit(matrix_data)
 matrix_temp = cor(matrix_data)
