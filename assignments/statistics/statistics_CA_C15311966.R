@@ -242,6 +242,9 @@ corrplot(cor(correlation_matrix_fdata), type="upper", order="hclust")
 
 # checking data
 str(correlation_matrix_data)
+
+corr.test(correlation_matrix_fdata)
+
 # creating a matrix for a heatmap
 matrix = cor(correlation_matrix_data)
 heatmap(matrix)

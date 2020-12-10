@@ -193,7 +193,11 @@ summary(result)
 summary.aov(result)
 
 
-# report here
+# report here # 
+
+# the one way multivariate analysis of variance test did not show for a parents education to have a significant interaction on the # outcome of their academic performance. Medu > p and Fedu:Medu > p of 0.05. However an interaction was found across the tables
+# with Fedu, the fathers education level showed a significant effect on the probability of having an effect on the students  
+# academic achievement.
 
 ```
 
@@ -219,6 +223,8 @@ corrplot(cor(correlation_matrix_fdata), type="upper", order="hclust")
 
 # checking data
 str(correlation_matrix_data)
+
+
 # creating a matrix for a heatmap
 matrix = cor(correlation_matrix_data)
 heatmap(matrix)
@@ -273,6 +279,7 @@ student_pref = read_csv("sperformance-dataset.csv")
 # Dimension Reduction #
 #######################
 # isolate data
+# not attempted here
 matrix_data = student_pref[,names(student_pref) %in% c("mG1", "mG2", "mG3", "Medu")]
 na.omit(matrix_data)
 matrix_temp = cor(matrix_data)
