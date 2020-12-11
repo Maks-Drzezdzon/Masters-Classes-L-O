@@ -253,6 +253,14 @@ summary.aov(both_parents)
 model = lm(student_pref$Medu ~ student_pref$pG3)
 summary(model)
 
+# the plot function doesnt run properly in a notebook, it generates a set of useful graphs such as 
+# Residuals vs fitted on a scatter plot
+# QQ-plot
+# Scale-location on a scatter plot
+# residuals vs 
+# however it works fine from the .r code file
+plot(model)
+
 # Lin reg
 # create factor for variables so they are treated like categories
 student_pref$Fedu = factor(student_pref$Fedu)
@@ -264,6 +272,15 @@ summary(reg_model_father)
 
 reg_model_mother = glm(Medu ~ mG1 + mG2 + mG3, data = student_pref, family = "binomial")
 summary(reg_model_mother)
+
+# the plot function doesnt run properly in a notebook, it generates a set of useful graphs such as 
+# Residuals vs fitted on a scatter plot
+# QQ-plot
+# Scale-location on a scatter plot
+# residuals vs leverage
+plot(reg_model_father)
+
+plot(reg_model_mother)
 
 confint.default(reg_model_father)
 confint.default(reg_model_mother)

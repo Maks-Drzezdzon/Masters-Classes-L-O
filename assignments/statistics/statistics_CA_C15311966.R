@@ -266,8 +266,11 @@ summary.aov(both_parents)
 ##############
 # Regression #
 ##############
+# To use the plot functions for this block of code just run the model and reg_model_father, reg_model_mother models into memory 
+# then run the plot function and it will work  
 
 model = lm(student_pref$Medu ~ student_pref$pG3)
+plot(model)
 summary(model)
 
 # Lin reg
@@ -281,6 +284,13 @@ summary(reg_model_father)
 
 reg_model_mother = glm(Medu ~ mG1 + mG2 + mG3, data = student_pref, family = "binomial")
 summary(reg_model_mother)
+
+# The downside is that the labels cant be overridden
+plot(reg_model_father)
+
+# The downside is that the labels cant be overridden
+plot(reg_model_mother)
+
 
 confint.default(reg_model_father)
 confint.default(reg_model_mother)
