@@ -23,3 +23,5 @@ df$education[df$education == "unknown"] = NA
 df = na.omit(df)
 write.csv(df, "bank-full-updated.csv", row.names = F)
 head(df)
+df = read.table("bank-full-updated.csv", header = T, sep = ",")
+head(df)
