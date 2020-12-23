@@ -86,7 +86,7 @@ from bank_model_settings;
 begin 
     dbms_data_mining.create_model
 (
-        model_name => 'GLMR_REGRESSION_BANK',
+        model_name => 'GLM_REGRESSION_BANK',
         mining_function => dbms_data_mining.REGRESSION,
         data_table_name => 'bank_train_data',
         case_id_column_name => 'row_id',
@@ -96,6 +96,6 @@ begin
 end;
 
 select *
-from table(dbms_data_mining.get_model_details_global('GLMR_REGRESSION_BANK'))
+from table(dbms_data_mining.get_model_details_global('GLM_REGRESSION_BANK'))
 order by global_detail_name;
 
