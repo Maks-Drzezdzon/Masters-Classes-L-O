@@ -66,7 +66,7 @@ create table bank_model_settings
 -- setup above
 
 
---- GLM start
+--- GLMR start
 begin
     insert into bank_model_settings
     values(dbms_data_mining.ALGO_NAME, dbms_data_mining.ALGO_GENERALIZED_LINEAR_MODEL);
@@ -102,6 +102,10 @@ end;
 select *
 from GLMR_REGRESSION_BANK;
 
+
+select *
+from table(dbms_data_mining.GET_MODEL_DETAILS_GLM('GLMR_REGRESSION_BANK'));
+
 select *
 from table(dbms_data_mining.get_model_details_global('GLMR_REGRESSION_BANK'))
 order by global_detail_name;
@@ -123,13 +127,17 @@ select *
 from table(dbms_data_mining.get_model_details_global('bank_test_predictions'))
 order by global_detail_name;
 
---- GLM end
+--- GLMR end
 
 
 --- NAIVE BAYES start
 begin
     insert into bank_model_settings
     values(dbms_data_mining.ALGO_NAME, dbms_data_mining.ALGO_NAIVE_BAYES);
+    -- DATA PREP
+    insert into bank_model_settings
+    values(dbms_data_mining.PREP_AUTO, dbms_data_mining.PREP_AUTO_ON);
+
 end;
 
 select *
@@ -139,7 +147,7 @@ delete from bank_model_settings;
 begin 
     dbms_data_mining.create_model
 (
-        model_name => 'NAIVE_BAYES_BANK',
+        model_name => 'NAIVE2_BAYES_BANK',
         mining_function => dbms_data_mining.Classification,
         data_table_name => 'bank_train_data',
         case_id_column_name => 'row_id',
@@ -149,41 +157,34 @@ begin
 end;
 
 
-select *
-from table(dbms_data_mining.get_model_details_global('NAIVE_BAYES_BANK'));
+select target_attribute_name, target_attribute_str_value, prior_probability
+from table(dbms_data_mining.GET_MODEL_DETAILS_NB('NAIVE2_BAYES_BANK'));
 
-select *
-from table(dbms_data_mining.get_model_details_global('NAIVE_BAYES_BANK'))
-order by global_detail_name;
+
 --- NAIVE BAYES end
 
 
 --- Neural Network start
 begin
     insert into bank_model_settings
-    values(dbms_data_mining.ALGO_NAME, dbms_data_mining.ALGO_GENERALIZED_LINEAR_MODEL);
+    values(dbms_data_mining.ALGO_NAME, dbms_data_mining.ALGO_NEURAL_NETWORK);
     -- ROW DIAGNOSTICS
     insert into bank_model_settings
-    values(dbms_data_mining.GLMS_DIAGNOSTICS_TABLE_NAME, 'GLMS_BANK_DIAG');
+    values(dbms_data_mining.GLMS_DIAGNOSTICS_TABLE_NAME, 'NN_BANK_DIAG');
     -- DATA PREP
     insert into bank_model_settings
     values(dbms_data_mining.PREP_AUTO, dbms_data_mining.PREP_AUTO_ON);
-    -- FEATURE SELECTION
-    insert into bank_model_settings
-    values(dbms_data_mining.GLMS_FTR_SELECTION, dbms_data_mining.GLMS_FTR_SELECTION_ENABLE);
-    -- FEATURE GENERATION
-    insert into bank_model_settings
-    values(dbms_data_mining.GLMS_FTR_GENERATION, dbms_data_mining.GLMS_FTR_GENERATION_ENABLE);
 end;
 
 select *
 from bank_model_settings;
+delete from bank_model_settings;
 
 begin 
     dbms_data_mining.create_model
 (
-        model_name => 'GLMR_REGRESSION_BANK',
-        mining_function => dbms_data_mining.REGRESSION,
+        model_name => 'NEURAL_NETWORK_BANK',
+        mining_function => dbms_data_mining.Classification,
         data_table_name => 'bank_train_data',
         case_id_column_name => 'row_id',
         target_column_name => 'y',
@@ -192,7 +193,7 @@ begin
 end;
 
 select *
-from table(dbms_data_mining.get_model_details_global('GLMR_REGRESSION_BANK'))
+from table(dbms_data_mining.get_model_details_global('NEURAL_NETWORK_BANK'));
 order by global_detail_name;
 --- Neural Network end
 
@@ -203,7 +204,7 @@ begin
     values(dbms_data_mining.ALGO_NAME, dbms_data_mining.ALGO_GENERALIZED_LINEAR_MODEL);
     -- ROW DIAGNOSTICS
     insert into bank_model_settings
-    values(dbms_data_mining.GLMS_DIAGNOSTICS_TABLE_NAME, 'GLMS_BANK_DIAG');
+    values(dbms_data_mining.GLMS_DIAGNOSTICS_TABLE_NAME, 'GLMSR_BANK_DIAG');
     -- DATA PREP
     insert into bank_model_settings
     values(dbms_data_mining.PREP_AUTO, dbms_data_mining.PREP_AUTO_ON);
