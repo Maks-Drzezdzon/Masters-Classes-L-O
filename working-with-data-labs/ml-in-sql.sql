@@ -194,7 +194,49 @@ end;
 
 select *
 from table(dbms_data_mining.get_model_details_global('NEURAL_NETWORK_BANK'));
-order by global_detail_name;
+
+begin
+    dbms_data_mining.apply
+(
+        'NEURAL_NETWORK_BANK',
+        'bank_test_data',
+        'row_id',
+        'NN_bank_test_predictions'
+    );
+end;
+
+
+select
+    NN_bank_test_predictions.row_id, bank.y as actual, NN_bank_test_predictions.prediction as prediction,
+    round(NN_bank_test_predictions.probability) as probability, round(NN_bank_test_predictions.cost, 4) as cost
+from NN_bank_test_predictions
+    inner join bank on NN_bank_test_predictions.row_id=bank.row_id;
+
+with
+    bank_data
+    as
+    (
+        select count(row_id) as bank_row_count
+        from bank
+    ),
+    model_data
+    as
+    (
+        select count(*) as model_row_count
+        from NN_bank_test_predictions
+            inner join bank on NN_bank_test_predictions.row_id = bank.row_id
+        where bank.y = NN_bank_test_predictions.prediction and round(NN_bank_test_predictions.probability) = 1
+    )
+select round(model_row_count/bank_row_count, 2) as Model_Accuracy
+from bank_data, model_data;
+
+
+select *
+from table(dbms_data_mining.get_model_details_global('NN_bank_test_predictions'));
+
+
+end;
+
 --- Neural Network end
 
 
