@@ -160,6 +160,45 @@ end;
 select target_attribute_name, target_attribute_str_value, prior_probability
 from table(dbms_data_mining.GET_MODEL_DETAILS_NB('NAIVE2_BAYES_BANK'));
 
+begin
+    dbms_data_mining.apply
+(
+        'NAIVE2_BAYES_BANK',
+        'bank_test_data',
+        'row_id',
+        'NB_bank_test_predictions'
+    );
+end;
+
+select *
+from NB_bank_test_predictions
+fetch first 15 rows only;
+
+select
+    NB_bank_test_predictions.row_id, bank.y as actual, NB_bank_test_predictions.prediction as prediction,
+    round(NB_bank_test_predictions.probability) as probability, round(NB_bank_test_predictions.cost, 4) as cost
+from NB_bank_test_predictions
+    inner join bank on NB_bank_test_predictions.row_id=bank.row_id;
+
+with
+    bank_data
+    as
+    (
+        select count(row_id) as bank_row_count
+        from bank
+    ),
+    model_data
+    as
+    (
+        select count(*) as model_row_count
+        from NB_bank_test_predictions
+            inner join bank on NB_bank_test_predictions.row_id = bank.row_id
+        where bank.y = NB_bank_test_predictions.prediction and round(NB_bank_test_predictions.probability) = 1
+    )
+select round(model_row_count/bank_row_count, 2) as Model_Accuracy
+from bank_data, model_data;
+
+
 
 --- NAIVE BAYES end
 
@@ -240,53 +279,4 @@ end;
 --- Neural Network end
 
 
---- GLMC_REGRESSION_BANK start
-begin
-    insert into bank_model_settings
-    values(dbms_data_mining.ALGO_NAME, dbms_data_mining.ALGO_GENERALIZED_LINEAR_MODEL);
-    -- ROW DIAGNOSTICS
-    insert into bank_model_settings
-    values(dbms_data_mining.GLMS_DIAGNOSTICS_TABLE_NAME, 'GLMSR_BANK_DIAG');
-    -- DATA PREP
-    insert into bank_model_settings
-    values(dbms_data_mining.PREP_AUTO, dbms_data_mining.PREP_AUTO_ON);
-    -- FEATURE SELECTION
-    insert into bank_model_settings
-    values(dbms_data_mining.GLMS_FTR_SELECTION, dbms_data_mining.GLMS_FTR_SELECTION_ENABLE);
-    -- FEATURE GENERATION
-    insert into bank_model_settings
-    values(dbms_data_mining.GLMS_FTR_GENERATION, dbms_data_mining.GLMS_FTR_GENERATION_ENABLE);
-end;
-
-select *
-from bank_model_settings;
-delete from bank_model_settings;
-
-begin 
-    dbms_data_mining.create_model
-(
-        model_name => 'GLMC_REGRESSION_BANK',
-        mining_function => dbms_data_mining.Classification,
-        data_table_name => 'bank_train_data',
-        case_id_column_name => 'row_id',
-        target_column_name => 'y',
-        settings_table_name => 'bank_model_settings'
-    );
-end;
-
-select *
-from table(dbms_data_mining.get_model_details_global('GLMC_REGRESSION_BANK'))
-order by global_detail_name;
-
-begin
-    dbms_data_mining.apply
-(
-        'GLMR_REGRESSION_BANK',
-        'bank_test_data',
-        'row_id',
-        'bank_test_predictions'
-    );
-end;
-
---- ttt end
 
