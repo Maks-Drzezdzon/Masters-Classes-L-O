@@ -278,5 +278,80 @@ end;
 
 --- Neural Network end
 
+--- SVM start
+begin
+    insert into bank_model_settings
+    values(dbms_data_mining.ALGO_NAME, dbms_data_mining.ALGO_SUPPORT_VECTOR_MACHINES);
+    -- DATA PREP
+    insert into bank_model_settings
+    values(dbms_data_mining.PREP_AUTO, dbms_data_mining.PREP_AUTO_ON);
 
+    insert into bank_model_settings
+    values(dbms_data_mining.SVMS_KERNEL_FUNCTION, dbms_data_mining.SVMS_GAUSSIAN);
+end;
+
+select *
+from bank_model_settings;
+delete from bank_model_settings;
+
+begin 
+    dbms_data_mining.create_model
+(
+        model_name => 'SVM_v2_REGRESSION_BANK',
+        mining_function => dbms_data_mining.Classification,
+        data_table_name => 'bank_train_data',
+        case_id_column_name => 'row_id',
+        target_column_name => 'y',
+        settings_table_name => 'bank_model_settings'
+    );
+end;
+
+/* There isnt much info in the global details, just the iteration count which is 30*/
+
+select *
+from table(dbms_data_mining.get_model_details_global('SVM_v2_REGRESSION_BANK'))
+order by global_detail_name;
+
+
+begin
+    dbms_data_mining.apply
+(
+        'SVM_v2_REGRESSION_BANK',
+        'bank_test_data',
+        'row_id',
+        'SVM_v2_bank_test_predictions'
+    );
+end;
+
+select *
+from SVM_v2_bank_test_predictions;
+select max(prediction)
+from SVM_R_bank_test_predictions;
+
+
+select
+    bank.y as actual, SVM_v2_bank_test_predictions.prediction as prediction,
+    round(SVM_v2_bank_test_predictions.probability) as probability, round(SVM_v2_bank_test_predictions.cost, 4) as cost
+from SVM_v2_bank_test_predictions
+    inner join bank on SVM_v2_bank_test_predictions.row_id=bank.row_id;
+
+with
+    bank_data
+    as
+    (
+        select count(row_id) as bank_row_count
+        from bank
+    ),
+    model_data
+    as
+    (
+        select count(*) as model_row_count
+        from SVM_v2_bank_test_predictions
+            inner join bank on SVM_v2_bank_test_predictions.row_id = bank.row_id
+        where bank.y = SVM_v2_bank_test_predictions.prediction and round(SVM_v2_bank_test_predictions.probability) = 1
+    )
+select round(model_row_count/bank_row_count, 2) as Model_Accuracy
+from bank_data, model_data;
+
+--- SVM end
 
