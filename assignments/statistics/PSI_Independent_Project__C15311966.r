@@ -91,5 +91,5 @@ df$JOB[df$JOB == "0"] = "No"
 
 write_feather(df, 'idepen_proj_stats.feather')
 df = read_feather('idepen_proj_stats.feather')
-
+df
 
