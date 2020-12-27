@@ -24,53 +24,72 @@ map(df , ~sum(is.na(.)))
 
 # looking at cols with potential problems 
 unique(df$PHONE)
-unique(df$...10)
-unique(df$SISBEN)
-unique(df$JOB)
-unique(df$UNIVERSITY)
-unique(df$EDU_FATHER)
+unique(df$...10) # found potential issues
 
-# column is completely empty and serves no purpose 
-df = df[,!names(df) %in% c("...10")]
+unique(df$JOB) # found potential issues
+unique(df$UNIVERSITY)
+unique(df$SCHOOL_NAT)
+unique(df$ACADEMIC_PROGRAM)
+
+unique(df$EDU_FATHER) 
+# found potential issues a field with a value of 0, 
+# however this could indicate something else such as an absent parent, 
+# it will be left as is
+unique(df$OCC_FATHER) # found potential issues, ^
+unique(df$EDU_MOTHER) # found potential issues, ^
+unique(df$OCC_MOTHER) # found potential issues, ^
+#########################
+# variables of interest #
+#########################
+
+colnames(df)
+
+# looking for odd values which can be found easily via unique, such as negative values on exams etc
+
+unique(df$SISBEN) # found potential issues
+unique(df$INTERNET)
+unique(df$TV)
+unique(df$COMPUTER)
+unique(df$WASHING_MCH)
+unique(df$CAR)
+unique(df$MIC_OVEN)
+unique(df$DVD)
+unique(df$FRESH)
+unique(df$PHONE)
+unique(df$MOBILE)
+
+# Saber 11 EXAMS - no issues found
+unique(df$MAT_S11) # maths
+unique(df$CR_S11) # critical reading
+unique(df$CC_S11) # citizen competencies
+unique(df$BIO_S11) # biology
+unique(df$ENG_S11) # communication in English
+
+# SABER PRO EXAMS - no issues found
+unique(df$CR_PRO) # critical reading
+unique(df$QR_PRO) # quantitative reasoning
+unique(df$CC_PRO) # citizen competencies
+unique(df$WC_PRO) # written communication
+unique(df$ENG_PRO) # communication in English
 
 
 #################
 # Data Cleaning # 
 #################
 
+# column is completely empty and serves no purpose 
+df = df[,!names(df) %in% c("...10")]
+
+df$SISBEN[df$SISBEN == "0"] = "Level 0"
+df$SISBEN[df$SISBEN == "It is not classified by the SISBEN"] = "Level NA"
+df$SISBEN[df$SISBEN == "Esta clasificada en otro Level del SISBEN"] = "Level NA"
+
+df$JOB[df$JOB == "0"] = "No"
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-"""
-Variable    	Full name	    Mean	Standard Deviation	Max	Min
-MAT_S11	      Mathematics	    64.32	11.87	100	26
-CR_S11	      Critical Reading	    60.78	10.03	100	24
-CC_S11	      Citizen Competencies S11	    60.71	10.12	100	0
-BIO_S11	      Biology	63.95	11.16	100	11
-ENG_S11	      English	61.80	14.30	100	26
-QR_PRO	      Quantitative Reasoning	77.42	22.67	100	1
-CR_PRO	      Critical Reading	62.20	27.67	100	1
-CC_PRO	      Citizen Competencies SPRO	59.19	28.99	100	1
-ENG_PRO	      English	67.50	25.49	100	1
-WC_PRO	      Written Communication	53.70	30.00	100	0
-FEP_PRO	      Formulation of Engineering Projects	145.48	40.12	300	1
-G_SC	        Global Score	162.71	23.11	247	37
-PERCENTILE	  Percentile	68.45	25.87	100	1
-2ND_DECILE	  Second Decile	3.89	1.25	5	1
-QUARTILE	    Quartile	3.19	0.98	4	1
-SEL	          Socioeconomic Level	2.60	1.11	4	1
-SEL_IHE	      The Institution of Higher Education	2.41	0.93	4	1
-"""
+write_feather(df, 'idepen_proj_stats.feather')
+df = read_feather('idepen_proj_stats.feather')
 
 
