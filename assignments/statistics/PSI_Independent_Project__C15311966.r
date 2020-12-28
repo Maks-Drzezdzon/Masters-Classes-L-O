@@ -17,7 +17,7 @@ df = read_excel('idepen_proj_stats.xlsx')
 # basic exploration
 head(df)
 summary(df)
-str(df)
+glimpse(df)
 colnames(df)
 # how many missing values are in each col
 map(df , ~sum(is.na(.)))
@@ -80,16 +80,27 @@ unique(df$ENG_PRO) # communication in English
 # column is completely empty and serves no purpose 
 df = df[,!names(df) %in% c("...10")]
 
+# fixing inconsistency
 df$SISBEN[df$SISBEN == "0"] = "Level 0"
 df$SISBEN[df$SISBEN == "It is not classified by the SISBEN"] = "Level NA"
 df$SISBEN[df$SISBEN == "Esta clasificada en otro Level del SISBEN"] = "Level NA"
 
 df$JOB[df$JOB == "0"] = "No"
 
-
-
-
+# saving file into feather while working on project
+# it offers faster load times, however its not used
+# to store data long term
 write_feather(df, 'idepen_proj_stats.feather')
 df = read_feather('idepen_proj_stats.feather')
-df
+
+# fragmenting data
+df_pro_exams =  data.frame(df$CR_PRO, df$QR_PRO, df$CC_PRO, df$WC_PRO, df$ENG_PRO)
+summary(df_pro_exams)
+
+df_saber_exams =  data.frame(df$MAT_S11, df$CR_S11, df$CC_S11, df$BIO_S11, df$ENG_S11)
+summary(df_saber_exams)
+
+df_sisben =  data.frame(df$SISBEN, df$INTERNET, df$TV, df$COMPUTER, df$WASHING_MCH, df$CAR, df$MIC_OVEN, df$DVD, df$FRESH, df$PHONE, df$MOBILE)
+glimpse(df_sisben)
+
 
