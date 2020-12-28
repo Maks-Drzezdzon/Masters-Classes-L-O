@@ -152,26 +152,23 @@ ad.test(df_pro_exams$df.CC_PRO)
 ad.test(df_pro_exams$df.WC_PRO)
 ad.test(df_pro_exams$df.ENG_PRO)
 # p < 2.2e-16
+qqPlot(df_pro_exams$df.CR_PRO, ylab = "critical reading exam scores")
+qqPlot(df_pro_exams$df.QR_PRO, ylab = "quantitative reasoning exam scores")
+qqPlot(df_pro_exams$df.CC_PRO, ylab = "citizen competencies exam scores")
+qqPlot(df_pro_exams$df.WC_PRO, ylab = "written communication exam scores")
+qqPlot(df_pro_exams$df.ENG_PRO, ylab = "communication in English exam scores")
 
-qqPlot(df_pro_exams$df.CR_PRO)
-qqPlot(df_pro_exams$df.QR_PRO)
-qqPlot(df_pro_exams$df.CC_PRO)
-qqPlot(df_pro_exams$df.WC_PRO)
-qqPlot(df_pro_exams$df.ENG_PRO)
+hist(df_pro_exams$df.CR_PRO, xlab = "critical reading exam scores")
+hist(df_pro_exams$df.QR_PRO, xlab = "quantitative reasoning exam scores")
+hist(df_pro_exams$df.CC_PRO, xlab = "citizen competencies exam scores")
+hist(df_pro_exams$df.WC_PRO, xlab = "written communication exam scores")
+hist(df_pro_exams$df.ENG_PRO, xlab = "communication in English exam scores")
 
-hist(df_pro_exams$df.CR_PRO)
-hist(df_pro_exams$df.QR_PRO)
-hist(df_pro_exams$df.CC_PRO)
-hist(df_pro_exams$df.WC_PRO)
-hist(df_pro_exams$df.ENG_PRO)
-
-Boxplot()
-
-Boxplot(df_pro_exams$df.CR_PRO)
-boxplot(df_pro_exams$df.QR_PRO)
-boxplot(df_pro_exams$df.CC_PRO)
-boxplot(df_pro_exams$df.WC_PRO)
-boxplot(df_pro_exams$df.ENG_PRO)
+Boxplot(df_pro_exams$df.CR_PRO, ylab = "critical reading exam scores")
+Boxplot(df_pro_exams$df.QR_PRO, ylab = "quantitative reasoning exam scores")
+Boxplot(df_pro_exams$df.CC_PRO, ylab = "citizen competencies exam scores")
+Boxplot(df_pro_exams$df.WC_PRO, ylab = "written communication exam scores")
+Boxplot(df_pro_exams$df.ENG_PRO, ylab = "communication in English exam scores")
 
 # from the visualizations, p-value and a-value the pro exams are NOT normally distributed
 
@@ -185,21 +182,22 @@ ad.test(df_saber_exams$df.BIO_S11)
 ad.test(df_saber_exams$df.ENG_S11)
 # p < 2.2e-16
 
-hist(df_saber_exams$df.MAT_S11)
-hist(df_saber_exams$df.CR_S11)
-hist(df_saber_exams$df.CC_S11)
-hist(df_saber_exams$df.BIO_S11)
-hist(df_saber_exams$df.ENG_S11)
+hist(df_saber_exams$df.MAT_S11, xlab = "maths exam scores")
+hist(df_saber_exams$df.CR_S11, xlab = "critical reading exam scores")
+hist(df_saber_exams$df.CC_S11, xlab = "citizen competencies exam scores")
+hist(df_saber_exams$df.BIO_S11, xlab = "biology exam scores")
+hist(df_saber_exams$df.ENG_S11, xlab = "communication in English exam scores")
 
-
-boxplot(df_saber_exams$df.MAT_S11)
-boxplot(df_saber_exams$df.CR_S11)
-boxplot(df_saber_exams$df.CC_S11)
-boxplot(df_saber_exams$df.BIO_S11)
-boxplot(df_saber_exams$df.ENG_S11)
+boxplot(df_saber_exams$df.MAT_S11, ylab = "Maths Exam scores exam scores")
+boxplot(df_saber_exams$df.CR_S11, ylab = "critical reading exam scores")
+boxplot(df_saber_exams$df.CC_S11, ylab = "citizen competencies exam scores")
+boxplot(df_saber_exams$df.BIO_S11, ylab = "biology exam scores")
+boxplot(df_saber_exams$df.ENG_S11, ylab = "communication in English exam scores")
 
 # even though the p value in normality test doesnt confirm normality, the low A value and
 # visualizations confirm a normally distribution 
+
+# testing
 df_sisben = sapply(df_sisben, as.double)
 glimpse(df_sisben)
 
