@@ -200,25 +200,32 @@ boxplot(df_saber_exams$df.ENG_S11)
 
 # even though the p value in normality test doesnt confirm normality, the low A value and
 # visualizations confirm a normally distribution 
-
+df_sisben = sapply(df_sisben, as.double)
+glimpse(df_sisben)
 
 df_sisben =  data.frame(df$SISBEN, df$INTERNET, df$TV, df$COMPUTER, df$WASHING_MCH, df$CAR, df$MIC_OVEN, df$DVD, df$FRESH, df$PHONE, df$MOBILE)
 
+help("hist")
+barplot(as.numeric(df_sisben$df.SISBEN), breaks=5)
+hist(as.numeric(df_sisben$df.INTERNET), breaks=2)
+hist(df_sisben$df.TV)
+hist(df_sisben$df.COMPUTER)
+hist(df_sisben$df.WASHING_MCH)
 
-############
-# Dim Redu #
-############
-glimpse(df)
-unique(df$PEOPLE_HOUSE)
+#######################
+# Dimension Reduction #
+#######################
 matrix_data = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSITY", "Cod_SPro", 
                                     "SCHOOL_TYPE", "SCHOOL_NAT", "SCHOOL_NAME", 
                                     "JOB", "REVENUE", "OCC_MOTHER",
                                     "OCC_FATHER", "EDU_MOTHER", "EDU_FATHER", "COD_S11", 
                                     "GENDER", "PEOPLE_HOUSE", "STRATUM")]
+
 glimpse(matrix_data)
-matrix_data = lapply(matrix_data, as.double)
+matrix_data = sapply(matrix_data, as.double)
 matrix_data = cor(matrix_data)
-matrix_data
+# checking output
+matrix_data 
 heatmap(matrix_data, Rowv = NA, Colv = NA)
 
 
