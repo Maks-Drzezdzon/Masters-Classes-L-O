@@ -6,6 +6,10 @@ output: html_notebook
 
 
 ```{r Setup}
+# dataset used
+# https://www.sciencedirect.com/science/article/pii/S2352340920304315#utbl0001
+# download @ https://data.mendeley.com/datasets/83tcx8psxv/1
+
 needed_packages <- c("tidyverse", "readxl", "feather", "car", "nortest", "skimr")                      
 # Extract not installed packages
 not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
