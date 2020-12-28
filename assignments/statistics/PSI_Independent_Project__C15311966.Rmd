@@ -1,21 +1,30 @@
+---
+title: "PSI Independent Project C15311966"
+output: html_notebook
+---
+
+
+
+```{r Setup}
+needed_packages <- c("tidyverse", "readxl", "feather", "car", "nortest", "skimr")                      
+# Extract not installed packages
+not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
+# Install not installed packages
+if(length(not_installed)) install.packages(not_installed)
+
 library(tidyverse)
 library(readxl) # read xlsx
 library(feather) # file format lib
-library(lubridate) # date transformation 
-library(reticulate) # embed python inside R code
 library(skimr) # summary statistics for larger data sets
-library(forecast)
 library(car)
 library(nortest)
 
-# Maksymilian Drzezdzon
-
-####################
-# Data Exploration # 
-####################
-
-# loading data
 df = read_excel('idepen_proj_stats.xlsx')
+
+```
+
+```{r Data Exploration}
+
 # basic exploration
 head(df)
 summary(df)
@@ -40,6 +49,8 @@ unique(df$EDU_FATHER)
 unique(df$OCC_FATHER) # found potential issues, ^
 unique(df$EDU_MOTHER) # found potential issues, ^
 unique(df$OCC_MOTHER) # found potential issues, ^
+
+
 #########################
 # variables of interest #
 #########################
@@ -75,9 +86,10 @@ unique(df$WC_PRO) # written communication
 unique(df$ENG_PRO) # communication in English
 
 
-#################
-# Data Cleaning # 
-#################
+```
+
+```{r Data Cleaning}
+
 
 # column is completely empty and serves no purpose 
 df = df[,!names(df) %in% c("...10")]
@@ -95,11 +107,9 @@ df$JOB[df$JOB == "0"] = "No"
 write_feather(df, 'idepen_proj_stats.feather')
 df = read_feather('idepen_proj_stats.feather')
 
+```
 
-#########################
-# Testing for normality #
-#########################
-
+```{r Testing for normality-pro exams}
 
 # fragmenting data
 df_pro_exams =  data.frame(df$CR_PRO, df$QR_PRO, df$CC_PRO, df$WC_PRO, df$ENG_PRO)
@@ -135,6 +145,10 @@ boxplot(df_pro_exams$df.ENG_PRO)
 
 # from the visualizations, p-value and a-value the pro exams are NOT normally distributed
 
+```
+
+```{r Testing for normality-saber exams}
+
 df_saber_exams =  data.frame(df$MAT_S11, df$CR_S11, df$CC_S11, df$BIO_S11, df$ENG_S11)
 summary(df_saber_exams)
 
@@ -161,7 +175,8 @@ boxplot(df_saber_exams$df.ENG_S11)
 # even though the p value in normality test doesnt confirm normality, the low A value and
 # visualizations confirm a normally distribution 
 
+```
 
-df_sisben =  data.frame(df$SISBEN, df$INTERNET, df$TV, df$COMPUTER, df$WASHING_MCH, df$CAR, df$MIC_OVEN, df$DVD, df$FRESH, df$PHONE, df$MOBILE)
+```{r}
 
-
+```
