@@ -16,6 +16,8 @@ library(nortest)
 
 # loading data
 df = read_excel('idepen_proj_stats.xlsx')
+df = read_feather('idepen_proj_stats.feather')
+
 # basic exploration
 head(df)
 summary(df)
@@ -83,11 +85,47 @@ unique(df$ENG_PRO) # communication in English
 df = df[,!names(df) %in% c("...10")]
 
 # fixing inconsistency
-df$SISBEN[df$SISBEN == "0"] = "Level 0"
 df$SISBEN[df$SISBEN == "It is not classified by the SISBEN"] = "Level NA"
 df$SISBEN[df$SISBEN == "Esta clasificada en otro Level del SISBEN"] = "Level NA"
 
+df$SISBEN[df$SISBEN == "Level NA"] = 0
+df$SISBEN[df$SISBEN == "0"] = 0
+df$SISBEN[df$SISBEN == "Level 1"] = 1
+df$SISBEN[df$SISBEN == "Level 2"] = 2
+df$SISBEN[df$SISBEN == "Level 3"] = 3
+
+
 df$JOB[df$JOB == "0"] = "No"
+
+df$INTERNET[df$INTERNET == "Yes"] = 1
+df$INTERNET[df$INTERNET == "No"] = 0
+
+df$TV[df$TV == "Yes"] = 1
+df$TV[df$TV == "No"] = 0
+
+df$COMPUTER[df$COMPUTER == "Yes"] = 1
+df$COMPUTER[df$COMPUTER == "No"] = 0
+
+df$WASHING_MCH[df$WASHING_MCH == "Yes"] = 1
+df$WASHING_MCH[df$WASHING_MCH == "No"] = 0
+
+df$MIC_OVEN[df$MIC_OVEN == "Yes"] = 1
+df$MIC_OVEN[df$MIC_OVEN == "No"] = 0
+
+df$CAR[df$CAR == "Yes"] = 1
+df$CAR[df$CAR == "No"] = 0
+
+df$DVD[df$DVD == "Yes"] = 1
+df$DVD[df$DVD == "No"] = 0
+
+df$FRESH[df$FRESH == "Yes"] = 1
+df$FRESH[df$FRESH == "No"] = 0
+
+df$PHONE[df$PHONE == "Yes"] = 1
+df$PHONE[df$PHONE == "No"] = 0
+
+df$MOBILE[df$MOBILE == "Yes"] = 1
+df$MOBILE[df$MOBILE == "No"] = 0
 
 # saving file into feather while working on project
 # it offers faster load times, however its not used
@@ -127,7 +165,9 @@ hist(df_pro_exams$df.CC_PRO)
 hist(df_pro_exams$df.WC_PRO)
 hist(df_pro_exams$df.ENG_PRO)
 
-boxplot(df_pro_exams$df.CR_PRO)
+Boxplot()
+
+Boxplot(df_pro_exams$df.CR_PRO)
 boxplot(df_pro_exams$df.QR_PRO)
 boxplot(df_pro_exams$df.CC_PRO)
 boxplot(df_pro_exams$df.WC_PRO)
@@ -163,5 +203,24 @@ boxplot(df_saber_exams$df.ENG_S11)
 
 
 df_sisben =  data.frame(df$SISBEN, df$INTERNET, df$TV, df$COMPUTER, df$WASHING_MCH, df$CAR, df$MIC_OVEN, df$DVD, df$FRESH, df$PHONE, df$MOBILE)
+
+
+############
+# Dim Redu #
+############
+glimpse(df)
+unique(df$PEOPLE_HOUSE)
+matrix_data = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSITY", "Cod_SPro", 
+                                    "SCHOOL_TYPE", "SCHOOL_NAT", "SCHOOL_NAME", 
+                                    "JOB", "REVENUE", "OCC_MOTHER",
+                                    "OCC_FATHER", "EDU_MOTHER", "EDU_FATHER", "COD_S11", 
+                                    "GENDER", "PEOPLE_HOUSE", "STRATUM")]
+glimpse(matrix_data)
+matrix_data = lapply(matrix_data, as.double)
+matrix_data = cor(matrix_data)
+matrix_data
+heatmap(matrix_data, Rowv = NA, Colv = NA)
+
+
 
 
