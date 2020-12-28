@@ -18,7 +18,6 @@ library(feather) # file format lib
 library(skimr) # summary statistics for larger data sets
 library(car)
 library(nortest)
-
 df = read_excel('idepen_proj_stats.xlsx')
 
 ```
@@ -137,11 +136,11 @@ hist(df_pro_exams$df.CC_PRO)
 hist(df_pro_exams$df.WC_PRO)
 hist(df_pro_exams$df.ENG_PRO)
 
-boxplot(df_pro_exams$df.CR_PRO)
-boxplot(df_pro_exams$df.QR_PRO)
-boxplot(df_pro_exams$df.CC_PRO)
-boxplot(df_pro_exams$df.WC_PRO)
-boxplot(df_pro_exams$df.ENG_PRO)
+Boxplot(df_pro_exams$df.CR_PRO)
+Boxplot(df_pro_exams$df.QR_PRO)
+Boxplot(df_pro_exams$df.CC_PRO)
+Boxplot(df_pro_exams$df.WC_PRO)
+Boxplot(df_pro_exams$df.ENG_PRO)
 
 # from the visualizations, p-value and a-value the pro exams are NOT normally distributed
 
@@ -166,14 +165,14 @@ hist(df_saber_exams$df.BIO_S11)
 hist(df_saber_exams$df.ENG_S11)
 
 
-boxplot(df_saber_exams$df.MAT_S11)
-boxplot(df_saber_exams$df.CR_S11)
-boxplot(df_saber_exams$df.CC_S11)
-boxplot(df_saber_exams$df.BIO_S11)
-boxplot(df_saber_exams$df.ENG_S11)
+Boxplot(df_saber_exams$df.MAT_S11)
+Boxplot(df_saber_exams$df.CR_S11)
+Boxplot(df_saber_exams$df.CC_S11)
+Boxplot(df_saber_exams$df.BIO_S11)
+Boxplot(df_saber_exams$df.ENG_S11)
 
 # even though the p value in normality test doesnt confirm normality, the low A value and
-# visualizations confirm a normally distribution 
+# visualizations confirm a normally distribution for most exams
 
 ```
 
