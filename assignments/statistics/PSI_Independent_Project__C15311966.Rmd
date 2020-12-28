@@ -223,10 +223,7 @@ matrix_data = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSITY", "Cod_SPro"
 
 glimpse(matrix_data)
 matrix_data = sapply(matrix_data, as.double)
-matrix_data = cor(matrix_data)
-# checking output
-matrix_data 
-heatmap(matrix_data, Rowv = NA, Colv = NA)
+heatmap(cor(matrix_data), Rowv = NA, Colv = NA)
 
 
 ```
