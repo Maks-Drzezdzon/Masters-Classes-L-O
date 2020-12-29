@@ -235,7 +235,8 @@ matrix_data = sapply(prepare_matrix_data, as.double)
 heatmap(cor(tests_matrix), Rowv = NA, Colv = NA)
 heatmap(cor(matrix_data), Rowv = NA, Colv = NA)
 
-cortest.bartlett(cor(test_matrix), n=nrow(prepare_matrix_data_test))
+cortest.bartlett(cor(tests_matrix), n=nrow(prepare_matrix_data_tests))
+cortest.bartlett(cor(matrix_data), n=nrow(prepare_matrix_data))
 
 
 PCA_data = sapply(prepare_matrix_data, as.double)
