@@ -211,10 +211,11 @@ hist(df_sisben$df.WASHING_MCH)
 # Dimension Reduction #
 #######################
 prepare_matrix_data = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSITY", "Cod_SPro", 
-                                    "SCHOOL_TYPE", "SCHOOL_NAT", "SCHOOL_NAME", 
-                                    "JOB", "REVENUE", "OCC_MOTHER",
-                                    "OCC_FATHER", "EDU_MOTHER", "EDU_FATHER", "COD_S11", 
-                                    "GENDER", "PEOPLE_HOUSE", "STRATUM")]
+                                            "SCHOOL_TYPE", "SCHOOL_NAT", "SCHOOL_NAME", 
+                                            "JOB", "REVENUE", "OCC_MOTHER",
+                                            "OCC_FATHER", "EDU_MOTHER", "EDU_FATHER", "COD_S11", 
+                                            "GENDER", "PEOPLE_HOUSE", "STRATUM",
+                                            "SEL", "SEL_IHE", "QUARTILE", "2ND_DECILE")]
 
 
 prepare_matrix_data_tests = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSITY", "Cod_SPro", 

@@ -229,7 +229,8 @@ prepare_matrix_data = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSITY", "C
                                     "SCHOOL_TYPE", "SCHOOL_NAT", "SCHOOL_NAME", 
                                     "JOB", "REVENUE", "OCC_MOTHER",
                                     "OCC_FATHER", "EDU_MOTHER", "EDU_FATHER", "COD_S11", 
-                                    "GENDER", "PEOPLE_HOUSE", "STRATUM")]
+                                    "GENDER", "PEOPLE_HOUSE", "STRATUM",
+                                    "SEL", "SEL_IHE", "QUARTILE", "2ND_DECILE")]
 
 
 prepare_matrix_data_tests = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSITY", "Cod_SPro", 
@@ -241,17 +242,19 @@ prepare_matrix_data_tests = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSIT
                                             "CAR", "DVD", "FRESH", "PHONE", "MOBILE", 
                                             "SEL", "SEL_IHE", "QUARTILE", "2ND_DECILE")]
 
-glimpse(prepare_matrix_data)
-glimpse(prepare_matrix_data_tests)
 
 tests_matrix = sapply(prepare_matrix_data_tests, as.double)
 matrix_data = sapply(prepare_matrix_data, as.double)
 
 heatmap(cor(tests_matrix), Rowv = NA, Colv = NA)
 heatmap(cor(matrix_data), Rowv = NA, Colv = NA)
+# in the heatmaps even though there is little to no correlation between govenment aid sisben and grades
+# there is a slight correlation between the things that are under the sisben umbreala such as
+# internet, tv, computer, car
 
 cortest.bartlett(cor(tests_matrix), n=nrow(prepare_matrix_data_tests))
 cortest.bartlett(cor(matrix_data), n=nrow(prepare_matrix_data))
+# since the pvalue is 0, it indicates that this data is suitable for PCA
 
 # there seem to be two square clusters of correlations around exam scores and items on the sisben list
 # which show that there is very little or no correlation between these variables
