@@ -1,12 +1,10 @@
 library(tidyverse)
 library(readxl) # read xlsx
 library(feather) # file format lib
-library(lubridate) # date transformation 
-library(reticulate) # embed python inside R code
 library(skimr) # summary statistics for larger data sets
-library(forecast)
 library(car)
 library(nortest)
+library(psych)
 
 # Maksymilian Drzezdzon
 
@@ -133,7 +131,6 @@ df$MOBILE[df$MOBILE == "No"] = 0
 write_feather(df, 'idepen_proj_stats.feather')
 df = read_feather('idepen_proj_stats.feather')
 
-
 #########################
 # Testing for normality #
 #########################
@@ -213,15 +210,50 @@ hist(df_sisben$df.WASHING_MCH)
 #######################
 # Dimension Reduction #
 #######################
-matrix_data = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSITY", "Cod_SPro", 
+prepare_matrix_data = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSITY", "Cod_SPro", 
                                     "SCHOOL_TYPE", "SCHOOL_NAT", "SCHOOL_NAME", 
                                     "JOB", "REVENUE", "OCC_MOTHER",
                                     "OCC_FATHER", "EDU_MOTHER", "EDU_FATHER", "COD_S11", 
                                     "GENDER", "PEOPLE_HOUSE", "STRATUM")]
 
-glimpse(matrix_data)
-matrix_data = sapply(matrix_data, as.double)
+
+prepare_matrix_data_tests = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSITY", "Cod_SPro", 
+                                            "SCHOOL_TYPE", "SCHOOL_NAT", "SCHOOL_NAME", 
+                                            "JOB", "REVENUE", "OCC_MOTHER",
+                                            "OCC_FATHER", "EDU_MOTHER", "EDU_FATHER", "COD_S11", 
+                                            "GENDER", "PEOPLE_HOUSE", "STRATUM", "INTERNET",
+                                            "TV", "COMPUTER", "WASHING_MCH", "MIC_OVEN",
+                                            "CAR", "DVD", "FRESH", "PHONE", "MOBILE", 
+                                            "SEL", "SEL_IHE", "QUARTILE", "2ND_DECILE")]
+
+glimpse(prepare_matrix_data)
+glimpse(prepare_matrix_data_tests)
+
+tests_matrix = sapply(prepare_matrix_data_tests, as.double)
+matrix_data = sapply(prepare_matrix_data, as.double)
+
+heatmap(cor(tests_matrix), Rowv = NA, Colv = NA)
 heatmap(cor(matrix_data), Rowv = NA, Colv = NA)
+
+cortest.bartlett(cor(test_matrix), n=nrow(prepare_matrix_data_test))
+
+
+PCA_data = sapply(prepare_matrix_data, as.double)
+glimpse(PCA_data)
+classes = factor(df$SISBEN)
+# normalize data so larger values dont overweight smaller ones
+dfPCA = prcomp(scale(PCA_data[, -1]))
+# view PCA statistics
+summary(dfPCA)
+# this is used to see how many of the variables can be dropped and at what cost
+# the cumulative proportion increases with each PC component
+# for instance pc27 offers less than 1% up from pc26 making it not very useful
+# you can then pick a cut off point to see how many components can be dropped
+
+# the cut off for this analysis will be pc16-17 which allows the prediction of upto 90-92% the last 9-10 pc components only contribute 8-10%
+
+
+plot(dfPCA$x, col=classes)
 
 
 

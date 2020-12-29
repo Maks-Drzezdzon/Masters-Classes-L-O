@@ -10,7 +10,7 @@ output: html_notebook
 # https://www.sciencedirect.com/science/article/pii/S2352340920304315#utbl0001
 # download @ https://data.mendeley.com/datasets/83tcx8psxv/1
 
-needed_packages <- c("tidyverse", "readxl", "feather", "car", "nortest", "skimr")                      
+needed_packages <- c("tidyverse", "readxl", "feather", "car", "nortest", "skimr", "nortest", "psych")                      
 # Extract not installed packages
 not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
 # Install not installed packages
@@ -22,6 +22,7 @@ library(feather) # file format lib
 library(skimr) # summary statistics for larger data sets
 library(car)
 library(nortest)
+library(psych)
 df = read_excel('idepen_proj_stats.xlsx')
 
 ```
@@ -153,6 +154,11 @@ df = read_feather('idepen_proj_stats.feather')
 # fragmenting data
 df_pro_exams =  data.frame(df$CR_PRO, df$QR_PRO, df$CC_PRO, df$WC_PRO, df$ENG_PRO)
 summary(df_pro_exams)
+# there doesnt seem to be any issues with the summary statistics
+# mean and median are very close, the 3rd Qu. is roughly ~20-25% above the mean more or less
+
+
+
 # anderson-darling normality test is used over shapiro-wilks
 # because it has a limitation of 5000 records 
 # for comparison both give the same result
@@ -189,6 +195,10 @@ Boxplot(df_pro_exams$df.ENG_PRO, ylab = "communication in English exam scores")
 
 df_saber_exams =  data.frame(df$MAT_S11, df$CR_S11, df$CC_S11, df$BIO_S11, df$ENG_S11)
 summary(df_saber_exams)
+# there doesnt seem to be many issues with the summary statistics
+# all summary statistics seem the be closely distributed with a 10% difference in scores
+# from the 1st QU. to the mean/median and the 3rd Qu. this is reflected in the visualisations
+
 
 ad.test(df_saber_exams$df.MAT_S11)
 ad.test(df_saber_exams$df.CR_S11)
@@ -210,20 +220,58 @@ boxplot(df_saber_exams$df.BIO_S11, ylab = "biology exam scores")
 boxplot(df_saber_exams$df.ENG_S11, ylab = "communication in English exam scores")
 
 # even though the p value in normality test doesnt confirm normality, the low A value and
-# visualizations confirm a normally distribution 
+# visualizations confirm a normal distribution 
 
 ```
 
-```{r Dimension Reduction}
-matrix_data = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSITY", "Cod_SPro", 
+```{r Dimension Reduction - heatmap}
+prepare_matrix_data = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSITY", "Cod_SPro", 
                                     "SCHOOL_TYPE", "SCHOOL_NAT", "SCHOOL_NAME", 
                                     "JOB", "REVENUE", "OCC_MOTHER",
                                     "OCC_FATHER", "EDU_MOTHER", "EDU_FATHER", "COD_S11", 
                                     "GENDER", "PEOPLE_HOUSE", "STRATUM")]
 
-glimpse(matrix_data)
-matrix_data = sapply(matrix_data, as.double)
+glimpse(prepare_matrix_data)
+matrix_data = sapply(prepare_matrix_data, as.double)
 heatmap(cor(matrix_data), Rowv = NA, Colv = NA)
 
+# there seem to be two square clusters of correlations around exam scores and items on the sisben list
+# which show that there is very little or no correlation between these variables
 
+
+```
+
+
+
+```{r Dimension Reduction - PCA}
+PCA_data = sapply(prepare_matrix_data, as.double)
+glimpse(PCA_data)
+classes = factor(df$SISBEN)
+# normalize data so larger values dont overweight smaller ones
+dfPCA = prcomp(scale(PCA_data[, -1]))
+# view PCA statistics
+summary(dfPCA)
+# This is used to see how many of the variables can be dropped and at what cost
+# The cumulative proportion increases with each PC component,
+# for instance pc27 offers less than 1% up from pc26 making it not very useful
+# you can then pick a cut off point to see how many components can be dropped
+
+# the cut off for this analysis will be pc16-17 which allows the prediction of upto 90-92% the last 9-10 pc components only contribute 8-10%
+
+
+```
+
+
+
+```{r Dimension Reduction - heatmap}
+```
+
+
+
+```{r Dimension Reduction - heatmap}
+```
+
+
+
+```{r Dimension Reduction - heatmap}
 ```
