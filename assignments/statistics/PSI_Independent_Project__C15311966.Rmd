@@ -197,7 +197,7 @@ df_saber_exams =  data.frame(df$MAT_S11, df$CR_S11, df$CC_S11, df$BIO_S11, df$EN
 summary(df_saber_exams)
 # there doesnt seem to be many issues with the summary statistics
 # all summary statistics seem the be closely distributed with a 10% difference in scores
-# from the 1st QU. to the mean/median and the 3rd Qu. this is reflected in the visualisations
+# from the 1st QU. to the mean/median and the 3rd Qu. this is reflected in the visualizations
 
 
 ad.test(df_saber_exams$df.MAT_S11)
