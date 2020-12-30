@@ -10,7 +10,7 @@ output: html_notebook
 # https://www.sciencedirect.com/science/article/pii/S2352340920304315#utbl0001
 # download @ https://data.mendeley.com/datasets/83tcx8psxv/1
 
-needed_packages <- c("tidyverse", "readxl", "feather", "car", "nortest", "skimr", "nortest", "psych")                      
+needed_packages <- c("tidyverse", "readxl", "feather", "car", "nortest", "skimr", "nortest", "psych", "ggplot2")                      
 # Extract not installed packages
 not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
 # Install not installed packages
@@ -23,6 +23,7 @@ library(skimr) # summary statistics for larger data sets
 library(car)
 library(nortest)
 library(psych)
+library(ggplot2)
 df = read_excel('idepen_proj_stats.xlsx')
 
 ```
@@ -300,6 +301,7 @@ det(downsized_matrix_data)
 
 ```{r Dimension Reduction - PCA}
 PCA_data = sapply(prepare_matrix_data, as.double)
+prepare_matrix_data
 glimpse(PCA_data)
 classes = factor(df$SISBEN)
 # normalize data so larger values dont overweight smaller ones
@@ -327,6 +329,25 @@ summary(dfPCA)
 biplot(dfPCA, scale=0)
 # as the value for pc2 exams floats around -2.5 and 0.5 it projects all the sisben 
 # commodities to a value between -0.2 and 0.0
+
+
+# to have a better look at the biplot im going to extract the top 6 principal components 
+# attach them to the original prepared data and graph it to see if there are any 
+# "clusters" that form naturally
+
+df2 = cbind(prepare_matrix_data, dfPCA$x[,1:6])
+
+head(df2)
+
+ggplot(df2, aes(PC1, PC2, PC3, PC4, PC5, PC6, col = SISBEN, fill = SISBEN)) +
+  stat_ellipse(geom = "polygon", col = "black", alpha = 0.5) +
+  geom_point(shape = 21, col = "black")
+
+# after playing around with ggplot a much more readable graph was produced
+# here you can see that as much as all individuals overlap
+# there is much less overlap between people that receive no government aid
+# sisben 0 and those that receive some sisben 1 some government aid, those two groups are most apart
+# whereas all in between are closer grouped with those that dont receive any
 
 ```
 
