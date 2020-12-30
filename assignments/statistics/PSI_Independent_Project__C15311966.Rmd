@@ -362,7 +362,7 @@ unique(df$SISBEN)
 facsol = psych::fa(matrix_data, nfactors=4, obs=NA, n.iter=1, rotate="varimax", fm="pa")
 
 # scree plot
-# indicates that 2+ should be retained
+# indicates that 0.5 should be retained from the previous 2
 plot(facsol$values, type = "b")
 
 # Print the components with loadings # look over
@@ -372,11 +372,9 @@ psych::print.psych(facsol,cut=0.3, sort=TRUE)
 fa.sort(facsol$loading)
 
 # this further supports the analysis derived from the screeplot
-# that ~2 components can be extracted
-# from those two components its seems only 2 factors have a score of 1
-# with most having a factor of 0.7 which could be considered 
+# that 0.5-1 component can be extracted down from the previous 2
+# with most having a factor of 0.7 which is on the margin of being considerable while being too low
 fa.diagram(facsol)
-
 
 # Variance accounted for by each factor/component
 facsol$Vaccounted
@@ -385,6 +383,8 @@ facsol$Vaccounted
 facsol$values 
 # the two high eigenvalues are probably the percentile and global score for each student
 # these two variables dont offer anything to the analysis so they were removed as they were outliers , and everything above was updated accordingly
+
+# SLIDE 60
 
 ```
 ```{r }
