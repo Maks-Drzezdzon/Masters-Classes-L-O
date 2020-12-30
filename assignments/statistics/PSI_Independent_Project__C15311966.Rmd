@@ -263,7 +263,7 @@ cortest.bartlett(cor(matrix_data), n=nrow(prepare_matrix_data))
 
 # Visualization of significance levels at 0.05
 result = corrplot::cor.mtest(cor(matrix_data), conf.level = .95)
-corrplot(cor(matrix_data), method="square", p.mat = result$p, type="lower", sig.level = .05)
+corrplot::corrplot(cor(matrix_data), method="square", p.mat = result$p, type="lower", sig.level = .05)
 
 ```
 
@@ -277,6 +277,15 @@ KMOS(matrix_data)
 # these values indicate how well suited data is for factor analysis ranges from 0-1 the closer to 1 the better t he variable is
 # most values are above in high .7-.9 which is very good
 # WC_pro is in the .4 range and will be removed as its not good enough to be kept in
+
+```
+
+
+```{r Dimension Reduction - Determinant}
+det(tests_matrix)
+
+
+det(matrix_data)
 
 ```
 
@@ -297,11 +306,6 @@ summary(dfPCA)
 # the cut off for this analysis will be pc16-17 which allows the prediction of upto 90-92% the last 9-10 pc components only contribute 8-10%
 
 
-```
-
-
-
-```{r Dimension Reduction - heatmap}
 ```
 
 

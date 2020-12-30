@@ -243,7 +243,7 @@ cortest.bartlett(cor(matrix_data), n=nrow(prepare_matrix_data))
 
 
 result = corrplot::cor.mtest(cor(matrix_data), conf.level = .95)
-corrplot(cor(matrix_data), method="square", p.mat = result$p, type="lower", sig.level = .05)
+corrplot::corrplot(cor(matrix_data), method="square", p.mat = result$p, type="lower", sig.level = .05)
 
 
 KMOS(tests_matrix)
