@@ -250,6 +250,31 @@ KMOS(tests_matrix)
 KMOS(matrix_data)
 
 
+#There are 4 factors to extract
+unique(df$SISBEN)
+facsol = psych::fa(matrix_data, nfactors=4, obs=NA, n.iter=1, rotate="varimax", fm="pa")
+
+#Create your scree plot
+plot(facsol$values, type = "b")
+
+#Print the Variance accounted for by each factor/component
+facsol$Vaccounted
+#Output the Eigenvalues
+facsol$values 
+
+#Print the components with loadings
+psych::print.psych(facsol,cut=0.3, sort=TRUE)
+
+#Print sorted list of loadings
+fa.sort(facsol$loading)
+
+#create a diagram showing the factors and how the manifest variables load
+fa.diagram(facsol)
+
+
+
+
+
 
 
 PCA_data = sapply(prepare_matrix_data, as.double)

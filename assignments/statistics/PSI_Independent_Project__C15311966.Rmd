@@ -282,13 +282,41 @@ KMOS(matrix_data)
 
 
 ```{r Dimension Reduction - Determinant}
-det(tests_matrix)
+# this is done to check if there is colinearity
+dim(tests_matrix)
+dim(matrix_data)
+
+# downsized_tests_matrix = tests_matrix[0:13,]
+# downsized_matrix_data = matrix_data[0:23,]
 
 
-det(matrix_data)
+det(downsized_tests_matrix)
+det(downsized_matrix_data)
 
 ```
+```{r Dimension Reduction - Extracting Factors}
 
+# extract factors
+unique(df$SISBEN)
+facsol = psych::fa(matrix_data, nfactors=4, obs=NA, n.iter=1, rotate="varimax", fm="pa")
+
+# scree plot
+plot(facsol$values, type = "b")
+
+# Print the Variance accounted for by each factor/component
+facsol$Vaccounted
+# Output the Eigenvalues
+facsol$values 
+
+# Print the components with loadings
+psych::print.psych(facsol,cut=0.3, sort=TRUE)
+
+# Print sorted list of loadings
+fa.sort(facsol$loading)
+
+# create a diagram showing the factors and how the manifest variables load
+fa.diagram(facsol)
+```
 
 ```{r Dimension Reduction - PCA}
 PCA_data = sapply(prepare_matrix_data, as.double)
@@ -309,6 +337,3 @@ summary(dfPCA)
 ```
 
 
-
-```{r Dimension Reduction - heatmap}
-```
