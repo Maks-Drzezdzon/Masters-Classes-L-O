@@ -216,7 +216,7 @@ prepare_matrix_data = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSITY", "C
                                             "OCC_FATHER", "EDU_MOTHER", "EDU_FATHER", "COD_S11", 
                                             "GENDER", "PEOPLE_HOUSE", "STRATUM",
                                             "SEL", "SEL_IHE", "QUARTILE", "2ND_DECILE",
-                                            "WC_PRO")]
+                                            "WC_PRO", "PERCENTILE", "G_SC")]
 
 
 prepare_matrix_data_tests = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSITY", "Cod_SPro", 
@@ -227,7 +227,7 @@ prepare_matrix_data_tests = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSIT
                                                   "TV", "COMPUTER", "WASHING_MCH", "MIC_OVEN",
                                                   "CAR", "DVD", "FRESH", "PHONE", "MOBILE", 
                                                   "SEL", "SEL_IHE", "QUARTILE", "2ND_DECILE",
-                                                  "WC_PRO")]
+                                                  "WC_PRO", "PERCENTILE", "G_SC")]
 
 glimpse(prepare_matrix_data)
 glimpse(prepare_matrix_data_tests)

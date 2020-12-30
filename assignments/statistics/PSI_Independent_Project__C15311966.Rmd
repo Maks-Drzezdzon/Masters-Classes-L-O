@@ -24,7 +24,8 @@ library(car)
 library(nortest)
 library(psych)
 library(ggplot2)
-df = read_excel('idepen_proj_stats.xlsx')
+# df = read_excel('idepen_proj_stats.xlsx')
+df = read_feather('idepen_proj_stats.feather')
 
 ```
 
@@ -227,23 +228,23 @@ boxplot(df_saber_exams$df.ENG_S11, ylab = "communication in English exam scores"
 
 ```{r Dimension Reduction - heatmap, bartlett tests}
 prepare_matrix_data = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSITY", "Cod_SPro", 
-                                    "SCHOOL_TYPE", "SCHOOL_NAT", "SCHOOL_NAME", 
-                                    "JOB", "REVENUE", "OCC_MOTHER",
-                                    "OCC_FATHER", "EDU_MOTHER", "EDU_FATHER", "COD_S11", 
-                                    "GENDER", "PEOPLE_HOUSE", "STRATUM",
-                                    "SEL", "SEL_IHE", "QUARTILE", "2ND_DECILE",
-                                    "WC_PRO")]
-
-
-prepare_matrix_data_tests = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSITY", "Cod_SPro", 
                                             "SCHOOL_TYPE", "SCHOOL_NAT", "SCHOOL_NAME", 
                                             "JOB", "REVENUE", "OCC_MOTHER",
                                             "OCC_FATHER", "EDU_MOTHER", "EDU_FATHER", "COD_S11", 
-                                            "GENDER", "PEOPLE_HOUSE", "STRATUM", "INTERNET",
-                                            "TV", "COMPUTER", "WASHING_MCH", "MIC_OVEN",
-                                            "CAR", "DVD", "FRESH", "PHONE", "MOBILE", 
+                                            "GENDER", "PEOPLE_HOUSE", "STRATUM",
                                             "SEL", "SEL_IHE", "QUARTILE", "2ND_DECILE",
-                                            "WC_PRO")]
+                                            "WC_PRO", "PERCENTILE", "G_SC")]
+
+
+prepare_matrix_data_tests = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSITY", "Cod_SPro", 
+                                                  "SCHOOL_TYPE", "SCHOOL_NAT", "SCHOOL_NAME", 
+                                                  "JOB", "REVENUE", "OCC_MOTHER",
+                                                  "OCC_FATHER", "EDU_MOTHER", "EDU_FATHER", "COD_S11", 
+                                                  "GENDER", "PEOPLE_HOUSE", "STRATUM", "INTERNET",
+                                                  "TV", "COMPUTER", "WASHING_MCH", "MIC_OVEN",
+                                                  "CAR", "DVD", "FRESH", "PHONE", "MOBILE", 
+                                                  "SEL", "SEL_IHE", "QUARTILE", "2ND_DECILE",
+                                                  "WC_PRO", "PERCENTILE", "G_SC")]
 
 
 tests_matrix = sapply(prepare_matrix_data_tests, as.double)
@@ -283,9 +284,10 @@ KMOS(matrix_data)
 
 
 ```{r Dimension Reduction - Determinant}
-# this is done to check if there is colinearity
+# this is done to check if there is co-linearity
 dim(tests_matrix)
 dim(matrix_data)
+# det(matrix_data)
 
 # downsized_tests_matrix = tests_matrix[0:13,]
 # downsized_matrix_data = matrix_data[0:23,]
@@ -295,7 +297,7 @@ det(downsized_matrix_data)
 
 # This set can not be performed as finding the determinant can only be done on
 # square matrices, after making a small square matrix the method works, however 
-# its too small to represent the whole dataset
+# its too small to represent the whole data set
 
 ```
 
@@ -335,11 +337,12 @@ biplot(dfPCA, scale=0)
 # attach them to the original prepared data and graph it to see if there are any 
 # "clusters" that form naturally
 
-df2 = cbind(prepare_matrix_data, dfPCA$x[,1:6])
+# this was updated to 3 after a scree plot was produced that showed a slight cut off at 2+ but below 3-4
+df2 = cbind(prepare_matrix_data, dfPCA$x[,1:4])
 
 head(df2)
 
-ggplot(df2, aes(PC1, PC2, PC3, PC4, PC5, PC6, col = SISBEN, fill = SISBEN)) +
+ggplot(df2, aes(PC1, PC2, PC4, col = SISBEN, fill = SISBEN)) +
   stat_ellipse(geom = "polygon", col = "black", alpha = 0.5) +
   geom_point(shape = 21, col = "black")
 
@@ -359,21 +362,30 @@ unique(df$SISBEN)
 facsol = psych::fa(matrix_data, nfactors=4, obs=NA, n.iter=1, rotate="varimax", fm="pa")
 
 # scree plot
+# indicates that 2+ should be retained
 plot(facsol$values, type = "b")
 
-# Print the Variance accounted for by each factor/component
-facsol$Vaccounted
-# Output the Eigenvalues
-facsol$values 
-
-# Print the components with loadings
+# Print the components with loadings # look over
 psych::print.psych(facsol,cut=0.3, sort=TRUE)
 
-# Print sorted list of loadings
+# Print sorted list of loadings # look over
 fa.sort(facsol$loading)
 
-# create a diagram showing the factors and how the manifest variables load
+# this further supports the analysis derived from the screeplot
+# that ~2 components can be extracted
+# from those two components its seems only 2 factors have a score of 1
+# with most having a factor of 0.7 which could be considered 
 fa.diagram(facsol)
+
+
+# Variance accounted for by each factor/component
+facsol$Vaccounted
+
+# Eigenvalues
+facsol$values 
+# the two high eigenvalues are probably the percentile and global score for each student
+# these two variables dont offer anything to the analysis so they were removed as they were outliers , and everything above was updated accordingly
+
 ```
 ```{r }
 
