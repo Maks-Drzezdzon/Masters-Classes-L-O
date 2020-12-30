@@ -289,11 +289,48 @@ dim(matrix_data)
 # downsized_tests_matrix = tests_matrix[0:13,]
 # downsized_matrix_data = matrix_data[0:23,]
 
-
 det(downsized_tests_matrix)
 det(downsized_matrix_data)
 
+# This set can not be performed as finding the determinant can only be done on
+# square matrices, after making a small square matrix the method works, however 
+# its too small to represent the whole dataset
+
 ```
+
+```{r Dimension Reduction - PCA}
+PCA_data = sapply(prepare_matrix_data, as.double)
+glimpse(PCA_data)
+classes = factor(df$SISBEN)
+# normalize data so larger values dont overweight smaller ones
+# scaling divides by the standard of deviation 
+# subtract the mean so the new mean is 0
+# if variables are measured on different scales this will no longer be an issue
+# exclude sisben from PCA
+dfPCA = prcomp(scale(PCA_data[, -1]))
+
+# view PCA statistics
+summary(dfPCA)
+# This is used to see how many of the variables can be dropped and at what cost
+# The cumulative proportion increases with each PC component,
+# for instance pc27 offers less than 1% up from pc26 making it not very useful
+# you can then pick a cut off point to see how many components can be dropped
+
+# the cut off for this analysis will be pc16-17 which allows the prediction of up to 90-92% the last 9-10 pc components only contribute 8-10%
+
+# proportion of variance is similar to cumulative proportion except its 
+# the proportion that that principal component caries
+# these are sorted in order which indicates that past PC2 there is very little gain
+# even less so as you reach PC6, PC10 and PC15 etc etc
+
+# look for patterns
+biplot(dfPCA, scale=0)
+# as the value for pc2 exams floats around -2.5 and 0.5 it projects all the sisben 
+# commodities to a value between -0.2 and 0.0
+
+```
+
+
 ```{r Dimension Reduction - Extracting Factors}
 
 # extract factors
@@ -317,23 +354,18 @@ fa.sort(facsol$loading)
 # create a diagram showing the factors and how the manifest variables load
 fa.diagram(facsol)
 ```
-
-```{r Dimension Reduction - PCA}
-PCA_data = sapply(prepare_matrix_data, as.double)
-glimpse(PCA_data)
-classes = factor(df$SISBEN)
-# normalize data so larger values dont overweight smaller ones
-dfPCA = prcomp(scale(PCA_data[, -1]))
-# view PCA statistics
-summary(dfPCA)
-# This is used to see how many of the variables can be dropped and at what cost
-# The cumulative proportion increases with each PC component,
-# for instance pc27 offers less than 1% up from pc26 making it not very useful
-# you can then pick a cut off point to see how many components can be dropped
-
-# the cut off for this analysis will be pc16-17 which allows the prediction of upto 90-92% the last 9-10 pc components only contribute 8-10%
-
+```{r }
 
 ```
 
+```{r }
 
+```
+
+```{r }
+
+```
+
+```{r }
+
+```
