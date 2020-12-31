@@ -385,6 +385,7 @@ psych::print.psych(facsol,cut=0.3, sort=TRUE)
 # all loadings in PA1 seem to be significant 
 # meanwhile most loadings in PA2 are above the 0.3 threshold with 4 being under 0.3
 fa.sort(facsol$loading)
+pre_rotation_loadings = fa.sort(facsol$loading)
 
 # this further supports the analysis derived from the scree plot
 # that 0.5-1 component can be extracted down from the previous 2
@@ -411,23 +412,26 @@ psych::print.psych(facsolrot, cut = 0.3, sort = TRUE)
 #output the commonalities
 facsolrot$communality
 
+facsolrot$loadings
+pre_rotation_loadings
+
 ```
 
 
 ```{r Reliability Analysis}
-#If you know that variables are grouped, test each group as a separate scale
+psych::alpha(matrix_data, check.keys=TRUE) # slide 78 for recap
 
-#Output our Cronbach Alpha values
-psych::alpha(wine, check.keys=TRUE)
-
-```
-
-
-```{r }
+# sisben for group 0 is at 0.62 which is in the questionable category
+# for group 1, internet, tv,computer, phone, mobile and DVD seem to be very reliable
+# group 2 and 3 are almost all 0
 
 ```
 
 
-```{r }
 
-```
+
+
+
+
+
+
