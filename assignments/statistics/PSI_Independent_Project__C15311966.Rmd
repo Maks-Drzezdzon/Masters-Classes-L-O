@@ -352,6 +352,10 @@ ggplot(df2, aes(PC1, PC2, PC4, col = SISBEN, fill = SISBEN)) +
 # sisben 0 and those that receive some sisben 1 some government aid, those two groups are most apart
 # whereas all in between are closer grouped with those that dont receive any
 
+# This is an indicator that 1 sisben is closing the gap between people
+# and 2, that there is a difference between people with sisben 0 and sisben 1
+# from previous findings it seems to be small
+
 ```
 
 
@@ -365,13 +369,17 @@ facsol = psych::fa(matrix_data, nfactors=4, obs=NA, n.iter=1, rotate="varimax", 
 # indicates that 0.5 should be retained from the previous 2
 plot(facsol$values, type = "b")
 
-# Print the components with loadings # look over
+# Print the components with loadings 
+# PA1-2 can be kept, PA3 arguably could be kept since some values do peak over
+# 0.3 however PA1-2 are much higher and show commonalties
 psych::print.psych(facsol,cut=0.3, sort=TRUE)
 
-# Print sorted list of loadings # look over
+# Print sorted list of loadings 
+# all loadings in PA1 seem to be significant 
+# meanwhile most loadings in PA2 are above the 0.3 threshold with 4 being under 0.3
 fa.sort(facsol$loading)
 
-# this further supports the analysis derived from the screeplot
+# this further supports the analysis derived from the scree plot
 # that 0.5-1 component can be extracted down from the previous 2
 # with most having a factor of 0.7 which is on the margin of being considerable while being too low
 fa.diagram(facsol)
@@ -384,14 +392,23 @@ facsol$values
 # the two high eigenvalues are probably the percentile and global score for each student
 # these two variables dont offer anything to the analysis so they were removed as they were outliers , and everything above was updated accordingly
 
-# SLIDE 60
+```
+```{r Apply rotation}
+
+#Apply rotation to try to refine the component structure
+facsolrot =  principal(wine, rotate = "varimax")
+#output the components
+psych::print.psych(facsolrot, cut = 0.3, sort = TRUE)
+#output the communalities
+facsolrot$communality
 
 ```
-```{r }
 
-```
+```{r Reliability Analysis}
+#If you know that variables are grouped, test each group as a separate scale
 
-```{r }
+#Output our Cronbach Alpha values
+psych::alpha(wine, check.keys=TRUE)
 
 ```
 
