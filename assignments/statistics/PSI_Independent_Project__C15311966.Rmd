@@ -29,6 +29,7 @@ df = read_feather('idepen_proj_stats.feather')
 
 ```
 
+
 ```{r Initial Data Exploration}
 
 # basic exploration
@@ -94,6 +95,7 @@ unique(df$ENG_PRO) # communication in English
 
 ```
 
+
 ```{r Data Cleaning}
 
 
@@ -151,6 +153,7 @@ df = read_feather('idepen_proj_stats.feather')
 
 ```
 
+
 ```{r Testing for normality-pro exams}
 
 # fragmenting data
@@ -193,6 +196,7 @@ Boxplot(df_pro_exams$df.ENG_PRO, ylab = "communication in English exam scores")
 
 ```
 
+
 ```{r Testing for normality-saber exams}
 
 df_saber_exams =  data.frame(df$MAT_S11, df$CR_S11, df$CC_S11, df$BIO_S11, df$ENG_S11)
@@ -225,6 +229,7 @@ boxplot(df_saber_exams$df.ENG_S11, ylab = "communication in English exam scores"
 # visualizations confirm a normal distribution 
 
 ```
+
 
 ```{r Dimension Reduction - heatmap, bartlett tests}
 prepare_matrix_data = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSITY", "Cod_SPro", 
@@ -269,6 +274,7 @@ corrplot::corrplot(cor(matrix_data), method="square", p.mat = result$p, type="lo
 
 ```
 
+
 ```{r Dimension Reduction - Kaiser-Meyer-Olkin}
 
 KMOS(tests_matrix)
@@ -300,6 +306,7 @@ det(downsized_matrix_data)
 # its too small to represent the whole data set
 
 ```
+
 
 ```{r Dimension Reduction - PCA}
 PCA_data = sapply(prepare_matrix_data, as.double)
@@ -371,7 +378,7 @@ plot(facsol$values, type = "b")
 
 # Print the components with loadings 
 # PA1-2 can be kept, PA3 arguably could be kept since some values do peak over
-# 0.3 however PA1-2 are much higher and show commonalties
+# 0.3 however PA1-2 are much higher and show commonalities
 psych::print.psych(facsol,cut=0.3, sort=TRUE)
 
 # Print sorted list of loadings 
@@ -393,16 +400,19 @@ facsol$values
 # these two variables dont offer anything to the analysis so they were removed as they were outliers , and everything above was updated accordingly
 
 ```
+
+
 ```{r Apply rotation}
 
 #Apply rotation to try to refine the component structure
-facsolrot =  principal(wine, rotate = "varimax")
+facsolrot =  principal(matrix_data, nfactors = 4, rotate = "varimax")
 #output the components
 psych::print.psych(facsolrot, cut = 0.3, sort = TRUE)
-#output the communalities
+#output the commonalities
 facsolrot$communality
 
 ```
+
 
 ```{r Reliability Analysis}
 #If you know that variables are grouped, test each group as a separate scale
@@ -412,9 +422,11 @@ psych::alpha(wine, check.keys=TRUE)
 
 ```
 
+
 ```{r }
 
 ```
+
 
 ```{r }
 

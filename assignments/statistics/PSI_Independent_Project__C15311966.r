@@ -249,6 +249,7 @@ corrplot::corrplot(cor(matrix_data), method="square", p.mat = result$p, type="lo
 KMOS(tests_matrix)
 KMOS(matrix_data)
 
+help(principal)
 
 #There are 4 factors to extract
 unique(df$SISBEN)
@@ -271,6 +272,17 @@ fa.sort(facsol$loading)
 #create a diagram showing the factors and how the manifest variables load
 fa.diagram(facsol)
 
+
+
+
+
+
+#Apply rotation to try to refine the component structure
+facsolrot =  principal(matrix_data, nfactors = 4, rotate = "varimax")
+#output the components
+psych::print.psych(facsolrot, cut = 0.3, sort = TRUE)
+#output the commonalities
+facsolrot$communality
 
 
 
