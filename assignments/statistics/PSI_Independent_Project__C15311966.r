@@ -234,7 +234,6 @@ glimpse(prepare_matrix_data_tests)
 
 tests_matrix = sapply(prepare_matrix_data_tests, as.double)
 matrix_data = sapply(prepare_matrix_data, as.double)
-
 heatmap(cor(tests_matrix), Rowv = NA, Colv = NA)
 heatmap(cor(matrix_data), Rowv = NA, Colv = NA)
 
@@ -283,6 +282,10 @@ facsolrot =  principal(matrix_data, nfactors = 4, rotate = "varimax")
 psych::print.psych(facsolrot, cut = 0.3, sort = TRUE)
 #output the commonalities
 facsolrot$communality
+
+facsolrot$loadings
+pre_rotation_loadings
+
 
 
 

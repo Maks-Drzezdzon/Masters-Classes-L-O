@@ -6,11 +6,14 @@ output: html_notebook
 
 
 ```{r Setup}
-# dataset used
-# https://www.sciencedirect.com/science/article/pii/S2352340920304315#utbl0001
+# dataset used https://www.sciencedirect.com/science/article/pii/S2352340920304315#utbl0001
 # download @ https://data.mendeley.com/datasets/83tcx8psxv/1
 
-needed_packages <- c("tidyverse", "readxl", "feather", "car", "nortest", "skimr", "nortest", "psych", "ggplot2")                      
+# CITATION
+#  Delahoz-Dominguez, Enrique, Rohemi Zuluaga, and Tomas Fontalvo-Herrera. 
+# "Dataset of academic performance evolution for engineering students." Data in Brief (2020): 105537.
+
+needed_packages <- c("tidyverse", "readxl", "feather", "car", "nortest", "skimr", "nortest", "psych", "ggplot2", "REdaS")                      
 # Extract not installed packages
 not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
 # Install not installed packages
@@ -24,6 +27,7 @@ library(car)
 library(nortest)
 library(psych)
 library(ggplot2)
+library(REdaS)
 # df = read_excel('idepen_proj_stats.xlsx')
 df = read_feather('idepen_proj_stats.feather')
 
@@ -231,7 +235,7 @@ boxplot(df_saber_exams$df.ENG_S11, ylab = "communication in English exam scores"
 ```
 
 
-```{r Dimension Reduction - heatmap, bartlett tests}
+```{r Dimension Reduction - heatmap, Bartlett test}
 prepare_matrix_data = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSITY", "Cod_SPro", 
                                             "SCHOOL_TYPE", "SCHOOL_NAT", "SCHOOL_NAME", 
                                             "JOB", "REVENUE", "OCC_MOTHER",
@@ -282,7 +286,7 @@ KMOS(tests_matrix)
 
 KMOS(matrix_data)
 
-# these values indicate how well suited data is for factor analysis ranges from 0-1 the closer to 1 the better t he variable is
+# these values indicate how well suited data is for factor analysis ranges from 0-1 the closer to 1 the better the variable is
 # most values are above in high .7-.9 which is very good
 # WC_pro is in the .4 range and will be removed as its not good enough to be kept in
 
@@ -295,11 +299,12 @@ dim(tests_matrix)
 dim(matrix_data)
 # det(matrix_data)
 
+# un-commenting the 4 lines below technically works, but i dont think its worth it, thus the determinant was not used
+
 # downsized_tests_matrix = tests_matrix[0:13,]
 # downsized_matrix_data = matrix_data[0:23,]
-
-det(downsized_tests_matrix)
-det(downsized_matrix_data)
+# det(downsized_tests_matrix)
+# det(downsized_matrix_data)
 
 # This set can not be performed as finding the determinant can only be done on
 # square matrices, after making a small square matrix the method works, however 
@@ -310,7 +315,7 @@ det(downsized_matrix_data)
 
 ```{r Dimension Reduction - PCA}
 PCA_data = sapply(prepare_matrix_data, as.double)
-prepare_matrix_data
+
 glimpse(PCA_data)
 classes = factor(df$SISBEN)
 # normalize data so larger values dont overweight smaller ones
@@ -327,7 +332,7 @@ summary(dfPCA)
 # for instance pc27 offers less than 1% up from pc26 making it not very useful
 # you can then pick a cut off point to see how many components can be dropped
 
-# the cut off for this analysis will be pc16-17 which allows the prediction of up to 90-92% the last 9-10 pc components only contribute 8-10%
+# the cut off for this analysis will be 4 as they can predict 56.3% of all cases
 
 # proportion of variance is similar to cumulative proportion except its 
 # the proportion that that principal component caries
@@ -340,36 +345,39 @@ biplot(dfPCA, scale=0)
 # commodities to a value between -0.2 and 0.0
 
 
-# to have a better look at the biplot im going to extract the top 6 principal components 
+# to have a better look at the biplot im going to extract the top 4 principal components 
 # attach them to the original prepared data and graph it to see if there are any 
 # "clusters" that form naturally
 
-# this was updated to 3 after a scree plot was produced that showed a slight cut off at 2+ but below 3-4
+
 df2 = cbind(prepare_matrix_data, dfPCA$x[,1:4])
 
 head(df2)
 
+# 3 components were extracted as they had the highest scores, or that other components had next to none
 ggplot(df2, aes(PC1, PC2, PC4, col = SISBEN, fill = SISBEN)) +
   stat_ellipse(geom = "polygon", col = "black", alpha = 0.5) +
   geom_point(shape = 21, col = "black")
 
-# after playing around with ggplot a much more readable graph was produced
+# after playing around with ggplot a much more readable graph was produced (the original can be viewed in the r file attached)
 # here you can see that as much as all individuals overlap
 # there is much less overlap between people that receive no government aid
 # sisben 0 and those that receive some sisben 1 some government aid, those two groups are most apart
 # whereas all in between are closer grouped with those that dont receive any
 
-# This is an indicator that 1 sisben is closing the gap between people
-# and 2, that there is a difference between people with sisben 0 and sisben 1
-# from previous findings it seems to be small
+# This is an indicator that 1 sisben is possibly closing the gap between people receiving it
+# and that there is a difference between people with sisben 0 and sisben 1
+# from previous findings it seems to be small but it makes sense and does show
+# some significance that sisben does have some impact on a students performance
 
 ```
 
 
-```{r Dimension Reduction - Extracting Factors}
+```{r Dimension Reduction - Extracting Factors, Eigenvalues, Variance, Loadings, Scree Plot}
 
 # extract factors
 unique(df$SISBEN)
+
 facsol = psych::fa(matrix_data, nfactors=4, obs=NA, n.iter=1, rotate="varimax", fm="pa")
 
 # scree plot
@@ -383,7 +391,7 @@ psych::print.psych(facsol,cut=0.3, sort=TRUE)
 
 # Print sorted list of loadings 
 # all loadings in PA1 seem to be significant 
-# meanwhile most loadings in PA2 are above the 0.3 threshold with 4 being under 0.3
+# meanwhile most loadings in PA2 are above 0.3 threshold with 4 being under 0.3
 fa.sort(facsol$loading)
 pre_rotation_loadings = fa.sort(facsol$loading)
 
@@ -393,12 +401,16 @@ pre_rotation_loadings = fa.sort(facsol$loading)
 fa.diagram(facsol)
 
 # Variance accounted for by each factor/component
+# PA1 and 2 seem to be the ones that will be retained
 facsol$Vaccounted
 
-# Eigenvalues
+# Eigenvalues further support two components being above 1
 facsol$values 
 # the two high eigenvalues are probably the percentile and global score for each student
-# these two variables dont offer anything to the analysis so they were removed as they were outliers , and everything above was updated accordingly
+# these two variables dont offer anything to the analysis so they were removed as they were outliers , everything above was updated accordingly
+
+# two new values were selected
+# Internet, Tv scored a value of 0.7 with computer 0.6
 
 ```
 
@@ -419,17 +431,45 @@ pre_rotation_loadings
 
 
 ```{r Reliability Analysis}
-psych::alpha(matrix_data, check.keys=TRUE) # slide 78 for recap
+rel_analysis = psych::alpha(matrix_data, check.keys=TRUE) # slide 78 for recap
+rel_analysis
 
 # sisben for group 0 is at 0.62 which is in the questionable category
 # for group 1, internet, tv,computer, phone, mobile and DVD seem to be very reliable
 # group 2 and 3 are almost all 0
+
+# this further shows some statistical significance between sisben 2-3 being very close to sisben 0
+# meanwhile some sisben items such as internet, tv, computer, fresh, phone, mobile under sisben 1
+# show very high reliability
+
+# values in the very high range for being selected as factors/components are
+# Internet with 0.79
+# tv with 0.85
+# computer with 0.82
+# fresh with 0.97
+# phone with 0.96 mobile coming lower at 0.71
+
+rel_analysis$Fit # shows how well the diagonal elements can be reproduced on a scale of 0-1 with a result of 0.946
 
 ```
 
 
 
 
+### Results
+
+A principal component analysis (PCA) was conducted on the 21 items with orthogonal rotation (varimax).  Bartlett’s test of sphericity, Χ2(210) = 102262.6, p< .001, indicated that correlations between items were sufficiently large for PCA.  
+
+An initial analysis was run to obtain eigenvalues for each component in the data. Two components had eigenvalues over Kaiser’s criterion of 1 and in combination explained 46.06% of the variance.  
+
+The scree plot was slightly ambiguous and showed inflexions that would justify retaining either 0.5 or 2.65/2.75 factors.  
+
+Given the large sample size, and the convergence of the scree plot and Kaiser’s criterion on two components, two components were retained in the final analysis.  
+
+Component 1 represents a exams results and component 2 represents items/facilities that fall under the sisben umbrella, such as internet, Tv, mobile phone etc etc.
+
+Hvaing internet  α = .79, a TV  α = .85, computer α = .82, a phone  α = .96 and fresh  α = .97 (Im not sure what this variable represents, maybe fresh cloths/food I wasnt able to find that out) all had high reliabilities with DVD at α = .75, microwave oven α = .69 between questionable and acceptable.
+Sisben had a Cronbach’s of α = .62 under PC0 which is in the questionable range but a α = .17 in sisben 1 and 2. 
 
 
 
