@@ -13,7 +13,7 @@ output: html_notebook
 #  Delahoz-Dominguez, Enrique, Rohemi Zuluaga, and Tomas Fontalvo-Herrera. 
 # "Dataset of academic performance evolution for engineering students." Data in Brief (2020): 105537.
 
-needed_packages <- c("tidyverse", "readxl", "feather", "car", "nortest", "skimr", "nortest", "psych", "ggplot2", "REdaS")                      
+needed_packages <- c("tidyverse", "readxl", "feather", "car", "nortest", "skimr", "nortest", "psych", "ggplot2", "REdaS", "moments")                      
 # Extract not installed packages
 not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
 # Install not installed packages
@@ -28,8 +28,10 @@ library(nortest)
 library(psych)
 library(ggplot2)
 library(REdaS)
+library(moments) # used to asses skewness
+
 # df = read_excel('idepen_proj_stats.xlsx')
-df = read_feather('idepen_proj_stats.feather')
+df = read_feather('idepen_proj_stats.feather') # used during project work, will be rebuild during notebook 
 
 ```
 
@@ -259,8 +261,9 @@ prepare_matrix_data_tests = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSIT
                                                   "WC_PRO", "PERCENTILE", "G_SC")]
 
 
-tests_matrix = sapply(prepare_matrix_data_tests, as.double)
 matrix_data = sapply(prepare_matrix_data, as.double)
+
+tests_matrix = sapply(prepare_matrix_data_tests, as.double) # this dataframe is just used for comparison 
 
 heatmap(cor(tests_matrix), Rowv = NA, Colv = NA)
 heatmap(cor(matrix_data), Rowv = NA, Colv = NA)
@@ -279,6 +282,19 @@ cortest.bartlett(cor(matrix_data), n=nrow(prepare_matrix_data))
 result = corrplot::cor.mtest(cor(matrix_data), conf.level = .95)
 corrplot::corrplot(cor(matrix_data), method = "square", p.mat = result$p, type = "lower", sig.level = .05)
 # this corr plot shows very little to no useful correlations 
+
+```
+
+
+```{r More testing for normality with variables of interest - Assesing skew}
+sapply(df_saber_exams, function(x) skewness(x)) 
+# small skews, high positive and negative skew for English exam
+
+sapply(df_pro_exams, function(x) skewness(x))
+# significant skew for all exams except wc_pro
+
+sapply(prepare_matrix_data, function(x) var(x))
+# low variance in facilities and high variance in exam results, which makes sense, facilities are binary values yes/no 1/0 
 
 ```
 
@@ -320,6 +336,10 @@ dim(matrix_data)
 
 ```{r Dimension Reduction - PCA, stat ellipse graph}
 PCA_data = sapply(prepare_matrix_data, as.double)
+# these are orthogonal, meaning they are not correlated
+# each principal components is a combination of linearly correlated variables that are completely separate from 
+# other principal components
+
 
 glimpse(PCA_data)
 classes = factor(df$SISBEN)
@@ -329,6 +349,12 @@ classes = factor(df$SISBEN)
 # if variables are measured on different scales this will no longer be an issue
 # exclude sisben from PCA
 dfPCA = prcomp(scale(PCA_data[, -1]))
+
+scree_dfPCA = prcomp(PCA_data[, -1], center = F)
+screeplot(scree_dfPCA)
+# this scree plot further shows that principal component 1 explains 30.64% of variance in the data
+# being the highest of all other components
+
 
 # view PCA statistics
 summary(dfPCA)
@@ -350,7 +376,8 @@ biplot(dfPCA, scale=0)
 # commodities to a value between -0.2 and 0.0
 
 
-# to have a better look at the biplot im going to extract the top 4 principal components 
+# to have a better look at the biplot im going to extract the top 4 principal components as they seem to
+# show some signs of correlation 
 # attach them to the original prepared data and graph it to see if there are any 
 # "clusters" that form naturally
 
@@ -374,6 +401,11 @@ ggplot(df2, aes(PC1, PC2, PC4, col = SISBEN, fill = SISBEN)) +
 # and that there is a difference between people with sisben 0 and sisben 1
 # from previous findings it seems to be small but it makes sense and does show
 # some significance that sisben does have some impact on a students performance
+
+# sisben 0 and 1 have been identified as useful factors
+# essential items such as PC, Internet, Mobile and Tv do support and fit the hypothesis that 
+# governement aid does have some effect on academic performance
+# however further tests and exploration need to be done
 
 ```
 
@@ -481,8 +513,10 @@ Sisben had a Cronbach’s of α = .62 under PC0 which is in the questionable ran
 
 The original target variable "sisben" shows little to no correlation with students academic achievement. However after further observation items that are under the sisben umbrella do have an significant effect, such as internet, mobile computer and Tv. Furthermore using a stats ellipse an interesting observation was discovered. Sisben 1 and Sisben 0 are significantly further apart than any other Sisben level, meaning that there is a difference and that this gap is reduced at higher Sisben levels.
 
-Having said that, through other analysis and graphs, it is more likely that the null hypothesis is true. Not having access to the internet, computer or mobile is a reasonable assumption to make that its almost a necessity when assessing exams especially when some students have access to these facilities, meaning that there is little to no statistical significance between increasing government aid/sisben especially after those essential items have been met, this is further supported by the stats ellipse.
+Having said that, despite the correlation between the variables above and academic performance through other analysis and graphs, it is more likely that the null hypothesis is true. Not having access to the internet, computer or mobile is a reasonable assumption to make, that its almost a necessity when assessing exams especially when some students have access to these facilities, meaning that there is little to no statistical significance between increasing levels of government aid/sisben especially after those essential items have been met, this is further supported by the stats ellipse.
 
-An argument could be made/reiterated that increasing levels of sisben do close the gap, but based on the analysis presented above that difference is too small to reject the null hypothesis.
+An argument could be made/reiterated upon that increasing levels of sisben do close the gap, but based on the analysis presented above that difference is too small to reject the null hypothesis.
 
+I think this analysis successfully extracted obvious yet statistically significant predictors/factors that have an effect on the performance of a students academic achievement
 
+In that sense the model fit is good but not extremely useful as these are somewhat obvious assertions, now with some statistics and graphs to back them up 
