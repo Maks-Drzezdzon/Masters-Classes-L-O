@@ -348,10 +348,9 @@ classes = factor(df$SISBEN)
 # subtract the mean so the new mean is 0
 # if variables are measured on different scales this will no longer be an issue
 # exclude sisben from PCA
-dfPCA = prcomp(scale(PCA_data[, -1]))
-
-scree_dfPCA = prcomp(PCA_data[, -1], center = F)
-screeplot(scree_dfPCA)
+dfPCA = prcomp(scale(PCA_data[, -1])) # scaling model
+screeplot(dfPCA) # graphing variances for a visual comparison
+# str(dfPCA)
 # this scree plot further shows that principal component 1 explains 30.64% of variance in the data
 # being the highest of all other components
 
