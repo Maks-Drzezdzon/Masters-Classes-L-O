@@ -30,8 +30,8 @@ library(ggplot2)
 library(REdaS)
 library(moments) # used to asses skewness
 
-# df = read_excel('idepen_proj_stats.xlsx')
-df = read_feather('idepen_proj_stats.feather') # used during project work, will be rebuild during notebook 
+df = read_excel('idepen_proj_stats.xlsx')
+# df = read_feather('idepen_proj_stats.feather') # used during project work, will be rebuild during notebook 
 
 ```
 
@@ -355,7 +355,9 @@ screeplot(dfPCA) # graphing variances for a visual comparison
 # being the highest of all other components
 
 
-# view PCA statistics
+# view PCA statistics, run this separately because when its run with all other plots its seems difficult to read for some reason
+# PC1 seems to be a collection of exams
+# PC2 seems to be items/facilities provided by various levels of sisben
 summary(dfPCA)
 # This is used to see how many of the variables can be dropped and at what cost
 # The cumulative proportion increases with each PC component,
