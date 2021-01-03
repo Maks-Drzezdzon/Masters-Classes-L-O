@@ -158,7 +158,7 @@ df = read_feather('idepen_proj_stats.feather')
 ```
 
 
-```{r Testing for normality-pro exams}
+```{r Testing for normality - pro exams, qqPlots, Histograms, Boxplots}
 
 # fragmenting data
 df_pro_exams =  data.frame(df$CR_PRO, df$QR_PRO, df$CC_PRO, df$WC_PRO, df$ENG_PRO)
@@ -178,6 +178,7 @@ ad.test(df_pro_exams$df.CC_PRO)
 ad.test(df_pro_exams$df.WC_PRO)
 ad.test(df_pro_exams$df.ENG_PRO)
 # p < 2.2e-16
+par(mfrow=c(2,2)) # reduce the amount of single graph images that will be displayed
 qqPlot(df_pro_exams$df.CR_PRO, ylab = "critical reading exam scores")
 qqPlot(df_pro_exams$df.QR_PRO, ylab = "quantitative reasoning exam scores")
 qqPlot(df_pro_exams$df.CC_PRO, ylab = "citizen competencies exam scores")
@@ -190,6 +191,7 @@ hist(df_pro_exams$df.CC_PRO, xlab = "citizen competencies exam scores")
 hist(df_pro_exams$df.WC_PRO, xlab = "written communication exam scores")
 hist(df_pro_exams$df.ENG_PRO, xlab = "communication in English exam scores")
 
+par(mfrow=c(1,1)) # return to single graph view for boxplots as its easier to see
 Boxplot(df_pro_exams$df.CR_PRO, ylab = "critical reading exam scores")
 Boxplot(df_pro_exams$df.QR_PRO, ylab = "quantitative reasoning exam scores")
 Boxplot(df_pro_exams$df.CC_PRO, ylab = "citizen competencies exam scores")
@@ -201,7 +203,7 @@ Boxplot(df_pro_exams$df.ENG_PRO, ylab = "communication in English exam scores")
 ```
 
 
-```{r Testing for normality-saber exams}
+```{r Testing for normality - saber exams, Histograms, Boxplots}
 
 df_saber_exams =  data.frame(df$MAT_S11, df$CR_S11, df$CC_S11, df$BIO_S11, df$ENG_S11)
 summary(df_saber_exams)
@@ -216,13 +218,14 @@ ad.test(df_saber_exams$df.CC_S11)
 ad.test(df_saber_exams$df.BIO_S11)
 ad.test(df_saber_exams$df.ENG_S11)
 # p < 2.2e-16
-
+par(mfrow=c(2,2)) # reduce the amount of single graph images that will be displayed
 hist(df_saber_exams$df.MAT_S11, xlab = "maths exam scores")
 hist(df_saber_exams$df.CR_S11, xlab = "critical reading exam scores")
 hist(df_saber_exams$df.CC_S11, xlab = "citizen competencies exam scores")
 hist(df_saber_exams$df.BIO_S11, xlab = "biology exam scores")
 hist(df_saber_exams$df.ENG_S11, xlab = "communication in English exam scores")
 
+par(mfrow=c(1,1)) # return to single graph view for boxplots as its easier to see
 boxplot(df_saber_exams$df.MAT_S11, ylab = "Maths Exam scores exam scores")
 boxplot(df_saber_exams$df.CR_S11, ylab = "critical reading exam scores")
 boxplot(df_saber_exams$df.CC_S11, ylab = "citizen competencies exam scores")
@@ -235,7 +238,7 @@ boxplot(df_saber_exams$df.ENG_S11, ylab = "communication in English exam scores"
 ```
 
 
-```{r Dimension Reduction - heatmap, Bartlett test}
+```{r Dimension Reduction - heatmap, Bartlett test, corrplot}
 prepare_matrix_data = df[,!names(df) %in% c("ACADEMIC_PROGRAM", "UNIVERSITY", "Cod_SPro", 
                                             "SCHOOL_TYPE", "SCHOOL_NAT", "SCHOOL_NAME", 
                                             "JOB", "REVENUE", "OCC_MOTHER",
@@ -261,7 +264,7 @@ matrix_data = sapply(prepare_matrix_data, as.double)
 
 heatmap(cor(tests_matrix), Rowv = NA, Colv = NA)
 heatmap(cor(matrix_data), Rowv = NA, Colv = NA)
-# in the heatmaps even though there is little to no correlation between govenment aid sisben and grades
+# in the heatmaps even though there is little to no correlation between government aid sisben and grades
 # there is a slight correlation between the things that are under the sisben umbreala such as
 # internet, tv, computer, car
 
@@ -274,7 +277,8 @@ cortest.bartlett(cor(matrix_data), n=nrow(prepare_matrix_data))
 
 # Visualization of significance levels at 0.05
 result = corrplot::cor.mtest(cor(matrix_data), conf.level = .95)
-corrplot::corrplot(cor(matrix_data), method="square", p.mat = result$p, type="lower", sig.level = .05)
+corrplot::corrplot(cor(matrix_data), method = "square", p.mat = result$p, type = "lower", sig.level = .05)
+# this corr plot shows very little to no useful correlations 
 
 ```
 
@@ -282,8 +286,6 @@ corrplot::corrplot(cor(matrix_data), method="square", p.mat = result$p, type="lo
 ```{r Dimension Reduction - Kaiser-Meyer-Olkin}
 
 KMOS(tests_matrix)
-
-
 KMOS(matrix_data)
 
 # these values indicate how well suited data is for factor analysis ranges from 0-1 the closer to 1 the better the variable is
@@ -293,7 +295,7 @@ KMOS(matrix_data)
 ```
 
 
-```{r Dimension Reduction - Determinant}
+```{r Dimension Reduction - Determinant - NOT USED}
 # this is done to check if there is co-linearity
 dim(tests_matrix)
 dim(matrix_data)
@@ -306,14 +308,17 @@ dim(matrix_data)
 # det(downsized_tests_matrix)
 # det(downsized_matrix_data)
 
-# This set can not be performed as finding the determinant can only be done on
+# This test can not be performed as finding the determinant can only be done on
 # square matrices, after making a small square matrix the method works, however 
 # its too small to represent the whole data set
+
+# If the det is run for these two small matrices its above 0 which would be meaning full for further analysis, having said that
+# it seems way too small to be useful
 
 ```
 
 
-```{r Dimension Reduction - PCA}
+```{r Dimension Reduction - PCA, stat ellipse graph}
 PCA_data = sapply(prepare_matrix_data, as.double)
 
 glimpse(PCA_data)
@@ -458,7 +463,7 @@ rel_analysis$Fit # shows how well the diagonal elements can be reproduced on a s
 
 ### Results
 
-A principal component analysis (PCA) was conducted on the 21 items with orthogonal rotation (varimax).  Bartlett’s test of sphericity, Χ2(210) = 102262.6, p< .001, indicated that correlations between items were sufficiently large for PCA.  
+A principal component analysis (PCA) was conducted on the 21 items with orthogonal rotation (varimax) with 4 factors.  Bartlett’s test of sphericity, Χ2(210) = 102262.6, p< .001, indicated that correlations between items were sufficiently large for PCA.  
 
 An initial analysis was run to obtain eigenvalues for each component in the data. Two components had eigenvalues over Kaiser’s criterion of 1 and in combination explained 46.06% of the variance.  
 
@@ -472,6 +477,12 @@ Hvaing internet  α = .79, a TV  α = .85, computer α = .82, a phone  α = .96 
 Sisben had a Cronbach’s of α = .62 under PC0 which is in the questionable range but a α = .17 in sisben 1 and 2. 
 
 
+### Conclusion 
 
+The original target variable "sisben" shows little to no correlation with students academic achievement. However after further observation items that are under the sisben umbrella do have an significant effect, such as internet, mobile computer and Tv. Furthermore using a stats ellipse an interesting observation was discovered. Sisben 1 and Sisben 0 are significantly further apart than any other Sisben level, meaning that there is a difference and that this gap is reduced at higher Sisben levels.
+
+Having said that, through other analysis and graphs, it is more likely that the null hypothesis is true. Not having access to the internet, computer or mobile is a reasonable assumption to make that its almost a necessity when assessing exams especially when some students have access to these facilities, meaning that there is little to no statistical significance between increasing government aid/sisben especially after those essential items have been met, this is further supported by the stats ellipse.
+
+An argument could be made/reiterated that increasing levels of sisben do close the gap, but based on the analysis presented above that difference is too small to reject the null hypothesis.
 
 
