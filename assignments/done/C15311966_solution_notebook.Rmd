@@ -1,0 +1,161 @@
+---
+title: "C15311966_Maks_Drzezdzon"
+output: html_notebook
+---
+
+
+
+```{r Setup }
+needed_packages <- c("tidyverse")                      
+# Extract not installed packages
+not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
+# Install not installed packages
+if(length(not_installed)) install.packages(not_installed)
+
+library(tidyverse)
+
+df = read_csv("data-file.csv")
+df = read_table("read-data.csv")
+
+# ToDo's
+
+# 1) Clean the Data Set
+# 2) relevant summary statistics, single visualisation that 
+# captures the relationship between at least 3 of the original variables
+# 3) Focus on a subset of the data and create 3 derived variables 
+# for the purposes of answering a single question of interest.
+
+
+############
+# Question #
+############
+
+# the question is, can you predict or forecast the players career by their activity 
+# how often do they get to play, how often are they allowed to start from the beginning etc
+
+```
+
+
+```{r Cleaning }
+# 1) Clean the Data Set
+colnames(df)
+
+# rename 
+df = df %>% setnames(
+  old = c(colnames(df)),
+  new = c("season_year", "Rk", "player_name", "position",
+          "player_age", "team_name", "games_played", "games_started",
+          "minutes_played_per_game", "successful_field_goals_per_game", 
+          
+          "field_goals_attempts_per_game", "field_goals_successrate_for_season",
+          "three_pointers_per_game", "three_pointer_attempts_per_game",
+          "three_pointer_successrate",
+          "two_pointers_per_game", "two_pointer_attempts_per_game",
+          "two_pointer_successrate",
+          
+          "effective_field_goal_percent_per_season", "successful_free_throws_per_game",
+          "free_throw_attempts_per_game", "successful_free_throw_percentage_per_season",
+          "offensive_rebounds_per_game", "defensive_rebounds_per_game",
+          
+          "total_rebounds_per_game", "assists_per_game",
+          "steals_per_game", "blocks_per_game",
+          "turnovers_per_game", "personal_fouls_per_game",
+          "points_per_game")
+)
+
+# drop col and drop index col in case its there
+df = df[,!names(df) %in% c("Rk", "X1", "drop_me")]
+
+# create new cols
+df=separate(df, season_year, sep = "-", into = c("season_start_year","season_end_year"))
+
+#  didnt get to clean name in time, but this was the idea, split and remove escape character simliar method to the date above
+# df=separate(df, player_name, sep = "\\", into = c("player_name","drop_me"))
+
+# change to date
+df = df %>% mutate(season_start_year = make_date(season_start_year))
+df = df %>% mutate(season_end_year = make_date(season_end_year))
+# save just incase
+write.csv(df, "dataset-updated.csv", row.names = F)
+
+map(df , ~sum(is.na(.)))
+df = na.omit(df)
+colnames(df)
+
+```
+
+```{r Analysis & Visualisation }
+# 2) relevant summary statistics, single visualization that 
+# captures the relationship between at least 3 of the original variables
+# preparing data and getting numeric values
+correlation_matrix_data = df[,!names(df) %in% c("season_start_year", "season_end_year", "player_name", "position", "team_name")]
+correlation_matrix_data = cor(correlation_matrix_data)
+head(correlation_matrix_data)
+
+# some summary statistics used to quickly inspect and evaluate data
+head(df)
+tail(df)
+max(df$successful_field_goals_per_game)
+max(df$minutes_played_per_game)
+df$player_name
+summary(df)
+glimpse(df)
+fivenum(df)
+
+# more data exploration, I swapped these out for other variables 
+plot(df$player_age)
+qqplot(df$player_age)
+boxplot(df$player_age)
+
+# single visualization that uses 3 or more original variables
+heatmap(correlation_matrix_data, na.rm = T, main = "MBA correlation heat map")
+
+```
+
+```{r Derived Variables }
+# 3) Focus on a subset of the data and create 3 derived variables 
+# for the purposes of answering a single question of interest.
+############
+# Question #
+############
+
+# the question is, can you predict or forecast the players career by their activity 
+# how often do they get to play, how often are they allowed to start from the beginning etc
+
+# subset data and create 3 derived variables
+mba_2019_season = with(df, df[(season_start_year <= "2018-01-01" & season_end_year >= "2019-01-01"), ])
+mba_2019_season = df[,!names(mba_2019_season) %in% c("Rk", "position",
+                                                     "team_name","successful_field_goals_per_game", 
+                                                     
+                                                     "field_goals_attempts_per_game", "field_goals_successrate_for_season",
+                                                     "three_pointers_per_game", "three_pointer_attempts_per_game",
+                                                     "three_pointer_successrate",
+                                                     "two_pointers_per_game", "two_pointer_attempts_per_game",
+                                                     "two_pointer_successrate",
+                                                     
+                                                     "effective_field_goal_percent_per_season", "successful_free_throws_per_game",
+                                                     "free_throw_attempts_per_game", "successful_free_throw_percentage_per_season",
+                                                     "offensive_rebounds_per_game", "defensive_rebounds_per_game")]
+
+mba_2019_season
+colnames(mba_2019_season)
+head(mba_2019_season)
+
+# the question is, can you predict or forecast the players career by their activity 
+# how often do they get to play, how often are they allowed to start from the beginning etc
+
+# assumption is that these dont have to be saved in the dataset
+# if they were then one can use cbind(colname, another_colname) etc
+
+# the higher the decimal the better the player yield is, the earlier they are in their career as younger players tend to get more field time
+game_activity = mba_2019_season$games_played/mba_2019_season$player_age
+
+# the lower the number the better, as the player started in more games
+start_game_chances = mba_2019_season$games_played - mba_2019_season$games_started
+
+# the higher the score the better a player defends/pushes the other team back
+game_effectiveness_participation = mba_2019_season$steals_per_game + mba_2019_season$assists_per_game + mba_2019_season$blocks_per_game
+
+write.csv(mba_2019_season, "final-dataset.csv", row.names = F)
+ 
+```
