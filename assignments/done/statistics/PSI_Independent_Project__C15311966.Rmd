@@ -501,7 +501,7 @@ A principal component analysis (PCA) was conducted on the 21 items with orthogon
 
 An initial analysis was run to obtain eigenvalues for each component in the data. Two components had eigenvalues over Kaiser’s criterion of 1 and in combination explained 46.06% of the variance.  
 
-The scree plot was slightly ambiguous and showed inflexions that would justify retaining either 0.5 or 2.65/2.75 factors.  
+The scree plot was slightly ambiguous and showed inflections that would justify retaining either 0.5 or 2.65/2.75 factors.  
 
 Given the large sample size, and the convergence of the scree plot and Kaiser’s criterion on two components, two components were retained in the final analysis.  
 
@@ -514,7 +514,7 @@ Sisben had a Cronbach’s of α = .62 under PC0 which is in the questionable ran
 
 ### Conclusion 
 
-The original target variable "sisben" shows little to no correlation with students academic achievement. However after further observation items that are under the sisben umbrella do have an significant effect, such as internet, mobile computer and Tv. Furthermore using a stats ellipse an interesting observation was discovered. Sisben 1 and Sisben 0 are significantly further apart than any other Sisben level, meaning that there is a difference and that this gap is reduced at higher Sisben levels.
+The original target variable "sisben" shows little to no correlation with students academic achievement. However after further observation items that are under the sisben umbrella do have an significant effect, such as internet, mobile computer and Tv. Furthermore using a stats ellipse uncovered an interesting observation, Sisben 1 and Sisben 0 are significantly further apart than any other Sisben level, meaning that there is a difference and that this gap is reduced at higher Sisben levels. Meaning that the gap as small as it may be is being closed by sisben 1 the most.
 
 Having said that, despite the correlation between the variables above and academic performance through other analysis and graphs, it is more likely that the null hypothesis is true. Not having access to the internet, computer or mobile is a reasonable assumption to make, that its almost a necessity when assessing exams especially when some students have access to these facilities, meaning that there is little to no statistical significance between increasing levels of government aid/sisben especially after those essential items have been met, this is further supported by the stats ellipse.
 
