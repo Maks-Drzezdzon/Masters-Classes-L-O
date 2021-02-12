@@ -6,9 +6,9 @@ output: html_notebook
 
 ```{r Setup}
 
-needed_packages <- c("tidyverse", "data.table", "feather", "lubridate", "reticulate", "skimr", "forecast")                      
+needed_packages = c("tidyverse", "data.table", "feather", "lubridate", "reticulate", "skimr", "forecast")                      
 # Extract not installed packages
-not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
+not_installed = needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
 # Install not installed packages
 if(length(not_installed)) install.packages(not_installed)
 
@@ -28,7 +28,7 @@ library(forecast)
 ```{r Initial Data Wrangling}
 
 
-df = read_csv('weather-data.csv')
+df = read_csv('../weather-data.csv')
 spec(df)
 
 # rename cols to be more descriptive 
