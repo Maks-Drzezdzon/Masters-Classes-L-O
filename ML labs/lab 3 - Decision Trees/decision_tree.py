@@ -1,6 +1,7 @@
 """
 Create a Decision Stump
 """
+# from https://www.python-course.eu/Boosting.php
 
 import scipy.stats as sps
 from sklearn.model_selection import cross_validate
