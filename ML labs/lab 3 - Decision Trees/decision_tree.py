@@ -17,7 +17,7 @@ style.use('fivethirtyeight')
 # Load in the data and define the column labels
 # dataset https://archive.ics.uci.edu/ml/datasets/mushroom
 
-dataset = pd.read_csv('data\mushroom.csv', header=None)
+dataset = pd.read_csv('../data/mushroom.csv', header=None)
 dataset = dataset.sample(frac=1)
 dataset.columns = ['target', 'cap-shape', 'cap-surface', 'cap-color', 'bruises', 'odor', 'gill-attachment', 'gill-spacing',
                    'gill-size', 'gill-color', 'stalk-shape', 'stalk-root', 'stalk-surface-above-ring', 'stalk-surface-below-ring', 'stalk-color-above-ring',

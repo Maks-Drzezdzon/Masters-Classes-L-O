@@ -1,0 +1,10 @@
+ID,Age,Education,MaritalStatus,Occupation,AnnualIncome
+1,39,bachelors,never married, transport,25K-50K
+2,50,bachelors,married,professional,25K-50K
+3,18,high school,never married,agriculture,<25K
+4,28,bachelors,married,professional,25K-50K
+5,37,high school,married,agriculture,25K-50K
+6,24,high school,never married,armed forces,<25K
+7,52,high school,divorced,transport,25K-50K
+8,40,doctorate,married,professional,>50K
+
