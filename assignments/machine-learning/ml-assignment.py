@@ -13,3 +13,9 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 from sklearn.decomposition import PCA
 from sklearn.svm import SVC
+
+
+train_fnc = pd.read_csv(
+    '/Desktop/mlsp-2014-mri/Test/test_SBM.csv', delimiter=',')
+train_sbm = pd.read_csv()
+train_set = pd.merge(train)
