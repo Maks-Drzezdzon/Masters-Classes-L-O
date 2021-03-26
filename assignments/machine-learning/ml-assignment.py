@@ -1,21 +1,34 @@
-import tensorflow as tf
 import numpy as np
 import sklearn
 import pandas as pd
 
-from time import time
-import logging
-import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
-from sklearn.model_selection import GridSearchCV
-from sklearn.datasets import fetch_lfw_people
-from sklearn.metrics import classification_report
-from sklearn.metrics import confusion_matrix
-from sklearn.decomposition import PCA
-from sklearn.svm import SVC
 
 
+
+
+# merging test data
+test_fnc = pd.read_csv(
+    '../../../../../Desktop/mlsp-2014-mri/Test/test_FNC.csv', delimiter=',')
+test_sbm = pd.read_csv(
+    '../../../../../Desktop/mlsp-2014-mri/Test/test_SBM.csv', delimiter=',')
+
+test_set = pd.merge(test_fnc, test_sbm)
+
+lables = pd.read_csv(
+    '../../../../../Desktop/mlsp-2014-mri/Train/train_labels.csv', delimiter=',')
+
+# merging train data
 train_fnc = pd.read_csv(
-    '/Desktop/mlsp-2014-mri/Test/test_SBM.csv', delimiter=',')
-train_sbm = pd.read_csv()
-train_set = pd.merge(train)
+    '../../../../../Desktop/mlsp-2014-mri/Train/train_FNC.csv', delimiter=',')
+train_sbm = pd.read_csv(
+    '../../../../../Desktop/mlsp-2014-mri/Train/train_SBM.csv', delimiter=',')
+    
+    
+# transposing otherwise
+train_fnc.transpose()
+train_sbm.transpose()
+
+train_set = pd.merge(train_fnc, train_sbm)
+train_set.drop(labels='Id', axis=0)
+print(train_set.head(10))
+# train_set.transpose()
