@@ -30,6 +30,7 @@ head(testFNC)
 submission_example = read.csv("mlsp-2014-mri/submission_example.csv", as.is=T, header=T, sep=",")
 
 head(submission_example)
+tail(submission_example)
 
 # remove id column, transpose data frames otherwise they wont be able to be combined as their dimensions are different
 train_data = rbind(t(trainFNC[,-1]), t(trainSBM[,-1]))
@@ -37,14 +38,20 @@ head(train_data)
 # add class label to each col
 colnames(train_data) = train_labels$Class
 typeof(train_data)
-train_data = as.data.frame(train_data)
-write_feather(train_data, 'train_data.feather')
+# train_data = as.data.frame(train_data)
+
+# write_feather(train_data, 'train_data.feather')
+write.csv(train_data, 'mlsp-2014-mri/assign_data/amalgamated_train_data.csv', row.names = F)
 
 test_data = rbind(t(testFNC[,-1]), t(testSBM[,-1]))
 head(test_data)
 colnames(test_data) = testFNC$Id
-test_data = as.data.frame(test_data)
-write_feather(test_data, 'test_data.feather')
+# test_data = as.data.frame(test_data)
+# write_feather(test_data, 'test_data.feather')
+# sadly the feather format is no good for this approach as 
+# classes have duplicate column names based on labels
+# because of this I will save the new combined data set into a csv files
+# train_data = read_feather('train_data.feather')
 
-train_data = read_feather('train_data.feather')
-# doesnt work rip :c
+
+write.csv(test_data, 'mlsp-2014-mri/assign_data/amalgamated_test_data.csv', row.names = F)
