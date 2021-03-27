@@ -10,39 +10,21 @@
 # classes have duplicate column names based on labels
 # because of this I will save the new combined data set into a csv files
 
-# train data
-trainFNC = read.csv("mlsp-2014-mri/Train/train_FNC.csv", as.is=T, header=T, sep=",")
-trainSBM = read.csv("mlsp-2014-mri/Train/train_SBM.csv", as.is=T, header=T, sep=",")
-train_labels = read.csv("mlsp-2014-mri/Train/train_labels.csv", as.is=T, header=T, sep=",")
-
-head(trainFNC)
-head(trainSBM)
-head(trainLAB)
-
-# test data
-testFNC = read.csv("mlsp-2014-mri/Test/test_FNC.csv", as.is=T, header=T, sep=",")
-testSBM = read.csv("mlsp-2014-mri/Test/test_SBM.csv", as.is=T, header=T, sep=",")
-
-head(testSBM)
-head(testFNC)
 
 
-submission_example = read.csv("mlsp-2014-mri/submission_example.csv", as.is=T, header=T, sep=",")
 
-head(submission_example)
-tail(submission_example)
+data = read.csv("mlsp-2014-mri/test.csv", as.is=T, header=T, sep=",")
+write.csv(data[,-1], 'mlsp-2014-mri/assign_data/amalgamated_train_data.csv', row.names = F)
 
-# remove id column, transpose data frames otherwise they wont be able to be combined as their dimensions are different
-train_data = rbind(t(trainFNC[,-1]), t(trainSBM[,-1]))
-head(train_data)
-# add class label to each col
-colnames(train_data) = train_labels$Class
-typeof(train_data)
+data = read.csv("mlsp-2014-mri/amalgamated_test_data.csv", as.is=T, header=T, sep=",")
+head(data)
+write.csv(data[,-2], 'mlsp-2014-mri/assign_data/new_test_data.csv', row.names = F)
 
-write.csv(train_data, 'mlsp-2014-mri/assign_data/amalgamated_train_data.csv', row.names = F)
 
-test_data = rbind(t(testFNC[,-1]), t(testSBM[,-1]))
-head(test_data)
-colnames(test_data) = testFNC$Id
 
-write.csv(test_data, 'mlsp-2014-mri/assign_data/amalgamated_test_data.csv', row.names = F)
+test_FNC = read.csv(  'mlsp-2014-mri/Test/test_FNC.csv', as.is=T, header=T, sep=",")
+test_SBM = read.csv(  'mlsp-2014-mri/Test/test_SBM.csv', as.is=T, header=T, sep=",")
+test = rbind(test_FNC, test_SBM)
+head(test)
+test = read.csv(  'mlsp-2014-mri/new_test.csv', as.is=T, header=T, sep=",")
+write.csv(test[,-1], 'mlsp-2014-mri/assign_data/new_test_data.csv', row.names = F)
