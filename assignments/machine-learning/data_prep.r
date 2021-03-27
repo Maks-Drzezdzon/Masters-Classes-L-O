@@ -1,5 +1,3 @@
-library(feather)
-
 # Data preparation 
 # I originally tried this in python but for some reason python cant drop the Id column, I google'd around for a solution 
 # such as resetting the index etc and it still wouldn't work
@@ -8,6 +6,9 @@ library(feather)
 # One more thing, I originally thought this data was going to be in image format but its not
 # one way to enrich MRI data is to actually rotate images a few times to have more data to train the model on
 
+# sadly the feather format is not good for this project as 
+# classes have duplicate column names based on labels
+# because of this I will save the new combined data set into a csv files
 
 # train data
 trainFNC = read.csv("mlsp-2014-mri/Train/train_FNC.csv", as.is=T, header=T, sep=",")
@@ -19,7 +20,6 @@ head(trainSBM)
 head(trainLAB)
 
 # test data
-
 testFNC = read.csv("mlsp-2014-mri/Test/test_FNC.csv", as.is=T, header=T, sep=",")
 testSBM = read.csv("mlsp-2014-mri/Test/test_SBM.csv", as.is=T, header=T, sep=",")
 
@@ -38,20 +38,11 @@ head(train_data)
 # add class label to each col
 colnames(train_data) = train_labels$Class
 typeof(train_data)
-# train_data = as.data.frame(train_data)
 
-# write_feather(train_data, 'train_data.feather')
 write.csv(train_data, 'mlsp-2014-mri/assign_data/amalgamated_train_data.csv', row.names = F)
 
 test_data = rbind(t(testFNC[,-1]), t(testSBM[,-1]))
 head(test_data)
 colnames(test_data) = testFNC$Id
-# test_data = as.data.frame(test_data)
-# write_feather(test_data, 'test_data.feather')
-# sadly the feather format is no good for this approach as 
-# classes have duplicate column names based on labels
-# because of this I will save the new combined data set into a csv files
-# train_data = read_feather('train_data.feather')
-
 
 write.csv(test_data, 'mlsp-2014-mri/assign_data/amalgamated_test_data.csv', row.names = F)
