@@ -45,12 +45,12 @@ and to find whats missing https://www.scribbr.com/dissertation/literature-review
 		- or highlight gap
 
 		=> Stand Alone
-		- give background on topic
-		- discuss scope
-		- state objective
+		- give background on topic done
+		- discuss scope DONE
+		- state objective DONE
 
 	- Main body
-		- could use a heading for each theme, method etc
+		- could use a heading for each theme, method etc DONE
 		- Summarise & Synthesise sources
 			- overview of main points from literature, combine sources to make an overall point
 			- show similariteis and differences
