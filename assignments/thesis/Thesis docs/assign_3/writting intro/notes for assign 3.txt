@@ -1,0 +1,66 @@
+Abstract
+https://www.scribbr.com/dissertation/abstract/
+
+1. Research problem => define purpose of your research, what is it dealing with, diagnosis of schizo
+2. Methods => what did you use, models, alogrithms etc
+3. Key results &/or arguments => summorise research results
+4. Conclusion => answer to problem to question
+=> List key words for someones literature searches
+
+
+
+literature review, is the summary of what you've read, what has been done, what has been tried
+give your reader an overview of what you've found
+and to find whats missing https://www.scribbr.com/dissertation/literature-review/
+
+1. Search for literature - assign 2 - done
+	- List key words => use this to search for more papers and build a better lit rev for later too
+	- use '-' to excluse word in google scolar
+	-
+2. Evaluate Sorces - read sources
+	- if something is cited a lot, read it and probabily see if you need to cite it
+	
+
+3. Identify themes, gaps & debates
+	- Trends in areas, methods used etc
+	- Trends in theories
+	- Patterns in models used
+	- Contridictions in papers?
+	- Gaps (doing research on highly visual social media such as insta, snap rather than fb or twitter)
+
+
+4. Literature Structure - pick one
+	- Chronological => how it might have changed, developed over time ?
+	- Theme => mental health? idk
+	- Method => what ML methods they used ? etc
+	- Theory => idk
+
+
+
+5. Write
+	- Introduction
+		=> Research Paper
+		- Restate research question
+		- Many studies focused on x or y
+		- or highlight gap
+
+		=> Stand Alone
+		- give background on topic done
+		- discuss scope DONE
+		- state objective DONE
+
+	- Main body
+		- could use a heading for each theme, method etc DONE
+		- Summarise & Synthesise sources
+			- overview of main points from literature, combine sources to make an overall point
+			- show similariteis and differences
+		- Analyse & interpret 
+
+	- Conclusion
+		=> Research
+		- how does the work address gaps
+		- how it contributes new knowledge 
+		
+		=> Stand Alone
+		- Summarize major findings and implications
+		- Make suggestions for future research
