@@ -1,0 +1,45 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+library(tidyverse)
+library(sqldf)
+library(eeptools)
+library(Rcpp, "1.0.7")
+library(reshape2)
+
+# lab 6
+df = read.csv("/Users/maksdrzezdzon/Downloads/studentresult.csv", sep= ',' , header=T )
+
+
+# Q1
+test_marks = sqldf('select Subject, Name, round(avg(Mark_Written) + avg(Mark_Oral), 1)/2 as Test_mark from df
+group by Name, Subject')
+plot = ggplot(data = test_marks, aes(Name, Test_mark, fill=as.factor(Subject))) + geom_col(position="dodge") + labs(x="Student Name", y="Grade Average", 
+       title="Q1 What are the total marks for each student for each subject?", fill="Subject Name")
+plot
+
+
+
+
+
+
+# Q3 
+test_marks_3 = sqldf('select Name, avg(Mark_Written) as "Written Exam", avg(Mark_Oral) as "Oral Exam" from df
+group by Name')
+pivot_data = melt(test_marks_3 ,  id.vars = 'Name', variable.name = 'Exam')
+plot = ggplot(data = pivot_data, aes(Name, value, fill=as.factor(Exam))) + geom_col(position = "dodge") + labs(x="Student Name", y="Avg Test Score", title="Q3 Did any students do better on their written compared with their oral?", fill="Subject Name")
+plot
+
+# Q4
+test_marks_4 = sqldf('select Subject, round((avg(Mark_Written) + avg(Mark_Oral))/2) as "Test Score" from df
+group by subject')
+plot = ggplot(data = test_marks_4, aes(Subject, `Test Score`, fill=as.factor(Subject))) + geom_col(position="dodge") + labs(x="Subject Name", y="Grade Average", title="Q4 What subject obtained the best results on average?", fill="")
+plot
+
+```
+
+
