@@ -21,6 +21,12 @@ plot = ggplot(data = test_marks, aes(Name, Test_mark, fill=as.factor(Subject))) 
        title="Q1 What are the total marks for each student for each subject?", fill="Subjects")
 plot
 
+# Q2
+test_marks_2 = sqldf('select Name, avg(Mark_Written) as "Written Exam", avg(Mark_Oral) as "Oral Exam" from df
+group by Name')
+plot = ggplot(data = test_marks_2, aes(Name, value, fill=as.factor(Exam))) + geom_col(position = "dodge") + labs(x="Student Name", y="Avg Test Score", title="Q3 What is the relationship between age and mark??", fill="Subjects")
+plot
+
 # Q3 
 test_marks_3 = sqldf('select Name, avg(Mark_Written) as "Written Exam", avg(Mark_Oral) as "Oral Exam" from df
 group by Name')
@@ -48,4 +54,87 @@ ggplot(data=test_marks_5, aes(x=Name, y=test_marks_5$`Avg Oral Score`, fill=Subj
 
 ```
 
+```{r, fig.width = 10, fig.height = 5}
+library(tidyverse)
+library(sqldf)
+library(eeptools)
+library(Rcpp, "1.0.7")
+library(reshape2)
+# lab 6
+df = read.csv("/Users/Grim/Documents/GitHub/Masters-Classes-L-O/Data Visualisation/data/studentresult.csv", sep= ',' , header=T )
+test_marks = sqldf('select Name, avg(Mark_Written) as "Written Exam", avg(Mark_Oral) as "Oral Exam" from df
+group by Name')
+pivot_data = melt(test_marks ,  id.vars = 'Name', variable.name = 'Exam')
+plot = ggplot(data = pivot_data, aes(Name, value, fill=as.factor(Exam))) + geom_col(position = "dodge") + labs(x="Student Name", y="Avg Test Score", title="Q1 plot the results for the written and oral exams in two bars per student", fill="Subjects")
+plot
 
+
+# Q2-1
+# Plot one variable counting the instances that fall in each bin (Histogram). Bin size can be adjusted with the command binwidth.
+test_marks = sqldf('select Subject, Name, round(Mark_Written) as "Mark Written" from df
+group by Name, Subject')
+
+hist(test_marks$`Mark Written`, 
+     col="skyblue2", 
+     xlab="Mark Ranges for Students",
+     main="Q2-1")
+
+
+# Q2-2
+# Change the orientation of a bar chart to be horizontal rather than vertical. (1 mark)
+qplot(test_marks$`Mark Written`, geom="histogram", xlab="Mark Ranges for Students") + coord_flip()
+
+
+# Q2-3
+# Fit a line to a scatter plot of age against Written Marks. (1 mark)
+# scatter plot 
+
+# Q2-4
+# Create a scatter plot with a separate line for each data series (per subject). (1 mark)
+# scatter plot 
+
+```
+
+
+
+```
+test_marks
+plot = ggplot(data = test_marks, aes(Name, Test_mark, fill=as.factor(Subject))) + geom_col(position="dodge") + labs(x="Student Name", y="Grade Average", 
+       title="What are the total marks for each student for each subject?", fill="Subject Name")
+plot
+
+
+# Q2
+
+test_marks_2 = sqldf('select DOB, Subject, Name, round((avg(Mark_Written) + avg(Mark_Oral))/2) as Test_mark from df
+group by Name, Subject')
+as.numeric(difftime(as.Date("2021-01-01", format=""), as.Date("2011-01-01"), unit="year"))
+
+t = interval(ymd(Sys.Date(), format='%y/%m/%d'), ymd(test_marks_2$DOB))
+time_length(t, "year")
+
+
+test_marks_2$DOB = 3
+test_marks_2
+
+
+int <- interval(ymd("1900-01-01"), ymd("1999-12-31"))
+time_length(int, "year")
+
+
+
+
+test_marks_5_2013 = with(test_marks_5, test_marks_5[(Year == 2013),])
+test_marks_5_2014= with(test_marks_5, test_marks_5[(Year == 2014),])
+test_marks_5_2015 = with(test_marks_5, test_marks_5[(Year == 2015),])
+
+
+plot_2013 = ggplot(data = test_marks_5_2013, aes(Name, test_marks_5_2013$`Avg Oral Score`, fill=as.factor(Subject))) + geom_col(position="dodge") + labs(x="Student Name", y="Grade Average", fill="Subject Name")
+plot_2014 = ggplot(data = test_marks_5_2014, aes(Name, test_marks_5_2014$`Avg Oral Score`, fill=as.factor(Subject))) + geom_col(position="dodge") + labs(x="Student Name", y="Grade Average", fill="Subject Name")
+plot_2015 = ggplot(data = test_marks_5_2015, aes(Name, test_marks_5_2015$`Avg Oral Score`, fill=as.factor(Subject))) + geom_col(position="dodge") + labs(x="Student Name", y="Grade Average", fill="Subject Name")
+
+
+plots = cbind(plot_2013, plot_2014, plot_2015)
+
+
+```
