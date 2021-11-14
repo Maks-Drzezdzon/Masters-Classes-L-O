@@ -10,6 +10,7 @@ library(sqldf)
 library(eeptools)
 library(Rcpp, "1.0.7")
 library(reshape2)
+library(lubridate)
 # lab 6
 df = read.csv("/Users/Grim/Documents/GitHub/Masters-Classes-L-O/Data Visualisation/data/studentresult.csv", sep= ',' , header=T )
 
@@ -22,9 +23,16 @@ plot = ggplot(data = test_marks, aes(Name, Test_mark, fill=as.factor(Subject))) 
 plot
 
 # Q2
-test_marks_2 = sqldf('select Name, avg(Mark_Written) as "Written Exam", avg(Mark_Oral) as "Oral Exam" from df
-group by Name')
-plot = ggplot(data = test_marks_2, aes(Name, value, fill=as.factor(Exam))) + geom_col(position = "dodge") + labs(x="Student Name", y="Avg Test Score", title="Q3 What is the relationship between age and mark??", fill="Subjects")
+test_marks_2 = sqldf('select DOB, Subject, Name, round(avg(Mark_Written) + avg(Mark_Oral), 1)/2 as Test_mark from df
+group by Name, Subject')
+
+test_marks_2$DOB = year(strptime("11-11-2021", format = "%d-%m-%Y")) - year(strptime(test_marks_2$DOB, format = "%d-%m-%Y"))
+names(test_marks_2)[1] = "Age"
+plot = ggplot(data=test_marks_2, aes(x=Age, y=Test_mark, group=1)) +
+  geom_line(color="blue")+
+  geom_point() + labs(x="Age", y="Grade Average", 
+       title="Q2 What is the relationship between age and mark?", fill="Subjects")
+
 plot
 
 # Q3 
@@ -60,7 +68,8 @@ library(sqldf)
 library(eeptools)
 library(Rcpp, "1.0.7")
 library(reshape2)
-# lab 6
+library(lubridate)
+# lab 7
 df = read.csv("/Users/Grim/Documents/GitHub/Masters-Classes-L-O/Data Visualisation/data/studentresult.csv", sep= ',' , header=T )
 test_marks = sqldf('select Name, avg(Mark_Written) as "Written Exam", avg(Mark_Oral) as "Oral Exam" from df
 group by Name')
@@ -88,10 +97,38 @@ qplot(test_marks$`Mark Written`, geom="histogram", xlab="Mark Ranges for Student
 # Q2-3
 # Fit a line to a scatter plot of age against Written Marks. (1 mark)
 # scatter plot 
+test_marks_age = sqldf('select DOB, Subject, Name, round(avg(Mark_Written)) as "Mark Written" from df
+group by Name, Subject')
+
+test_marks_age$DOB = year(strptime("11-11-2021", format = "%d-%m-%Y")) - year(strptime(test_marks_age$DOB, format = "%d-%m-%Y"))
+names(test_marks_age)[1] = "Age"
+
+plot = ggplot(data=test_marks_age, aes(x=Age, y=test_marks_age$`Mark Written`, group=1)) +
+  geom_line(color="blue")+
+  geom_point() + labs(x="Age", y="Written Marks", 
+       title="Q2-3 Fit a line to a scatter plot of age against Written Marks", fill="Subjects")
+
+plot
 
 # Q2-4
 # Create a scatter plot with a separate line for each data series (per subject). (1 mark)
 # scatter plot 
+
+test_marks_age = sqldf('select DOB, Subject, Name, round(avg(Mark_Written)) as "Mark Written" from df
+group by Name, Subject')
+
+test_marks_age$DOB = year(strptime("11-11-2021", format = "%d-%m-%Y")) - year(strptime(test_marks_age$DOB, format = "%d-%m-%Y"))
+names(test_marks_age)[1] = "Age"
+
+plot = ggplot(data=test_marks_age, aes(x=Age, y=test_marks_age$`Mark Written`, group=1)) +
+  geom_line(color="blue")+
+  geom_point() + labs(x="Age", y="Written Marks", 
+       title="Q2-3 Fit a line to a scatter plot of age against Written Marks", fill="Subjects")
+
+plot
+
+# https://stackoverflow.com/questions/14860078/plot-multiple-lines-data-series-each-with-unique-color-in-r
+# https://r-coder.com/scatter-plot-r/
 
 ```
 
