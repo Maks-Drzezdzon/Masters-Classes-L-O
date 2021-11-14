@@ -62,20 +62,22 @@ ggplot(data=test_marks_5, aes(x=Name, y=test_marks_5$`Avg Oral Score`, fill=Subj
 
 ```
 
-```{r, fig.width = 10, fig.height = 5}
+```{r, fig.width = 10, fig.height = 6}
 library(tidyverse)
 library(sqldf)
 library(eeptools)
 library(Rcpp, "1.0.7")
 library(reshape2)
 library(lubridate)
+library(magrittr)
+library(dplyr)
+
 # lab 7
 df = read.csv("/Users/Grim/Documents/GitHub/Masters-Classes-L-O/Data Visualisation/data/studentresult.csv", sep= ',' , header=T )
 test_marks = sqldf('select Name, avg(Mark_Written) as "Written Exam", avg(Mark_Oral) as "Oral Exam" from df
 group by Name')
 pivot_data = melt(test_marks ,  id.vars = 'Name', variable.name = 'Exam')
 plot = ggplot(data = pivot_data, aes(Name, value, fill=as.factor(Exam))) + geom_col(position = "dodge") + labs(x="Student Name", y="Avg Test Score", title="Q1 plot the results for the written and oral exams in two bars per student", fill="Subjects")
-plot
 
 
 # Q2-1
@@ -95,37 +97,51 @@ qplot(test_marks$`Mark Written`, geom="histogram", xlab="Mark Ranges for Student
 
 
 # Q2-3
-# Fit a line to a scatter plot of age against Written Marks. (1 mark)
-# scatter plot 
-test_marks_age = sqldf('select DOB, Subject, Name, round(avg(Mark_Written)) as "Mark Written" from df
+# Fit a line to a scatter plot of age against Written Marks. 
+test_marks_age = sqldf('select DOB, Subject, Name, Mark_Written as "Mark Written" from df
 group by Name, Subject')
 
 test_marks_age$DOB = year(strptime("11-11-2021", format = "%d-%m-%Y")) - year(strptime(test_marks_age$DOB, format = "%d-%m-%Y"))
 names(test_marks_age)[1] = "Age"
 
 plot = ggplot(data=test_marks_age, aes(x=Age, y=test_marks_age$`Mark Written`, group=1)) +
-  geom_line(color="blue")+
+  geom_line(color="skyblue3")+
   geom_point() + labs(x="Age", y="Written Marks", 
-       title="Q2-3 Fit a line to a scatter plot of age against Written Marks", fill="Subjects")
-
+                      title="Q2-3 Fit a line to a scatter plot of age against Written Marks", fill="Subjects")
 plot
 
 # Q2-4
 # Create a scatter plot with a separate line for each data series (per subject). (1 mark)
-# scatter plot 
 
-test_marks_age = sqldf('select DOB, Subject, Name, round(avg(Mark_Written)) as "Mark Written" from df
+test_marks_age = sqldf('select DOB, Subject, Name, Mark_Written as "Mark Written" from df
 group by Name, Subject')
 
 test_marks_age$DOB = year(strptime("11-11-2021", format = "%d-%m-%Y")) - year(strptime(test_marks_age$DOB, format = "%d-%m-%Y"))
 names(test_marks_age)[1] = "Age"
 
-plot = ggplot(data=test_marks_age, aes(x=Age, y=test_marks_age$`Mark Written`, group=1)) +
-  geom_line(color="blue")+
+plot = ggplot(data=test_marks_age, aes(x=Age, y=test_marks_age$`Mark Written`, group=Subject, colour=Subject)) +
+  geom_line()+
   geom_point() + labs(x="Age", y="Written Marks", 
-       title="Q2-3 Fit a line to a scatter plot of age against Written Marks", fill="Subjects")
+                      title="Q2-4 Create a scatter plot with a separate line for each data series", fill="Subjects")
 
 plot
+
+# Q2-5
+# Create a bubble chart using ggplot by creating a scatter plot 
+# and adding the third dimension in the aesthetic option size. A fourth dimension can be added using the colour fill
+test_marks_5 = sqldf('select DOB, Subject, Name, Mark_Written as "Mark Written" from df
+group by Name, Subject')
+test_marks_5
+#plot = ggplot(test_marks_5, aes(x=Subject, y=test_marks_5$`Mark Written`)) + geom_point(aes(size=test_marks_5$`Mark Written`))
+#plot
+
+test_marks_5 %>%
+  arrange(desc(test_marks_5$`Mark Written`)) %>%
+  #mutate(country = factor(country, country)) %>%
+  ggplot(aes(x=Subject, y=test_marks_5$`Mark Written`, size=test_marks_5$`Mark Written`, color=test_marks_5$`Mark Written`)) +
+  geom_point(alpha=0.5) +
+  scale_size(range = c(.1, 24), name="Written Exam Marks") + labs(title = "Q2-5", x = "Subjects", y = "Written Marks", color = "Written Exam Marks Concentration")
+
 
 # https://stackoverflow.com/questions/14860078/plot-multiple-lines-data-series-each-with-unique-color-in-r
 # https://r-coder.com/scatter-plot-r/
