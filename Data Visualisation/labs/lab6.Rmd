@@ -184,9 +184,7 @@ df_year_2000 = with(df, df[(Year >= 2000),])
 
 df_year_2000_tmp = sqldf('select Year, count(Medal) as Medal, Country from df_year_2000 where Medal == "silver" group by Country')
 names(df_year_2000_tmp)[3] = "region"
-df_year_2000_tmp
 silver_medals = right_join(mapdata, df_year_2000_tmp, by="region")
-silver_medals
 
 # ====> ToDo add labels for countries
 
@@ -211,7 +209,7 @@ map2 = map1 + scale_fill_gradient(name = "Total Medals Won", low = "white", high
         axis.title.y=element_blank(),
         axis.title.x=element_blank(),
         rect = element_blank())
-map2
+# map2
 
 
 # 2) How is the gender balance amongst the United States gold medalist? - Done
@@ -219,7 +217,7 @@ df_usa = with(df, df[(Country == "USA"),])
 df_usa = with(df_usa, df_usa[(Medal == "gold"),])
 
 df_usa_tmp = sqldf('select count(Gender) as Medal_Count, Medal, Gender from df_usa where Country="USA" group by Gender')
-df_usa_tmp
+
 
 plot = ggplot(data = df_usa_tmp, aes(Gender, Medal_Count, fill=as.factor(Gender))) +
   geom_col(position="dodge") + 
@@ -244,8 +242,6 @@ df_countires_list = with(df, df[(Country == c("USA", "Sweden", "Austria", "Switz
 df_countires_list = with(df_countires_list, df_countires_list[(Medal == "gold"),])
 
 
-df_countires_list_tmp = sqldf('select Event, count(Medal) as Medal_Count, Country from df_countires_list where Medal_Count != 0 group by Country, Event')
-
 
 plot = ggplot(data = df_countires_list_tmp, aes(Event, Medal_Count, fill=as.factor(Country))) +
   geom_col(position="dodge") + 
@@ -257,7 +253,6 @@ plot
 # 4) Who has the most total medals? - Done
 
 medals_total = sqldf('select count(Medal) as Medal_Count, Country from df group by Country')
-medals_total
 
 plot = ggplot(data = medals_total, aes(Country, Medal_Count, fill=as.factor(Country))) +
   geom_col(position="dodge") + 
@@ -267,16 +262,8 @@ plot
 
 
 # 5) What is the variation and spread of ages among gold and silver medalists?
-tmp_df = df
-tmp_df$DOB = year(strptime("11-11-2021", format = "%d-%m-%Y")) - year(strptime(tmp_df$DOB, format = "%d-%m-%Y"))
-names(tmp_df)[1] = "Age"
-medal_age = tmp_df %>% drop_na()
-medal_age_df = sqldf('select Athlete_Age, Medal from medal_age where Medal != "bronze"')
-plot = ggplot(data = medal_age_df, aes(Athlete_Age, Medal, fill=as.factor(Athlete_Age))) + 
-  geom_col(position="dodge") + labs(x="Medal Name", y="Athlete Age", 
-           title="Q5 What is the variation and spread of ages among gold and silver medalists?", fill="Athlete Age Range") + coord_flip()
-plot
-# 5)
+
+
 ```
 
 
