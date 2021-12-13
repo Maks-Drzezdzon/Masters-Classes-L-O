@@ -1,0 +1,97 @@
+
+%%% Preamble
+\documentclass[	DIV=calc,%
+							paper=a4,%
+							fontsize=11pt,%
+							twocolumn]{scrartcl}	 				% KOMA-article class
+
+\usepackage[english]{babel}										    % English language/hyphenation
+\usepackage[protrusion=true,expansion=true]{microtype}				% Better typography
+\usepackage{amsmath,amsfonts,amsthm}					            % Math packages
+\usepackage[pdftex]{graphicx}									    % Enable pdflatex
+\usepackage[svgnames]{xcolor}									    % Enabling colors by their 'svgnames'
+\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption}	% Custom captions under/above floats
+\usepackage{epstopdf}												% Converts .eps to .pdf
+\usepackage{subfig}													% Subfigures
+\usepackage{booktabs}												% Nicer tables
+\usepackage{fix-cm}													% Custom fontsizes
+\usepackage{apacite}                                                % Apa citations
+
+\bibliographystyle{apacite}
+
+
+
+%%% Custom sectioning (sectsty package)
+\usepackage{sectsty}													% Custom sectioning (see below)
+\allsectionsfont{%															% Change font of al section commands
+	\usefont{OT1}{phv}{b}{n}%										% bch-b-n: CharterBT-Bold font
+	}
+
+\sectionfont{%																% Change font of \section command
+	\usefont{OT1}{phv}{b}{n}%										% bch-b-n: CharterBT-Bold font
+	}
+
+
+
+%%% Headers and footers
+\usepackage{fancyhdr}												% Needed to define custom headers/footers
+	\pagestyle{fancy}														% Enabling the custom headers/footers
+\usepackage{lastpage}	
+
+% Header (empty)
+\lhead{}
+\chead{}
+\rhead{}
+% Footer (you may change this to your own needs)
+\lfoot{Student Name Surname - D000000000}
+\cfoot{}
+\rfoot{\footnotesize \thepage}	% "Page 1 of 2"
+\renewcommand{\headrulewidth}{0.0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+
+
+%%% Title, author and date metadata
+\usepackage{titling}															% For custom titles
+
+\newcommand{\HorRule}{\color{DarkGoldenrod}%			% Creating a horizontal rule
+									  	\rule{\linewidth}{1pt}%
+										}
+%%begin novalidate
+\pretitle{\vspace{-30pt} \begin{flushleft} \HorRule 
+				\fontsize{20}{20} \usefont{OT1}{phv}{b}{n} \color{Black} \selectfont 
+				}
+\title{Research Design \& Proposal writing (full proposal): title}					% Title of your article goes here
+\posttitle{ \end{flushleft}\vskip 0.5em Dataset}
+
+\preauthor{\begin{flushleft}
+					\large \lineskip 0.5em \usefont{OT1}{phv}{b}{sl} \color{DarkRed}}
+\author{Student Name Surname - D000000000 }										
+\postauthor{\footnotesize  \usefont{OT1}{phv}{m}{sl} \color{Black} 
+                    \par
+					TU0XXX - MSc in ... - University Name 						
+					\end{flushleft}\HorRule}
+%%end novalidate
+\date{}																				% No date
+
+
+%%% Begin document
+\begin{document}
+\maketitle
+\thispagestyle{fancy} 			% Enabling the custom headers/footers for the first page 
+
+\section{Background, Context and Scope}
+
+\section{Problem Description}
+\cite{Goodfellow2014} did this and that
+
+\subsection{Approaches to solve the problem}
+\subsection{Gaps in Research}
+\section{Research Question}
+
+
+\section{Hypothesis}
+\section{Design and Implementation}
+\bibliography{bibliography_file}
+
+\end{document}
