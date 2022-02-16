@@ -1,0 +1,35 @@
+"### Body Fat [file=bodyfat.txt]#####
+Data consists of estimates of the percentage of body fat determined by underwater 
+weighing and various body circumference measurements for 252 men. 
+The 15 variables are:
+
+Density determined from Hydrostatic Weighing => Percent body fat
+
+13 Predictors (potentially)
+Age (years),
+Weight (lbs),
+Height (inches),
+Neck circumference (cm),
+Chest circumference (cm),
+Abdomen 2 circumference (cm),
+Hip circumference (cm),
+Thigh circumference (cm),
+Knee circumference (cm),
+Ankle circumference (cm),
+Biceps (extended) circumference (cm),
+Forearm circumference (cm),
+Wrist circumference (cm).
+
+1) Read these data into R
+
+2) Use the add1(.) and update(.) functions to apply the forward selection method with
+p-values and an entry criterion of 0.1
+
+3). Use the drop1(.) and update(.) functions to apply the backward selection method with
+p-values and an stay criterion of 0.05
+
+4.) Use the step(.) function to perform forward, backward and stepwise using AIC.
+
+5.) Use the glmnet package to fit the Lasso model to these data.
+."
+

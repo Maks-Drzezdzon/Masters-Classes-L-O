@@ -1,0 +1,30 @@
+"A motor insurance company is conducting an analysis of historic
+customer retention data. The response variable is a binary 
+indicator of whether that customer renewed their car insurance at
+the end of their policy period or did not (1=renewed, 0=did not 
+renew). Potential predictors were: the age group of the customer;
+the type of cover (comprehensive or third party fire & theft) and
+the engine size of the insured vehicle (coded A, B and C in order of 
+increasing engine size). 
+
+(a) Read the insurance.csv data into R.
+
+(b) Fit a logistic regression model to these data with retained 
+as the reponse variable and age, cover and engine_size as 
+predictors. Which predictors are related to the response?
+
+(c) Find the estimated odds ratio that a customer in the 20-29 
+age group will renew over a customer in the 50-60 age group - all
+other variables being equal.
+
+(d) Discuss the evidence for the predictor ‘cover’ being related
+to the response. 
+
+(e) Predict the probability that a customer with the following 
+values of the predictors would renew: age= 40-49, cover = 
+comprehensive, engine size= A.
+
+(f) State what type of customer the intercept is modelling in 
+this case. Calculate the odds that such a customer will renew and
+determine a 95% confidence interval for this odds."
+

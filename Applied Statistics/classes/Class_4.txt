@@ -1,0 +1,31 @@
+"
+An experiment was performed to compare the effectiveness of 4 different 
+treatments on postoperative dental pain. The treatments were combinations of codeine
+and acupuncture. The Pain Data set is on the website. Download it and read it into
+R. It consists of 5 variables as follows.
+(a) Painlevel: baseline pain tolerance.
+(b) Codeine: indicator variable, 1=no codeine administered, 2=codeine adminis-
+tered.
+(c) Acupuncture: indicator variable, 1=no acupuncture administered, 2=acupunc-
+ture administered.
+(d) Relief: Pain relief from self-reporting.
+(e) Treat: factor variable with the following factor; Treat Code
+1=no codeine, no acupuncture
+2=codeine, no acupuncture
+3=no codeine, acupuncture
+4=codeine, acupuncture
+
+(2.) To perform a regression analysis on these data use lm(.) with the factor(.) 
+function and treat as the single predictor. This will automatically create the
+required dummy variables and impose the set to zero constraint to get a solution. 
+To do this you must declare the variable treat as a factor variable. 
+
+(3.) Get the parameter estimate table and write down what each parameter in the parameter
+estimate table is estimating in the context of the experiment performed.
+
+(3.) Create the dummy variables by hand for fitting the same model as that given 
+using factor(.).
+
+(4.) Fit a new model, allowing for an effect of codeine and the effect of acupuncture
+separately. Con you see any advantages/disadvantages to this model?
+"

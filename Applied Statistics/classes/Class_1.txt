@@ -1,0 +1,25 @@
+"
+(1) Download the optometry_SE_AC.xls spreadsheet and open it in Excel. Save it as a csv (comma separated value file) - it should now be called optometry_SE_AC.csv. 
+
+(2) Open optometry_SE_AC.csv in a text editor to take a look at its structure.
+
+(3) Read the data in this file into R as a dataframe.
+
+(4) Rename the two columns to make them easier to reference.
+
+(5) Get a report-ready scatter plot of mean spherical error (on the vertical axis) against  anterior chamber depth - include nice plot and axis labels etc.
+
+(6) Fit a simple linear regression model to these data with spherical error as the response. What do you conclude?
+
+(7) Plot the simple ls line on your scatter plot and include a suitable descriptive legend for this line.
+
+(8) Fit a quadratic curved line as well - is there any evidence that we need a curved line here?
+
+(9) In any case, plot the curved line on the scatter plot and amend the legend accordingly.
+
+(10) Save the plot as a .png image or .jpeg image for inclusion in a report.
+
+"
+######################################
+
+

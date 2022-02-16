@@ -1,0 +1,25 @@
+"
+Research is conducted on the effect of two types of antibiotics in treating 
+leprosy. For each patient, the volume of leprosy bacillus are recorded from 
+six sites on their body both pre-treatment and again post-treatment. Five 
+patients  were assigned  to one of two antibiotic treatments (drugs A and D) 
+and five  were assigned to a standard drug as a control (drug F). 
+
+The data can be found in the leprosy.csv file on Webcourses.
+
+A model is fitted to these data with post-treatment bacillus volume as the 
+response, drug as a categorical predictor, pre-treatment bacilli volume as 
+a continuous predictor and the interaction of drug and pre-treatment bacillus 
+volume. 
+
+Fit this model and establish if the interaction is required. What is the 
+geometric interpretation of this model?
+
+Refit the model without the interaction included. What is the geometric 
+interpretation of this revised model? 
+
+Compare the 3 treatments using a general linear hypothesis and the glht() 
+function from the multcomp library. Which pairs of treatments (if any) are 
+statistically different from each other? 
+"
+

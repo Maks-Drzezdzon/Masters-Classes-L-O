@@ -1,0 +1,14 @@
+A study is conducted on 252 men and their percentage body fat is measured along with the circumference of their neck. 
+
+The data are collected in the file called `bf_study.csv' which is available to download. A simple linear regression model is to be fitted to these data where neck_circumference is the predictor and  body_fat is the response.  
+ 
+[NB: You should summarise your answers in writing. ]
+
+(1) Read these data into R using programming statements.
+(2) Get a report ready scatter plot of these data, including suitable axes labels.
+(3) Fit a simple least squares model to these data. Interpret the LS parameter estimates.
+(4) Conduct a suitable hypothesis test to determine if the predictor is related to the response. State the null and alternative hypotheses, the test statistic, its distribution under the null hypothesis and state your conclusions clearly.
+(5) Find and interpret a 90% CI for the slope.
+(6) Use R to add a plot of the LS line to the scatter plot, add an appropriate legend and export the plot to a pdf graphic file.
+
+

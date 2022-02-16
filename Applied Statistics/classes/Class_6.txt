@@ -1,0 +1,27 @@
+"### cotton dataset #####
+The dataset cotton.csv dataset should be read into R. These data are from a
+experiment to relate tensile strength in fabric (lb/in^2, the repsonse) to 
+cotton weight by percentage of the fabric (catgprcial response)
+
+(1) Create indicator (dummy variables) for each different cotton_weight value 
+in the dataset. Call these dummy15-dummy35. Attempt to fit a regression model 
+using the lm funciton with dummy15-dummy35 as the predictors - what do you 
+notice? 
+
+(2) Use the anovatab function to get the anova table for the model you fitted.
+
+(3) Use the factor function in the lm() call on the cotton_weight predictor 
+and use the anovatab function on this model - compare with your previous 
+results - what do you notice?
+
+(4) Interpret the parameter estimates in the two model and compare/contrast 
+(use the summary function).
+
+(5) Use the lsmeans library to do a pair-wise comparison of cotton_weights 
+using the none, the Bonferroni and FDR correction methods - what are your 
+conclusions?
+
+(6) Conduct a GLH using the mutlcomp library to test whether 
+weight(30)=weight(35). State the null and alternative hypothesis and your 
+conclusions."
+
