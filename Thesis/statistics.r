@@ -11,7 +11,7 @@ setwd("~/GitHub/Data/mlsp-2014-mri")
 getwd()
 
 
-labels_train = read.csv(file='Train/train_labels.csv',head=TRUE,sep=",")
+labels_train = read.csv(file='Train/train_labels.csv', head=TRUE, sep=",")
 labels_train
 # Convert 'Class' into an unordered categorical variable, and assign labels
 # to each level.
