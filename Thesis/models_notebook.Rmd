@@ -1,0 +1,174 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+
+```{r - setup, reload data}
+library(sparseSVM)
+library(SVMMaj)
+library(WeightSVM)
+library(e1071) # SVM package 
+library(kernlab) # SVM package/s - has multiple libs such as LiblineaR, kernlab, e1071, obliqueRF
+
+# Notes for kernlab - seems to have e1071 svm impl too aswell as other libraries
+# https://topepo.github.io/caret/available-models.html 
+# https://stackoverflow.com/questions/18911338/vastly-different-results-for-svm-model-using-e1071-and-caret
+# https://www.thekerneltrip.com/statistics/kernlab-vs-e1071/#:~:text=While%20kernlab%20implements%20kernel%2Dbased,bagged%20clustering%2C%20naive%20Bayes%20classifier. 
+
+library(rdwd) # DWD package
+library(sdwd) # SparseDWD
+library(kerndwd)
+library(DWDLargeR)
+
+library(caret) # data split - https://rdrr.io/rforge/caret/man/createDataPartition.html
+library(mlbench) # https://cran.r-project.org/web/packages/mlbench/mlbench.pdf
+
+getwd()
+
+
+y_labels_train = read.csv(file='mlsp-2014-mri/Train/train_labels.csv', head=TRUE, sep=",") # this is your y var
+# Convert 'Class' into an unordered categorical variable, and assign labels
+# to each level.
+y_labels_train$Class = factor(y_labels_train$Class) # labels=c('Healthy_Control','Schizophrenic_Patient')
+# 46 control # 40 patient 
+
+############################
+# loading and merging data #
+############################
+
+FNC_train = read.csv(file='mlsp-2014-mri/Train/train_FNC.csv',head=TRUE,sep=",")
+SBM_train = read.csv(file='mlsp-2014-mri/Train/train_SBM.csv',head=TRUE,sep=",")
+train_data = merge(FNC_train, SBM_train, by = "Id")
+train_data = merge(train_data, y_labels_train, by="Id")
+
+
+SBM_test = read.csv(file='mlsp-2014-mri/Test/test_SBM.csv',head=TRUE,sep=",")
+FNC_test = read.csv(file='mlsp-2014-mri/Test/test_FNC.csv',head=TRUE,sep=",")
+test_data = merge(FNC_test, SBM_test, by = "Id")
+
+#######################################
+# data 70% - 30% split for train-test #
+#######################################
+# https://rdrr.io/rforge/caret/man/createDataPartition.html
+# get indices for 70% of the data set
+tmp_data = createDataPartition(y = train_data$Class, p = 0.8, list=FALSE)
+
+# seperate test and training sets
+train_sample_data = train_data[tmp_data,]
+test_sample_data = train_data[-tmp_data,]
+
+
+```
+
+
+
+```{r - SVM Baseline}
+sample_sub = read.csv(file='mlsp-2014-mri/submission_example.csv',head=TRUE,sep=",")
+
+getModelInfo(model = "svmPoly")
+
+# best params {'C': 100, 'cache_size': 200, 'coef0': 0.7, 'gamma': 0.0001, 'kernel': 'poly', 'random_state': 0} rs 104
+set.seed(104)
+train_control = trainControl(method = "cv", number = 10, search = "grid")
+
+"""
+param_grid = expand.grid(C=c(1,2,3,4,5),
+                         degree=c(1,2,3,4),
+                         scale=seq(0,0.1, by=0.001))
+
+svm_model_poly = train(Class ~ ., 
+                       data = train_sample_data, 
+                       method = "svmPoly",
+                       trControl = train_control,
+                       tuneLength = 10,
+                       tuneGrid =param_grid,
+                       verbose=FALSE)
+
+svm_model_poly = svm_model_poly$finalModel
+
+
+tmp = tune(svm, 
+           Class~., 
+           data = train_sample_data,
+           kernel = "polynomial",
+           ranges = list(cost = c(100, 75, 50, 25, 10), gamma = c(0.0001, 0.0002, 0.0003, 0.0004, 0.0005, 0.0006), scale = TRUE, coef0=0.7),
+           tunecontrol = tune.control(sampling = "cross")
+         )
+
+summary(tmp)
+
+svm_model_poly = tmp$best.model
+"""
+
+svm_model_poly = svm(Class ~ ., data = train_sample_data, kernel = "polynomial", cost=100, coef0= 0.7, cachesize=200, gamma=0.0001, scale = TRUE) 
+# scale = True because ive 86 features
+# tune poly look for better degree
+pred = predict(svm_model_poly, test_data)
+
+sample_sub$Probability = pred
+
+write.csv(sample_sub,file='new_submission.csv',row.names=FALSE)
+
+svm_model_rbf = svm(Class ~ ., data = train_sample_data, scale = TRUE) # rbf
+pred = predict(svm_model_rbf, test_data, type="Class")
+
+svm_model_linear = svm(Class ~ ., data = train_sample_data, kernel = "linear", scale = TRUE)
+pred = predict(svm_model_linear, test_data, type="Class")
+
+svm_model_sigmoid = svm(Class ~ ., data = train_sample_data, kernel = "sigmoid", scale = TRUE)
+pred = predict(svm_model_sigmoid, test_data, type="Class")
+
+```
+
+
+
+```{r - DWD Baseline}
+
+```
+
+
+
+
+```{r - sparseSVM}
+
+```
+
+
+
+
+```{r - SVMMaj}
+
+```
+
+
+
+
+```{r - WeightSVM}
+
+```
+
+
+
+
+
+```{r - SparseDWD}
+
+```
+
+
+
+
+```{r - kerndwd}
+
+```
+
+
+
+
+
+
+```{r - DWDLargeR}
+
+```
