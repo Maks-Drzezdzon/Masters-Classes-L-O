@@ -18,6 +18,23 @@ setwd("~/GitHub/Masters-Classes-L-O/Applied Statistics/data_stats")
 getwd()
 data = read.csv("skincells.csv")
 
+anovatab <-
+  function(mod){
+    tab=as.matrix(anova(mod))
+    rows=dim(tab)[1]
+    moddf=sum(tab[,1])-tab[rows,1]
+    ssmodel=sum(tab[,2])-tab[rows,2]
+    msmodel=ssmodel/moddf
+    f=msmodel/tab[rows,3]
+    p=1-pf(f,moddf,tab[rows,1])
+    tab2=tab[(rows-1):rows,]
+    tab2[1,1:5]=c(moddf,ssmodel,msmodel,f,p)
+    tab2=rbind(tab2,c(moddf+tab2[2,1],ssmodel+tab2[2,2],rep(NA,3)))
+    rownames(tab2)=c('Model','Error','Total')
+    colnames(tab2)[1]='df'
+    return(print(tab2,na.print = "" , quote = FALSE,digits=3))
+  }
+
 
 "
 ################
@@ -107,7 +124,6 @@ colnames(data)[3] = "number of live cells (log2)"
 # Desc stats
 summary(data)
 
-
 # store reference 
 tmp_df = data
 
@@ -117,6 +133,7 @@ data$`day of observation` = as.factor(data$`day of observation`)
 # - look up what graph best to use for this data
 # - what is the least squared line used for????
 # - quadratic curved line # https://stackoverflow.com/questions/42764028/fitting-a-quadratic-curve-in-ggplot
+
 
 tmp_scatter_plot = ggplot(data, aes(x=`number of live cells (log2)`,
                                 y=`time exposed to radiation (minutes)`, 
@@ -158,7 +175,15 @@ possibility of interactions between the predictors. Submit your complete R progr
 code with suitable explanatory in-code comments.
 "
 
+m1 = lm(`number of live cells (log2)`~`time exposed to radiation (minutes)`, data=data)
+m2 = lm(`number of live cells (log2)`~`time exposed to radiation (minutes)` + `day of observation`, data=data)
 
+m1
+
+m2
+
+summary(m1)
+summary(m2)
 
 
 
@@ -168,11 +193,18 @@ code with suitable explanatory in-code comments.
 ```{r - 3) (Submission deadline: 1.00pm 14th March 2022)}
 "
 Report your fndings (4 pages maximum excluding R-code): summarise the relationship
-between predictor(s) and the response(what are the average efects, confdence intervals,
+between predictor(s) and the response
+
+
+(what are the average effects, confdence intervals,
 results of tests of hypotheses etc.). Present plots where appropriate.
 "
 
+confint(m1,level=0.9)
+confint(m2,level=0.9)
 
+anovatab(m1)
+anovatab(m2)
 
 
 
