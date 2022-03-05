@@ -296,6 +296,8 @@ dwd_polynomial = kerndwd(x, y, kern, qval=1, eps=1e-5, maxit=1e5)
 pred = predict(dwd_polynomial, kern, x, test_data)
 
 
+
+# TODO https://discuss.analyticsvidhya.com/t/how-to-resolve-error-na-nan-inf-in-foreign-function-call-arg-6-in-knn/7280/3
 # fit laplacian kernel -- Error in dwdpath(x, y, nobs, np, kern, qval, ulam, nlam, wt, eps, maxit, : NA/NaN/Inf in foreign function call (arg 2)
 kern = laplacedot(sigma = 1)
 dwd_laplacian = kerndwd(x, y, kern, qval=1, eps=1e-5, maxit=1e5)
@@ -338,9 +340,15 @@ pred = predict(dwd_spline, kern, x, test_data)
 ```{r - DWDLargeR}
 
 
+# calculate the best penalty parameter
+penalty_param = penaltyParameter(x, y,expon=1)
+# solve the generalized DWD model
+dwd_larger_r = genDWD(x, y, penalty_param, expon=1)
 
+pred = predict(dwd_larger_r, test_data)
 
-
+# TODO Error in genDWD(x, y, penalty_param, expon = 1) : trying to get slot "ra" from an object of a basic class ("matrix") with no slots
+# Im tired do this later
 
 ```
 
