@@ -200,8 +200,9 @@ summary(svm_maj_v2)
 svm_maj_v3 = svmmaj(x, y, weight.obs = weight.obs, spline.knots = 3, spline.degree = 2)
 plotWeights(svm_maj_v3, plotdim = c(2, 4))
 
-
-
+pred = predict(svm_maj, tmp_test_data)
+pred = predict(svm_maj_v2, tmp_test_data)
+pred = predict(svm_maj_v3, tmp_test_data)
 
 ```
 
