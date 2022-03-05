@@ -63,15 +63,7 @@ test_sample_data = train_data[-tmp_data,]
 ```
 
 
-
-```{r - SVM Baseline}
-sample_sub = read.csv(file='mlsp-2014-mri/submission_example.csv',head=TRUE,sep=",")
-
-getModelInfo(model = "svmPoly")
-
-# best params {'C': 100, 'cache_size': 200, 'coef0': 0.7, 'gamma': 0.0001, 'kernel': 'poly', 'random_state': 0} rs 104
-set.seed(104)
-train_control = trainControl(method = "cv", number = 10, search = "grid")
+```{temp}
 
 """
 param_grid = expand.grid(C=c(1,2,3,4,5),
@@ -101,6 +93,17 @@ summary(tmp)
 
 svm_model_poly = tmp$best.model
 """
+```
+
+
+```{r - SVM Baseline}
+sample_sub = read.csv(file='mlsp-2014-mri/submission_example.csv',head=TRUE,sep=",")
+
+getModelInfo(model = "svmPoly")
+
+# best params {'C': 100, 'cache_size': 200, 'coef0': 0.7, 'gamma': 0.0001, 'kernel': 'poly', 'random_state': 0} rs 104
+set.seed(104)
+train_control = trainControl(method = "cv", number = 10, search = "grid")
 
 svm_model_poly = svm(Class ~ ., data = train_sample_data, kernel = "polynomial", cost=100, coef0= 0.7, cachesize=200, gamma=0.0001, scale = TRUE) 
 # scale = True because ive 86 features
