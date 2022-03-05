@@ -163,7 +163,6 @@ sparse_svm = sparseSVM(x, y)
 tmp_test_data = as.matrix(tmp_x)
 
 pred = predict(sparse_svm, tmp_test_data, lambda = c(0.2, 0.1))
-pred
 
 
 
@@ -171,14 +170,13 @@ sparse_svm_cross_val = cv.sparseSVM(x, y, nfolds = 5, ncores = 2, seed = 1234)
 
 pred = predict(sparse_svm_cross_val, tmp_test_data, lambda = c(0.2, 0.1))
 
-pred
 
 ```
 
 
 
 
-```{r - SVMMaj}
+```{r - SVMMaj - Implemented}
 # depends on running setup in sparseSVM
 
 # TODO look up plotting functions for this alg
@@ -211,6 +209,7 @@ pred = predict(svm_maj_v3, tmp_test_data)
 
 
 ```{r - WeightSVM - Work in prog}
+# depends on running setup in sparseSVM
 
 # reset data - clean this up and write why you did it so you dont forget
 # TODO read above
@@ -227,7 +226,6 @@ test_sample_data = train_data[-tmp_data,]
 weight_svm = wsvm(Class ~ ., weight = rep(1,69), data = train_sample_data)
 
 pred = predict(weight_svm, tmp_test_data, lambda = c(0.2, 0.1))
-pred
 
 
 ```
@@ -235,7 +233,7 @@ pred
 
 
 
-```{r - SparseDWD}
+```{r - SparseDWD - Work in prog}
 # Convert factor back to num array without loosing information 
 # TODO look up plotting functions for this alg
 
@@ -262,7 +260,7 @@ sparse_dwd = sdwd(x, y, lambda2=1)
 tmp_test_data = as.matrix(tmp_x)
 
 pred = predict(sparse_dwd, tmp_test_data)
-pred
+
 
 ```
 
@@ -270,6 +268,64 @@ pred
 
 
 ```{r - kerndwd}
+# https://cran.r-project.org/web/packages/kerndwd/kerndwd.pdf
+
+# fit a linear DWD
+kern = vanilladot()
+dwd_linear = kerndwd(x, y, kern, qval=1, eps=1e-5, maxit=1e5)
+pred = predict(dwd_linear, kern, x, test_data)
+
+
+
+# fit a DWD using Gaussian kernel
+kern = rbfdot(sigma=1)
+dwd_gaussian = kerndwd(x, y, kern, qval=1, eps=1e-5, maxit=1e5)
+pred = predict(dwd_gaussian, kern, x, test_data)
+
+
+# fit a weighted kernel DWD
+kern = rbfdot(sigma=1)
+weights = c(1, 2)[factor(y)]
+dwd_weighted_gaussian = kerndwd(x, y, kern, qval=1, wt = weights, eps=1e-5, maxit=1e5)
+pred = predict(dwd_weighted_gaussian, kern, x, test_data)
+
+
+# fit polynomial kernel
+kern = polydot(degree = 1, scale = 1, offset = 1)
+dwd_polynomial = kerndwd(x, y, kern, qval=1, eps=1e-5, maxit=1e5)
+pred = predict(dwd_polynomial, kern, x, test_data)
+
+
+# fit laplacian kernel -- Error in dwdpath(x, y, nobs, np, kern, qval, ulam, nlam, wt, eps, maxit, : NA/NaN/Inf in foreign function call (arg 2)
+kern = laplacedot(sigma = 1)
+dwd_laplacian = kerndwd(x, y, kern, qval=1, eps=1e-5, maxit=1e5)
+pred = predict(dwd_laplacian, kern, x, test_data)
+
+
+# fit bessel kernel -- Error in dwdpath(x, y, nobs, np, kern, qval, ulam, nlam, wt, eps, maxit, : NA/NaN/Inf in foreign function call (arg 2)
+kern = besseldot(sigma = 1, order = 1, degree = 1)
+nobs = nrow(test_data)
+dwd_bessel = kerndwd(x, y, kern, qval=1, eps=1e-5, maxit=1e5)
+pred = predict(dwd_bessel, kern, x, test_data)
+
+
+# fit anova rbf kernel where rbf is a gaussian kernel 
+kern = anovadot(sigma = 1, degree = 1)
+dwd_anova = kerndwd(x, y, kern, qval=1, eps=1e-5, maxit=1e5)
+pred = predict(dwd_anova, kern, x, test_data)
+
+
+# fit spline kernel - Error: cannot allocate vector of size 106.8 Gb
+kern = splinedot()
+dwd_spline = kerndwd(x, y, kern, qval=1, eps=1e-5, maxit=1e5)
+pred = predict(dwd_spline, kern, x, test_data)
+
+
+# TODO add models to list and loop over them later - read about optimizing these kernels later
+
+# sigest(x)
+
+
 
 
 
@@ -281,6 +337,17 @@ pred
 
 ```{r - DWDLargeR}
 
+
+
+
+
+
+```
+
+
+
+```{r - TODO write functions here to gather statistics, put into df and write out, loop over models and append etc}
+# TODO read title
 
 
 
