@@ -180,6 +180,7 @@ pred
 
 ```{r - SVMMaj}
 # depends on running setup in sparseSVM
+
 # TODO look up plotting functions for this alg
 svm_maj = svmmaj(x, y, hinge = 'quadratic', lambda = 1)
 
@@ -209,9 +210,24 @@ pred = predict(svm_maj_v3, tmp_test_data)
 
 
 
-```{r - WeightSVM - Weight doesnt work}
+```{r - WeightSVM - Work in prog}
 
-weights.obs = list(positive = 1, negative = 2)
+# reset data - clean this up and write why you did it so you dont forget
+# TODO read above
+# https://www.rdocumentation.org/packages/WeightSVM/versions/1.7-9/topics/wsvm
+# https://cran.r-project.org/web/packages/WeightSVM/WeightSVM.pdf
+
+tmp_data = createDataPartition(y = train_data$Class, p = 0.8, list=FALSE)
+
+# seperate test and training sets
+train_sample_data = train_data[tmp_data,]
+test_sample_data = train_data[-tmp_data,]
+
+# this worked
+weight_svm = wsvm(Class ~ ., weight = rep(1,69), data = train_sample_data)
+
+pred = predict(weight_svm, tmp_test_data, lambda = c(0.2, 0.1))
+pred
 
 
 ```
