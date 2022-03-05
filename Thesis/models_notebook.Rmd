@@ -137,29 +137,38 @@ pred = predict(svm_model_sigmoid, test_data, type="Class")
 
 ```{r - sparseSVM}
 # Convert factor back to num array without loosing information 
+
+tmp_data = createDataPartition(y = train_data$Class, p = 1, list=FALSE)
+
+# separate test and training sets
+train_sample_data = train_data[tmp_data,]
+
+# convert factor to numeric array without loosing data
 f = train_sample_data$Class
 y = as.numeric(levels(f))[f]
+tmp_y = y
+y = replace(tmp_y, tmp_y == 0, -1)
 
-#y = replace(tmp_y, tmp_y == 1, -1)
 
-#y = replace(tmp_y, tmp_y == 0, -1)
-
-y
-X = matrix(rnorm(1000*100), 1000, 100)
-
+# remove target variable
 tmp_x = subset(train_sample_data, select = -c(Class))
+# convert to matrix
 x = as.matrix(tmp_x)
+sparse_svm = sparseSVM(x, y)
 
-fit = sparseSVM(x, y)
-# summary(fit)
+tmp_test_data = as.matrix(tmp_x)
 
-sparse_svm = cv.sparseSVM(x, y, nfolds = 5, ncores = 2, seed = 1234)
+pred = predict(sparse_svm, tmp_test_data)
+pred
 
-tmp_test_data = as.matrix(test_data)
-train_sample_data
-pred = predict(fit, tmp_test_data[])
 
-pred = predict(sparse_svm, tmp_test_data, lambda = c(0.2, 0.1))
+
+
+sparse_svm_cross_val = cv.sparseSVM(x, y, nfolds = 5, ncores = 2, seed = 1234)
+
+pred = predict(sparse_svm_cross_val, tmp_test_data, lambda = c(0.2, 0.1))
+
+pred
 
 ```
 
