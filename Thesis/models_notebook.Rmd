@@ -235,10 +235,51 @@ pred
 
 
 
-
 ```{r - SparseDWD}
 
 
+# load the data
+data(colon)
+# fit the elastic-net penalized DWD with lambda2=1
+fit = sdwd(colon$x, colon$y, lambda2=1)
+print(fit)
+# coefficients at some lambda value
+c1 = coef(fit, s=0.005)
+# make predictions
+predict(fit, newx=colon$x[1:10, ], s=c(0.01, 0.005))
+
+
+
+
+
+
+# Convert factor back to num array without loosing information 
+# TODO look up plotting functions for this alg
+
+tmp_data = createDataPartition(y = train_data$Class, p = 1, list=FALSE)
+
+# separate test and training sets
+train_sample_data = train_data[tmp_data,]
+
+# convert factor to numeric array without loosing data
+f = train_sample_data$Class
+y = as.numeric(levels(f))[f]
+tmp_y = y
+# this algo needs it to be in 1 and -1 format so im replacing it now before it crashes, 
+# docs say it does it on its own but it doesnt seem to work
+y = replace(tmp_y, tmp_y == 0, -1)
+
+
+# remove target variable
+tmp_x = subset(train_sample_data, select = -c(Class))
+# convert to matrix
+x = as.matrix(tmp_x)
+sparse_dwd = sdwd(x, y, lambda2=1)
+
+tmp_test_data = as.matrix(tmp_x)
+
+pred = predict(sparse_dwd, tmp_test_data)
+pred
 
 ```
 
@@ -255,8 +296,11 @@ pred
 
 
 
-
-
 ```{r - DWDLargeR}
+
+
+
+
+
 
 ```
