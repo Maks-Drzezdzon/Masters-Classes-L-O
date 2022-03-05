@@ -17,7 +17,7 @@ library(kernlab) # SVM package/s - has multiple libs such as LiblineaR, kernlab,
 # https://stackoverflow.com/questions/18911338/vastly-different-results-for-svm-model-using-e1071-and-caret
 # https://www.thekerneltrip.com/statistics/kernlab-vs-e1071/#:~:text=While%20kernlab%20implements%20kernel%2Dbased,bagged%20clustering%2C%20naive%20Bayes%20classifier. 
 
-library(rdwd) # DWD package
+# library(rdwd) # DWD package
 library(sdwd) # SparseDWD
 library(kerndwd)
 library(DWDLargeR)
@@ -31,7 +31,8 @@ getwd()
 y_labels_train = read.csv(file='mlsp-2014-mri/Train/train_labels.csv', head=TRUE, sep=",") # this is your y var
 # Convert 'Class' into an unordered categorical variable, and assign labels
 # to each level.
-y_labels_train$Class = factor(y_labels_train$Class) # labels=c('Healthy_Control','Schizophrenic_Patient')
+y_labels_train$Class = factor(y_labels_train$Class) 
+# labels=c('Healthy_Control','Schizophrenic_Patient')
 # 46 control # 40 patient 
 
 ############################
@@ -135,6 +136,30 @@ pred = predict(svm_model_sigmoid, test_data, type="Class")
 
 
 ```{r - sparseSVM}
+# Convert factor back to num array without loosing information 
+f = train_sample_data$Class
+y = as.numeric(levels(f))[f]
+
+#y = replace(tmp_y, tmp_y == 1, -1)
+
+#y = replace(tmp_y, tmp_y == 0, -1)
+
+y
+X = matrix(rnorm(1000*100), 1000, 100)
+
+tmp_x = subset(train_sample_data, select = -c(Class))
+x = as.matrix(tmp_x)
+
+fit = sparseSVM(x, y)
+# summary(fit)
+
+sparse_svm = cv.sparseSVM(x, y, nfolds = 5, ncores = 2, seed = 1234)
+
+tmp_test_data = as.matrix(test_data)
+train_sample_data
+pred = predict(fit, tmp_test_data[])
+
+pred = predict(sparse_svm, tmp_test_data, lambda = c(0.2, 0.1))
 
 ```
 
@@ -143,12 +168,16 @@ pred = predict(svm_model_sigmoid, test_data, type="Class")
 
 ```{r - SVMMaj}
 
+
+
 ```
 
 
 
 
 ```{r - WeightSVM}
+
+
 
 ```
 
@@ -158,12 +187,17 @@ pred = predict(svm_model_sigmoid, test_data, type="Class")
 
 ```{r - SparseDWD}
 
+
+
 ```
 
 
 
 
 ```{r - kerndwd}
+
+
+
 
 ```
 
