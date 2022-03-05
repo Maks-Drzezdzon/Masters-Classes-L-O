@@ -236,23 +236,6 @@ pred
 
 
 ```{r - SparseDWD}
-
-
-# load the data
-data(colon)
-# fit the elastic-net penalized DWD with lambda2=1
-fit = sdwd(colon$x, colon$y, lambda2=1)
-print(fit)
-# coefficients at some lambda value
-c1 = coef(fit, s=0.005)
-# make predictions
-predict(fit, newx=colon$x[1:10, ], s=c(0.01, 0.005))
-
-
-
-
-
-
 # Convert factor back to num array without loosing information 
 # TODO look up plotting functions for this alg
 
