@@ -24,6 +24,7 @@ library(DWDLargeR)
 
 library(caret) # data split - https://rdrr.io/rforge/caret/man/createDataPartition.html
 library(mlbench) # https://cran.r-project.org/web/packages/mlbench/mlbench.pdf
+library(ggplot2)
 
 getwd()
 
@@ -97,7 +98,7 @@ svm_model_poly = tmp$best.model
 ```
 
 
-```{r - SVM Baseline}
+```{r - SVM Baseline - Implemented}
 sample_sub = read.csv(file='mlsp-2014-mri/submission_example.csv',head=TRUE,sep=",")
 
 getModelInfo(model = "svmPoly")
@@ -128,15 +129,16 @@ pred = predict(svm_model_sigmoid, test_data, type="Class")
 
 
 
-```{r - DWD Baseline}
+```{r - DWD Baseline - Missing}
 
 ```
 
 
 
 
-```{r - sparseSVM}
+```{r - sparseSVM - Implemented}
 # Convert factor back to num array without loosing information 
+# TODO look up plotting functions for this alg
 
 tmp_data = createDataPartition(y = train_data$Class, p = 1, list=FALSE)
 
@@ -147,6 +149,8 @@ train_sample_data = train_data[tmp_data,]
 f = train_sample_data$Class
 y = as.numeric(levels(f))[f]
 tmp_y = y
+# this algo needs it to be in 1 and -1 format so im replacing it now before it crashes, 
+# docs say it does it on its own but it doesnt seem to work
 y = replace(tmp_y, tmp_y == 0, -1)
 
 
@@ -158,9 +162,8 @@ sparse_svm = sparseSVM(x, y)
 
 tmp_test_data = as.matrix(tmp_x)
 
-pred = predict(sparse_svm, tmp_test_data)
+pred = predict(sparse_svm, tmp_test_data, lambda = c(0.2, 0.1))
 pred
-
 
 
 
@@ -176,6 +179,27 @@ pred
 
 
 ```{r - SVMMaj}
+# depends on running setup in sparseSVM
+# TODO look up plotting functions for this alg
+svm_maj = svmmaj(x, y, hinge = 'quadratic', lambda = 1)
+
+
+summary(svm_maj)
+
+# weights.obs = list(positive = 2, negative = 1)
+# I want to penalise negatives more, right?
+weights.obs = list(positive = 1, negative = 2)
+weights.obs
+## using radial basis kernel
+svm_maj_v2 = svmmaj(x, y, hinge = 'quadratic', lambda = 1, 
+                weights.obs = weights.obs, scale = 'interval', kernel = rbfdot, kernel.sigma = 1)
+
+summary(svm_maj_v2)
+
+## I-spline basis
+svm_maj_v3 = svmmaj(x, y, weight.obs = weight.obs, spline.knots = 3, spline.degree = 2)
+plotWeights(svm_maj_v3, plotdim = c(2, 4))
+
 
 
 
@@ -184,8 +208,9 @@ pred
 
 
 
-```{r - WeightSVM}
+```{r - WeightSVM - Weight doesnt work}
 
+weights.obs = list(positive = 1, negative = 2)
 
 
 ```
