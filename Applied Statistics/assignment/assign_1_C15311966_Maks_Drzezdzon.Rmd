@@ -13,10 +13,12 @@ library(semTools) #For skewness and kurtosis
 library(FSA) # For percentage
 library(car) # For Levene's test for homogeneity of variance 
 library(effectsize) # To calculate effect size for t-test
+library(kableExtra) # Used to generate report ready tables
 
 setwd("~/GitHub/Masters-Classes-L-O/Applied Statistics/data_stats")
 getwd()
 data = read.csv("skincells.csv")
+data$logcells = round(data$logcells, digit=5)
 
 anovatab <-
   function(mod){
@@ -97,11 +99,7 @@ i.e.
 the same number of replications at each exposure time on each day. But due to experimental
 loss, complete balance was not refected in the fnal data (e.g. some plates were contaminated
 and had to be discarded).
-
-
-
 "
-
 ```
 
 
@@ -117,17 +115,11 @@ in your report.
 
 # data
 
-colnames(data)[1] = "day of observation"
-colnames(data)[2] = "time exposed to radiation (minutes)"
-colnames(data)[3] = "number of live cells (log2)"
-
-# Desc stats
-summary(data)
-
-# store reference 
-tmp_df = data
-
-data$`day of observation` = as.factor(data$`day of observation`)
+colnames(data)[1] = "Day of Observation"
+colnames(data)[2] = "Time Exposed to Radiation (minutes)"
+colnames(data)[3] = "Number of Live Cells (log2)"
+tmp_df = data # store reference
+data$`Day of Observation` = as.factor(data$`Day of Observation`)
 
 # ToDo 
 # - look up what graph best to use for this data
@@ -135,22 +127,17 @@ data$`day of observation` = as.factor(data$`day of observation`)
 # - quadratic curved line # https://stackoverflow.com/questions/42764028/fitting-a-quadratic-curve-in-ggplot
 
 
-tmp_scatter_plot = ggplot(data, aes(x=`number of live cells (log2)`,
-                                y=`time exposed to radiation (minutes)`, 
+scatter_plot = ggplot(data, aes(x=`Time Exposed to Radiation (minutes)`,
+                                y=`Number of Live Cells (log2)`, 
                                 show.legend = T)) + 
                 geom_point(size=2) + 
-                ggtitle("Effect of radiation on cells") + 
-                stat_smooth(method = "lm", formula = y ~ x + I(x^2), size = 1)
+                ggtitle("Effect of Radiation on Cell Mortality") + 
+                stat_smooth(method = "lm", formula = y ~ x + I(x^2), size = 1) + 
+                theme(plot.title = element_text(hjust = 0.5))
+  
 
-tmp_scatter_plot
-
-scatter_plot = ggplot(data, aes(x=`number of live cells (log2)`,
-                                y=`time exposed to radiation (minutes)`, 
-                                color = `day of observation`, show.legend = T)) + 
-                geom_point(size=2) + 
-                ggtitle("Effect of radiation on cells over 4 days") + 
-                geom_smooth(method = "lm", se = FALSE)
 scatter_plot
+
 
 
 # reset reference 
@@ -165,9 +152,53 @@ data = tmp_df
 ```
 
 
+```{r - generate CI and df tables}
+kbl(data) %>%
+ kable_classic(full_width = F)
+
+group_means=by(data$`Number of Live Cells (log2)`, data$`Time Exposed to Radiation (minutes)`, t.test)
+
+group_means=matrix(c(unlist(group_means[['0']][5:4]),
+                     unlist(group_means[['0.5']][5:4]),
+                     unlist(group_means[['1.0']][5:4]),
+                     unlist(group_means[['1.5']][5:4]),
+                     unlist(group_means[['2.0']][5:4]),
+                     unlist(group_means[['2.5']][5:4]),
+                     unlist(group_means[['3.0']][5:4]),
+                     unlist(group_means[['3.5']][5:4])),
+                     nrow=8, ncol=3, byrow=T)
 
 
-```{r - 2) sdasdasdas (Submission deadline: 1.00pm 14th March 2022)}
+group_means = data.frame(cbind(group_means,c(0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5)))
+
+group_means$X1 = round(group_means$X1, digit=3)
+group_means$X2 = round(group_means$X2, digit=3)
+group_means$X3 = round(group_means$X3, digit=3)
+
+colnames(group_means)=c('Mean','Lower CL 95%','Upper CL 95%','Time Interval (minutes)')
+
+
+ggplot(group_means, aes(x=`Time Interval (minutes)`, y=group_means[,1])) +
+  geom_errorbar(aes(ymin=`Lower CL 95%`, ymax=`Upper CL 95%`), width=.1) +
+  geom_line() + 
+  geom_point() + 
+  expand_limits(y=c(5, 20)) + 
+  ylab("Count Live Cells (log2)") +
+  xlab('Time Intervals (minutes)') + 
+  labs(title="Average Cell Count at Time Interval & 95% CIs") + 
+  theme(text = element_text(size=16), axis.text.x=element_text(size=18), plot.title = element_text(hjust = 0.5)) 
+
+group_means = group_means %>% relocate(`Time Interval (minutes)`, .before = `Mean`)
+
+
+kbl(group_means) %>%
+ kable_classic(full_width = F)
+
+```
+
+
+
+```{r - 2) create models (Submission deadline: 1.00pm 14th March 2022)}
 "
 Using an R programme, analyse these data considering the two predictors, i.e. time
 (continuous) and day (categorical) and the response logcells. You should consider the
@@ -190,7 +221,7 @@ summary(m2)
 ```
 
 
-```{r - 3) (Submission deadline: 1.00pm 14th March 2022)}
+```{r - 3) Write report (Submission deadline: 1.00pm 14th March 2022)}
 "
 Report your fndings (4 pages maximum excluding R-code): summarise the relationship
 between predictor(s) and the response
@@ -200,8 +231,8 @@ between predictor(s) and the response
 results of tests of hypotheses etc.). Present plots where appropriate.
 "
 
-confint(m1,level=0.9)
-confint(m2,level=0.9)
+confint(m1,level=0.95)
+confint(m2,level=0.95)
 
 anovatab(m1)
 anovatab(m2)
