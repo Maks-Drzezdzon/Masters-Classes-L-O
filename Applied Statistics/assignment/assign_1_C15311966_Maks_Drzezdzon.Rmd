@@ -14,6 +14,7 @@ library(FSA) # For percentage
 library(car) # For Levene's test for homogeneity of variance 
 library(effectsize) # To calculate effect size for t-test
 library(kableExtra) # Used to generate report ready tables
+library(tidyverse) # data wrangling 
 
 setwd("~/GitHub/Masters-Classes-L-O/Applied Statistics/data_stats")
 getwd()
@@ -158,38 +159,41 @@ kbl(data) %>%
 
 group_means=by(data$`Number of Live Cells (log2)`, data$`Time Exposed to Radiation (minutes)`, t.test)
 
+
 group_means=matrix(c(unlist(group_means[['0']][5:4]),
                      unlist(group_means[['0.5']][5:4]),
-                     unlist(group_means[['1.0']][5:4]),
+                     unlist(group_means[['1']][5:4]),
                      unlist(group_means[['1.5']][5:4]),
-                     unlist(group_means[['2.0']][5:4]),
+                     unlist(group_means[['2']][5:4]),
                      unlist(group_means[['2.5']][5:4]),
-                     unlist(group_means[['3.0']][5:4]),
+                     unlist(group_means[['3']][5:4]),
                      unlist(group_means[['3.5']][5:4])),
                      nrow=8, ncol=3, byrow=T)
 
-
+group_means
 group_means = data.frame(cbind(group_means,c(0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5)))
 
-group_means$X1 = round(group_means$X1, digit=3)
-group_means$X2 = round(group_means$X2, digit=3)
-group_means$X3 = round(group_means$X3, digit=3)
+group_means$X1 = round(group_means$X1, digit=2)
+group_means$X2 = round(group_means$X2, digit=2)
+group_means$X3 = round(group_means$X3, digit=2)
 
-colnames(group_means)=c('Mean','Lower CL 95%','Upper CL 95%','Time Interval (minutes)')
+colnames(group_means)=c('Mean','Lower CI 95%','Upper CI 95%','Time Interval (minutes)')
 
+group_means
 
 ggplot(group_means, aes(x=`Time Interval (minutes)`, y=group_means[,1])) +
-  geom_errorbar(aes(ymin=`Lower CL 95%`, ymax=`Upper CL 95%`), width=.1) +
+  geom_errorbar(aes(ymin=`Lower CI 95%`, ymax=`Upper CI 95%`), width=.1) +
   geom_line() + 
   geom_point() + 
   expand_limits(y=c(5, 20)) + 
   ylab("Count Live Cells (log2)") +
   xlab('Time Intervals (minutes)') + 
   labs(title="Average Cell Count at Time Interval & 95% CIs") + 
-  theme(text = element_text(size=16), axis.text.x=element_text(size=18), plot.title = element_text(hjust = 0.5)) 
+  theme(text = element_text(size=16), axis.text.x=element_text(size=18), plot.title = element_text(hjust = 0.5))
 
 group_means = group_means %>% relocate(`Time Interval (minutes)`, .before = `Mean`)
 
+plot(group_means$`Time Interval (minutes)`, group_means$Mean)
 
 kbl(group_means) %>%
  kable_classic(full_width = F)
