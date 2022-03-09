@@ -15,6 +15,7 @@ library(car) # For Levene's test for homogeneity of variance
 library(effectsize) # To calculate effect size for t-test
 library(kableExtra) # Used to generate report ready tables
 library(tidyverse) # data wrangling 
+library(gtsummary) # generate table for model results 
 
 setwd("~/GitHub/Masters-Classes-L-O/Applied Statistics/data_stats")
 getwd()
@@ -210,16 +211,54 @@ possibility of interactions between the predictors. Submit your complete R progr
 code with suitable explanatory in-code comments.
 "
 
-m1 = lm(`number of live cells (log2)`~`time exposed to radiation (minutes)`, data=data)
-m2 = lm(`number of live cells (log2)`~`time exposed to radiation (minutes)` + `day of observation`, data=data)
+m1 = lm(data$`Number of Live Cells (log2)` ~ data$`Time Exposed to Radiation (minutes)`+factor(data$`Day of Observation`)+data$`Time Exposed to Radiation (minutes)`:factor(data$`Day of Observation`))
 
-m1
+# https://www.statology.org/diagnostic-plots-in-r/
 
-m2
-
+plot(m1)
 summary(m1)
-summary(m2)
+anovatab(m1)
 
+
+drop1(m1, test='F')
+
+m1 %>% tbl_regression() # https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html
+
+m2=lm(data$`Number of Live Cells (log2)` ~ data$`Time Exposed to Radiation (minutes)`)
+
+anovatab(m2)
+drop1(m2,test='F')
+summary(m2)
+confint(m2)
+
+
+## check for quadratic effect in Day of Observation
+m2_a = update(m2,.~.+I(data$`Day of Observation`^2))
+drop1(m2_a, test='F')
+
+
+"
+# TODO - do I really need this? 
+library(multcomp)
+# comparing --- types b and c
+
+L1=matrix(c(0, 0, 1, -1),nrow=1)
+glh1=glht(m2, linfct=L1)
+summary(glh1, test=Ftest())
+confint(glh1)
+
+# comparing --- types a and b
+L2=matrix(c(0, 0, 1, 0),nrow=1)
+glh2=glht(m2, linfct=L2)
+summary(glh2,test=Ftest())
+confint(glh2)
+
+# comparing --- types a and c
+L3=matrix(c(0, 0, 0, 1),nrow=1)
+glh3=glht(m2, linfct=L3)
+summary(glh3,test=Ftest())
+confint(glh3)
+"
 
 
 ```
