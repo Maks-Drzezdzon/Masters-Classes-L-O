@@ -215,18 +215,25 @@ m1 = lm(data$`Number of Live Cells (log2)` ~ data$`Time Exposed to Radiation (mi
 
 # https://www.statology.org/diagnostic-plots-in-r/
 
-plot(m1)
-summary(m1)
+# is there a difference in means?
 anovatab(m1)
+# plot(m1)
+# show with interval plot
+# done
+# compare the group means
 
+drop1(m1,test='F')
 
-drop1(m1, test='F')
+# assess model
+summary(m1)
+
 
 m1 %>% tbl_regression() # https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html
 
-m2=lm(data$`Number of Live Cells (log2)` ~ data$`Time Exposed to Radiation (minutes)`)
+m2=lm(data$`Number of Live Cells (log2)` ~ factor(data$`Time Exposed to Radiation (minutes)`))
 
 anovatab(m2)
+
 drop1(m2,test='F')
 summary(m2)
 confint(m2)
@@ -280,7 +287,10 @@ confint(m2,level=0.95)
 anovatab(m1)
 anovatab(m2)
 
-
+# https://support.minitab.com/en-us/minitab-express/1/help-and-how-to/modeling-statistics/anova/how-to/one-way-anova/interpret-the-results/key-results/
+# https://support.minitab.com/en-us/minitab-express/1/help-and-how-to/modeling-statistics/regression/how-to/multiple-regression/before-you-start/overview/
+# https://support.minitab.com/en-us/minitab-express/1/help-and-how-to/modeling-statistics/regression/how-to/simple-regression/before-you-start/overview/
+# https://support.minitab.com/en-us/minitab-express/1/help-and-how-to/modeling-statistics/regression/how-to/covariance/overview/
 
 
 ```
