@@ -16,6 +16,7 @@ library(effectsize) # To calculate effect size for t-test
 library(kableExtra) # Used to generate report ready tables
 library(tidyverse) # data wrangling 
 library(gtsummary) # generate table for model results 
+library(multcomp) # needed for glht 
 
 setwd("~/GitHub/Masters-Classes-L-O/Applied Statistics/data_stats")
 getwd()
@@ -226,46 +227,31 @@ drop1(m1,test='F')
 
 # assess model
 summary(m1)
-
+cov(m1)
+confint(m1)
 
 m1 %>% tbl_regression() # https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html
 
-m2=lm(data$`Number of Live Cells (log2)` ~ factor(data$`Time Exposed to Radiation (minutes)`))
+## check for quadratic effect in Day of Observation
+m1_a=lm(data$`Number of Live Cells (log2)` ~ factor(data$`Time Exposed to Radiation (minutes)`) + data$`Day of Observation`)
+summary(m1_a)
+m1_a = update(m1_a,.~.+I(data$`Day of Observation`^2))
+drop1(m1_a, test='F')
+
+m2=lm(`Number of Live Cells (log2)` ~ factor(`Time Exposed to Radiation (minutes)`), data = data)
 
 anovatab(m2)
 
 drop1(m2,test='F')
 summary(m2)
-confint(m2)
+
+m2 %>% tbl_regression(label=c("factor(`Time Exposed to Radiation (minutes)`)" ~ "Time Exposed to Radiation (minutes)"))
+
+confint(m2) 
 
 
-## check for quadratic effect in Day of Observation
-m2_a = update(m2,.~.+I(data$`Day of Observation`^2))
-drop1(m2_a, test='F')
-
-
-"
-# TODO - do I really need this? 
-library(multcomp)
-# comparing --- types b and c
-
-L1=matrix(c(0, 0, 1, -1),nrow=1)
-glh1=glht(m2, linfct=L1)
-summary(glh1, test=Ftest())
-confint(glh1)
-
-# comparing --- types a and b
-L2=matrix(c(0, 0, 1, 0),nrow=1)
-glh2=glht(m2, linfct=L2)
-summary(glh2,test=Ftest())
-confint(glh2)
-
-# comparing --- types a and c
-L3=matrix(c(0, 0, 0, 1),nrow=1)
-glh3=glht(m2, linfct=L3)
-summary(glh3,test=Ftest())
-confint(glh3)
-"
+glht1 = glht(m2, mcp("factor(`Time Exposed to Radiation (minutes)`)"="Tukey", interaction_average=TRUE))
+summary(glht1)
 
 
 ```
