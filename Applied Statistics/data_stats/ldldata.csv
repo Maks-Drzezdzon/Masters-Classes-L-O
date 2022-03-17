@@ -1,16 +1,3 @@
-Weight (KG),Cholesterol (mg/dL)
-70,100
-80,90
-80,110
-85,100
-85,110
-85,120
-85,130
-87,110
-90,120
-90,130
-92,140
-93,120
-95,140
-100,160
-105,150
+version https://git-lfs.github.com/spec/v1
+oid sha256:95c86d47953a7cf89321d2228c6a71dae013d0c1be656fab78e2e85591d83057
+size 138

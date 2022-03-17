@@ -24,7 +24,9 @@ library(DWDLargeR)
 
 library(caret) # data split - https://rdrr.io/rforge/caret/man/createDataPartition.html
 library(mlbench) # https://cran.r-project.org/web/packages/mlbench/mlbench.pdf
-library(ggplot2)
+library(ggplot2) # lib for making plots
+# https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html
+library(kableExtra) # Used to generate report ready tables
 
 getwd()
 

@@ -1,13 +1,3 @@
-No,Alternate,Bar,Fri/Sat,Hungry,Patrons,Price,Raining,Reservation,Type,WaitEst,WillWait?
-1,Yes,No,No,Yes,Some,$$$,No,Yes,French,0-10,Yes
-2,Yes,No,No,Yes,Full,$,No,No,Thai,30-60,No
-3,No,Yes,No,No,Some,$,No,No,Burger,0-10,Yes
-4,Yes,No,Yes,Yes,Full,$,No,No,Thai,10-30,Yes
-5,Yes,No,Yes,No,Full,$$$,No,Yes,French,>60,No
-6,No,Yes,No,Yes,Some,$$,Yes,Yes,Italian,0-10,Yes
-7,No,Yes,No,No,None,$,Yes,No,Burger,0-10,No
-8,No,No,No,Yes,Some,$$,Yes,Yes,Thai,0-10,Yes
-9,No,Yes,Yes,No,Full,$,Yes,No,Burger,>60,No
-10,Yes,Yes,Yes,Yes,Full,$$$,No,Yes,Italian,10-30,No
-11,No,No,No,No,None,$,No,No,Thai,0-10,No
-12,Yes,Yes,Yes,Yes,Full,$,No,No,Burger,30-60,Yes
+version https://git-lfs.github.com/spec/v1
+oid sha256:f68454f8e825f153847c353c9cc82ab9ae9a5bda8ac7ae76f44f8d7e0493052a
+size 638

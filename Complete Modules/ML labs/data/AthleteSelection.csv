@@ -1,21 +1,3 @@
-Athlete,Speed,Agility,Selected
-x1,2.5,6,No
-x2,3.75,8,No
-x3,2.25,5.5,No
-x4,3.25,8.25,No
-x5,2.75,7.5,No
-x6,4.5,5,No
-x7,3.5,5.25,No
-x8,3,3.25,No
-x9,4,4,No
-x10,4.25,3.75,No
-x11,2,2,No
-x12,5,2.5,No
-x13,8.25,8.5,Yes
-x14,5.75,8.75,Yes
-x15,4.75,6.25,Yes
-x16,5.5,6.75,Yes
-x17,5.25,9.5,Yes
-x18,7,4.25,Yes
-x19,7.5,8,Yes
-x20,7.25,3.75,Yes
+version https://git-lfs.github.com/spec/v1
+oid sha256:e645dea09a4299e4ea5cd14370608e0e8a7296367175a56a0b8478a7987eda04
+size 326
