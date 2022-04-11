@@ -1,0 +1,282 @@
+---
+title: "Assigment 1 Linear and Logistic Regression Models - C15311966 Maks Drzezdzon"
+output: html_notebook
+---
+
+
+
+```{r - setup, load data (Submission deadline: 1.00pm 14th March 2022) }
+library(pastecs) #For creating descriptive statistic summaries
+library(ggplot2) #For creating histograms with more detail than plot
+library(psych) # Some useful descriptive functions
+library(semTools) #For skewness and kurtosis
+library(FSA) # For percentage
+library(car) # For Levene's test for homogeneity of variance 
+library(effectsize) # To calculate effect size for t-test
+library(kableExtra) # Used to generate report ready tables
+library(tidyverse) # data wrangling 
+library(gtsummary) # generate table for model results 
+library(multcomp) # needed for glht 
+
+setwd("~/GitHub/Masters-Classes-L-O/Applied Statistics/data_stats")
+getwd()
+data = read.csv("skincells.csv")
+data$logcells = round(data$logcells, digit=5)
+
+anovatab <-
+  function(mod){
+    tab=as.matrix(anova(mod))
+    rows=dim(tab)[1]
+    moddf=sum(tab[,1])-tab[rows,1]
+    ssmodel=sum(tab[,2])-tab[rows,2]
+    msmodel=ssmodel/moddf
+    f=msmodel/tab[rows,3]
+    p=1-pf(f,moddf,tab[rows,1])
+    tab2=tab[(rows-1):rows,]
+    tab2[1,1:5]=c(moddf,ssmodel,msmodel,f,p)
+    tab2=rbind(tab2,c(moddf+tab2[2,1],ssmodel+tab2[2,2],rep(NA,3)))
+    rownames(tab2)=c('Model','Error','Total')
+    colnames(tab2)[1]='df'
+    return(print(tab2,na.print = "" , quote = FALSE,digits=3))
+  }
+
+
+"
+################
+# 4 page limit #
+################
+
+Methods expected to be used:
+Methods covered in the module up to and including video Regression 3B and lecture
+notes `Lecture 3'.
+
+#########
+# Notes #
+#########
+
+Variable Description
+
+=> day 
+
+The day (number code) that observation was recorded.
+
+
+
+=> time 
+
+The amount of radiation exposure in minutes the colony was
+exposed to in the solar simulator.
+
+
+
+=> logcells 
+
+The logarithm (base 2) of the number of live cells in the
+colony extrapolated from the sample result under the microscope.
+
+
+---------------------------------------------------------------
+----------------------------------------------------------------
+
+##############
+# Background #
+##############
+
+
+Introduction
+Researchers in the Radiation and Environmental Science Centre are conducting research into
+the effect of solar radiation on the mortality of human skin cells. Colonies of human skin cells
+are placed in medium and transferred to wells on experimental plates.
+
+These plates are then exposed to radiation in a solar simulator for various amounts of time from 0 (control) to 3.5
+minutes. After exposure, the number of live cells in a sample are counted under a microscope
+and the total number of live cells in the colony is extrapolated from the sample result. 
+
+The purpose of this experiment is to assess the effect of the varying times of exposure to radiation
+on cell death. Due to inherent variability in the response of cells, the researchers replicate
+their experiments a number of times. 
+
+There was also concern that environmental conditions within the lab from day to day may have an impact on the results. Therefore, the experiment is repeated over a number of days. Initially the experiment is designed with complete balance; 
+
+i.e.
+the same number of replications at each exposure time on each day. But due to experimental
+loss, complete balance was not refected in the fnal data (e.g. some plates were contaminated
+and had to be discarded).
+"
+```
+
+
+
+```{r - 1) Get Descriptive Statistics (Submission deadline: 1.00pm 14th March 2022)}
+"
+Using an R programme read these data into a data.frame and obtain basic descriptive
+statistics/plots of the data. Present salient features from this exploratory data analysis
+in your report.
+"
+
+# https://www2.nau.edu/lrm22/lessons/graph_tips/graph_tips.html#:~:text=The%20independent%20variable%20belongs%20on,%2Daxis%20(vertical%20line).
+
+# data
+
+colnames(data)[1] = "Day of Observation"
+colnames(data)[2] = "Time Exposed to Radiation (minutes)"
+colnames(data)[3] = "Number of Live Cells (log2)"
+tmp_df = data # store reference
+data$`Day of Observation` = as.factor(data$`Day of Observation`)
+
+# ToDo 
+# - look up what graph best to use for this data
+# - what is the least squared line used for????
+# - quadratic curved line # https://stackoverflow.com/questions/42764028/fitting-a-quadratic-curve-in-ggplot
+
+
+scatter_plot = ggplot(data, aes(x=`Time Exposed to Radiation (minutes)`,
+                                y=`Number of Live Cells (log2)`, 
+                                show.legend = T)) + 
+                geom_point(size=2) + 
+                ggtitle("Effect of Radiation on Cell Mortality") + 
+                stat_smooth(method = "lm", formula = y ~ x + I(x^2), size = 1) + 
+                theme(plot.title = element_text(hjust = 0.5))
+  
+
+scatter_plot
+
+
+
+# reset reference 
+data = tmp_df
+
+# ToDo 
+# class 2 https://brightspace.tudublin.ie/d2l/le/content/177851/viewContent/1382831/View
+# Class 3 https://brightspace.tudublin.ie/d2l/le/content/177851/viewContent/1382836/View
+ 
+
+
+```
+
+
+```{r - generate CI and df tables}
+kbl(data) %>%
+ kable_classic(full_width = F)
+
+group_means=by(data$`Number of Live Cells (log2)`, data$`Time Exposed to Radiation (minutes)`, t.test)
+
+
+group_means=matrix(c(unlist(group_means[['0']][5:4]),
+                     unlist(group_means[['0.5']][5:4]),
+                     unlist(group_means[['1']][5:4]),
+                     unlist(group_means[['1.5']][5:4]),
+                     unlist(group_means[['2']][5:4]),
+                     unlist(group_means[['2.5']][5:4]),
+                     unlist(group_means[['3']][5:4]),
+                     unlist(group_means[['3.5']][5:4])),
+                     nrow=8, ncol=3, byrow=T)
+
+group_means
+group_means = data.frame(cbind(group_means,c(0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5)))
+
+group_means$X1 = round(group_means$X1, digit=2)
+group_means$X2 = round(group_means$X2, digit=2)
+group_means$X3 = round(group_means$X3, digit=2)
+
+colnames(group_means)=c('Mean','Lower CI 95%','Upper CI 95%','Time Interval (minutes)')
+
+group_means
+
+ggplot(group_means, aes(x=`Time Interval (minutes)`, y=group_means[,1])) +
+  geom_errorbar(aes(ymin=`Lower CI 95%`, ymax=`Upper CI 95%`), width=.1) +
+  geom_line() + 
+  geom_point() + 
+  expand_limits(y=c(5, 20)) + 
+  ylab("Count Live Cells (log2)") +
+  xlab('Time Intervals (minutes)') + 
+  labs(title="Average Cell Count at Time Interval & 95% CIs") + 
+  theme(text = element_text(size=16), axis.text.x=element_text(size=18), plot.title = element_text(hjust = 0.5))
+
+group_means = group_means %>% relocate(`Time Interval (minutes)`, .before = `Mean`)
+
+plot(group_means$`Time Interval (minutes)`, group_means$Mean)
+
+kbl(group_means) %>%
+ kable_classic(full_width = F)
+
+```
+
+
+
+```{r - 2) create models (Submission deadline: 1.00pm 14th March 2022)}
+"
+Using an R programme, analyse these data considering the two predictors, i.e. time
+(continuous) and day (categorical) and the response logcells. You should consider the
+possibility of interactions between the predictors. Submit your complete R programme
+code with suitable explanatory in-code comments.
+"
+
+m1 = lm(data$`Number of Live Cells (log2)` ~ data$`Time Exposed to Radiation (minutes)`+factor(data$`Day of Observation`)+data$`Time Exposed to Radiation (minutes)`:factor(data$`Day of Observation`))
+
+# https://www.statology.org/diagnostic-plots-in-r/
+
+# is there a difference in means?
+anovatab(m1)
+# plot(m1)
+# show with interval plot
+# done
+# compare the group means
+
+drop1(m1,test='F')
+
+# assess model
+summary(m1)
+# cov(m1)
+confint(m1)
+
+m1 %>% tbl_regression() # https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html
+
+## check for quadratic effect in Day of Observation
+m1_a=lm(data$`Number of Live Cells (log2)` ~ factor(data$`Time Exposed to Radiation (minutes)`) + data$`Day of Observation`)
+summary(m1_a)
+m1_a = update(m1_a,.~.+I(data$`Day of Observation`^2))
+drop1(m1_a, test='F')
+
+m2=lm(`Number of Live Cells (log2)` ~ factor(`Time Exposed to Radiation (minutes)`), data = data)
+
+anovatab(m2)
+
+drop1(m2,test='F')
+summary(m2)
+
+m2 %>% tbl_regression(label=c("factor(`Time Exposed to Radiation (minutes)`)" ~ "Time Exposed to Radiation (minutes)"))
+
+confint(m2) 
+
+
+glht1 = glht(m2, mcp("factor(`Time Exposed to Radiation (minutes)`)"="Tukey", interaction_average=TRUE))
+summary(glht1)
+
+
+```
+
+
+```{r - 3) Write report (Submission deadline: 1.00pm 14th March 2022)}
+"
+Report your fndings (4 pages maximum excluding R-code): summarise the relationship
+between predictor(s) and the response
+
+
+(what are the average effects, confdence intervals,
+results of tests of hypotheses etc.). Present plots where appropriate.
+"
+
+confint(m1,level=0.95)
+confint(m2,level=0.95)
+
+anovatab(m1)
+anovatab(m2)
+
+# https://support.minitab.com/en-us/minitab-express/1/help-and-how-to/modeling-statistics/anova/how-to/one-way-anova/interpret-the-results/key-results/
+# https://support.minitab.com/en-us/minitab-express/1/help-and-how-to/modeling-statistics/regression/how-to/multiple-regression/before-you-start/overview/
+# https://support.minitab.com/en-us/minitab-express/1/help-and-how-to/modeling-statistics/regression/how-to/simple-regression/before-you-start/overview/
+# https://support.minitab.com/en-us/minitab-express/1/help-and-how-to/modeling-statistics/regression/how-to/covariance/overview/
+
+
+```
