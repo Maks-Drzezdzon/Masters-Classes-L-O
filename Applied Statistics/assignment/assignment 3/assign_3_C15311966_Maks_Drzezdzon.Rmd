@@ -54,31 +54,37 @@ anovatab =
   }
 
 get_var_name = function(var) {
+  # get the literal name of the variable 
   deparse(substitute(var))
 }
 
 
-get_plots = function(df, name, columns_to_assess, target){
+get_plots = function(df, df_name, columns_to_assess, target){
+  # @df => what df will be plotted 
+  # @df_name => name of df
+  # @columns_to_assess = which cols do you want to graph
+  # @target = your y value
   
   for (col in columns_to_assess){
       bar_plot = ggplot(df, aes_string(x=col,
                                   y=target, 
                                   show.legend = T)) + 
                   geom_bar(stat="identity") + 
-                  ggtitle(paste0("Effect of ", aes_string(x=col), " on customer churn for ", get_var_name(full_customer_dataset))) + 
+                  ggtitle(paste0("Effect of ", aes_string(x=col), " on customer churn for ", df_name)) + 
                   theme(plot.title = element_text(hjust = 0.5))
       print(bar_plot)
       
   }
   
+  
   # https://stats.stackexchange.com/questions/351781/how-to-plot-binary-presence-absence-1-0-data-against-continuous-variables
   conditional_density_plot = ggplot(df, aes(x=monthlycharges, fill=factor(churn))) + 
            geom_density(position = "stack") + 
            xlab("monthlycharges") + labs(fill='churn') +
-           ggtitle(paste0("Effect of ~monthlycharges on customer churn for ", name)) + 
+           ggtitle(paste0("Effect of ~monthlycharges on customer churn for ", df_name)) + 
            theme(legend.text=element_text(size=12), 
                  axis.title=element_text(size=14),
-                 plot.title = element_text(size=13))
+                 plot.title = element_text(size=11))
 
   
   return(conditional_density_plot)
@@ -87,11 +93,13 @@ get_plots = function(df, name, columns_to_assess, target){
 }
 
 
-combine_dfs_freq_table = function(columns){
+combine_dfs_freq_table = function(columns, df){
+  # hard coded data set full_customer_dataset
+  # @columns => what columns will be present in the frequency table  
   df_list = list()
   i=1
   for (col in cols){
-    tmp_df = data.frame(round(prop.table(table(full_customer_dataset[[col]])) * 100, 2))
+    tmp_df = data.frame(round(prop.table(table(df[[col]])) * 100, 2))
     colnames(tmp_df)[1] = "Values"
     tmp_df['Column Name'] = col
     df_list[[i]] = tmp_df
@@ -137,13 +145,30 @@ get_plots(customer_dataset_user_no_internet, get_var_name(customer_dataset_user_
 ```{r - generate CI and df tables for temp}
 
 df = full_customer_dataset
+kbl(df) %>%
+ kable_classic(full_width = F)
+
 cols_list = colnames(df)
 cols = cols_list[cols_list != "customerid" & cols_list != "monthlycharges"]
 df = subset(df, select=c(cols))
+data=df
+table_df = combine_dfs_freq_table(cols, df)
+kbl(table_df) %>%
+ kable_classic(full_width = F)
 
+df = customer_dataset_user_has_internet
+cols_list = colnames(df)
+cols = cols_list[cols_list != "customerid" & cols_list != "monthlycharges"]
+df = subset(df, select=c(cols))
+table_df = combine_dfs_freq_table(cols, df)
+kbl(table_df) %>%
+ kable_classic(full_width = F)
 
-table_df = combine_dfs_freq_table(cols)
-
+df = customer_dataset_user_no_internet
+cols_list = colnames(df)
+cols = cols_list[cols_list != "customerid" & cols_list != "monthlycharges"]
+df = subset(df, select=c(cols))
+table_df = combine_dfs_freq_table(cols, df)
 kbl(table_df) %>%
  kable_classic(full_width = F)
 
@@ -157,11 +182,20 @@ Using an R programme, analyse these data considering the two predictors, i.e. ti
 possibility of interactions between the predictors. Submit your complete R programme
 code with suitable explanatory in-code comments.
 "
-data_v2 = subset(data, temperature=='High')
+
+glm1 = glm(churn ~ (.)^2, data = data)
+anovatab(glm1)
+plot(glm1)
+drop1(glm1, test='F')
+summary(glm1)
+vcov(glm1)
+confint(glm1)
+
+emmeans(glm1, )
 
 
-m1 = lm(strength ~ factor(temperature) + factor(additive) + factor(additive):factor(temperature), data = data)
-m1 = lm(churn ~ ., data = df)
+# (.)^2 maps an interaction between all variables such as x1:x2 + x1:x3 + x2:x3... etc etc 
+m1 = lm(churn ~ (.)^2, data = data)
 m1
 # https://www.statology.org/diagnostic-plots-in-r/
 
