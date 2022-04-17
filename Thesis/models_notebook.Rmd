@@ -6,25 +6,41 @@ output: html_notebook
 
 
 ```{r - setup, reload data}
+# install.packages("penalizedSVM")
+
 library(sparseSVM)
 library(SVMMaj)
 library(WeightSVM)
 library(e1071) # SVM package 
 library(kernlab) # SVM package/s - has multiple libs such as LiblineaR, kernlab, e1071, obliqueRF
+library(penalizedSVM) # needed for Smoothly clipped absolute deviation penalty (SCAD)
+
+
 
 # Notes for kernlab - seems to have e1071 svm impl too aswell as other libraries
 # https://topepo.github.io/caret/available-models.html 
 # https://stackoverflow.com/questions/18911338/vastly-different-results-for-svm-model-using-e1071-and-caret
 # https://www.thekerneltrip.com/statistics/kernlab-vs-e1071/#:~:text=While%20kernlab%20implements%20kernel%2Dbased,bagged%20clustering%2C%20naive%20Bayes%20classifier. 
 
+
+
+
+
 # library(rdwd) # DWD package
 library(sdwd) # SparseDWD
 library(kerndwd)
 library(DWDLargeR)
 
+# Other
 library(caret) # data split - https://rdrr.io/rforge/caret/man/createDataPartition.html
 library(mlbench) # https://cran.r-project.org/web/packages/mlbench/mlbench.pdf
 library(ggplot2) # lib for making plots
+library(Boruta)
+library(glmnet)
+library(elasticnet)
+library(randomForest)
+
+
 # https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html
 library(kableExtra) # Used to generate report ready tables
 
@@ -66,42 +82,274 @@ test_sample_data = train_data[-tmp_data,]
 
 ```
 
+```{r - Feature selection}
 
-```{temp}
-
-"""
-param_grid = expand.grid(C=c(1,2,3,4,5),
-                         degree=c(1,2,3,4),
-                         scale=seq(0,0.1, by=0.001))
-
-svm_model_poly = train(Class ~ ., 
-                       data = train_sample_data, 
-                       method = "svmPoly",
-                       trControl = train_control,
-                       tuneLength = 10,
-                       tuneGrid =param_grid,
-                       verbose=FALSE)
-
-svm_model_poly = svm_model_poly$finalModel
+# https://academic.oup.com/comjnl/advance-article-abstract/doi/10.1093/comjnl/bxac033/6565626?redirectedFrom=fulltext
 
 
-tmp = tune(svm, 
-           Class~., 
-           data = train_sample_data,
-           kernel = "polynomial",
-           ranges = list(cost = c(100, 75, 50, 25, 10), gamma = c(0.0001, 0.0002, 0.0003, 0.0004, 0.0005, 0.0006), scale = TRUE, coef0=0.7),
-           tunecontrol = tune.control(sampling = "cross")
-         )
+# 0 = 'Healthy Control', 1 = 'Schizophrenic Patient'
 
-summary(tmp)
+#################
+# RANDOM FOREST #
+#################
 
-svm_model_poly = tmp$best.model
-"""
+# TODO
+# https://explained.ai/rf-importance/
+
+# making a dummy var, something you'd use in general linear regression
+
+tmp_data = cbind(train_data, rnorm(1:dim(train_data)[1]))
+colnames(tmp_data)[413] = 'dummy_var'
+cols_list = colnames(tmp_data)
+cols = cols_list[cols_list != "Id"]
+tmp_data = subset(tmp_data, select=c(cols))
+random_forest = randomForest(Class ~ ., data=tmp_data, 
+                             ntree = 2000, mtry = 100, 
+                             importance=TRUE, proximity=TRUE)  
+
+# drop everything below dummy_Var
+importance_df = data.frame(random_forest$importance)
+by_ill_acc_gain = importance_df[order(importance_df$X0, importance_df$MeanDecreaseAccuracy),]
+by_ill = importance_df[order(importance_df$X1),]
+by_acc_gain = importance_df[order(importance_df$MeanDecreaseAccuracy),]
+
+random_forest$importance
+
+importance(random_forest)
+
+# https://www.machinelearningplus.com/machine-learning/feature-selection/
+
+#######
+# RFE # 
+#######
+
+
+control = rfeControl(functions = rfFuncs, # random forest
+                      method = "repeatedcv", # repeated cv
+                      repeats = 10, 
+                      number = 20) # folds
+
+tmp = subset(train_data, select= -c(Class))
+
+
+result_rfe1 = rfe(x = tmp, 
+                   y = train_data$Class, 
+                   sizes = c(20:60), # best 20-60 features
+                   rfeControl = control)
+
+result_rfe1
+
+
+# https://towardsdatascience.com/effective-feature-selection-recursive-feature-elimination-using-r-148ff998e4f7
+predictors(result_rfe1)
+
+ggplot(data = result_rfe1, metric = "Accuracy") + theme_bw()
+ggplot(data = result_rfe1, metric = "Kappa") + theme_bw()
+
+
+arimp_data = data.frame(feature = row.names(varImp(result_rfe1))[1:60],
+                          importance = varImp(result_rfe1)[1:60, 1])
+
+ggplot(data = varimp_data, 
+       aes(x = reorder(feature, -importance), y = importance, fill = feature)) +
+  geom_bar(stat="identity") + labs(x = "Features", y = "Variable Importance") + 
+  geom_text(aes(label = round(importance, 2)), vjust=1.6, color="white", size=4) + 
+  theme_bw() + theme(legend.position = "none")
+
+
+#######
+# PCA #
+#######
+# TODO, do I even want to use this?
+
+
+
+
+
+#######
+# GLM #
+#######
+# Full interaction model 
+cols_list = colnames(train_data)
+cols = cols_list[cols_list != "Id"]
+tmp_data = subset(tmp_data, select=c(cols))
+
+# memory error......
+# glm1 = glm(Class ~ (.)^2, family=binomial, data = tmp_data)
+
+glm1 = glm(Class ~ ., family=binomial, data = tmp_data)
+
+summary(glm1)
+
+# TODO not working very well
+
+#############
+# GLM combo #
+#############
+
+
+
+
+
+
+#########
+# LASSO #
+#########
+
+fplasso <- glmnet(tmp_data[,1:410], tmp_data$Class, family = "multinomial", intercept = F, alpha=1)
+fplasso
+
+#Select features (with coefficients not shrunk to zero)
+coef(fplasso, s = "lambda.min")
+
+
+
+# Fit the LASSO model (Lasso: Alpha = 1)
+set.seed(100)
+cv.lasso <- cv.glmnet(as.matrix(tmp_data[,1:410]), as.double(tmp_data$Class), family='binomial', alpha=1, parallel=TRUE, standardize=TRUE, type.measure='auc')
+
+
+# Results
+plot(cv.lasso)
+
+
+
+
+
+drop=""
+drop=drop[drop==0]%>%names()
+
+
+##########
+# Boruta #
+##########
+
+boruta_output = Boruta(Class ~ ., data=na.omit(tmp_data), doTrace=0)  
+
+boruta_signif <- getSelectedAttributes(boruta_output, withTentative = TRUE)
+print(boruta_signif) 
+
+imps = attStats(roughFixMod)
+imps2 = imps[imps$decision != 'Rejected', c('meanImp', 'decision')]
+head(imps2[order(-imps2$meanImp), ]) 
+
+# Plot variable importance
+plot(boruta_output, cex.axis=.7, las=2, xlab="", main="Variable Importance")  
+
+
+
+
+
+##########################
+# no tentative variables #
+##########################
+
+roughFixMod = TentativeRoughFix(boruta_output)
+boruta_signif_2 = getSelectedAttributes(roughFixMod)
+print(boruta_signif_2)
+
+
+
+
+imps = attStats(roughFixMod)
+imps2 = imps[imps$decision != 'Rejected', c('meanImp', 'decision')]
+head(imps2[order(-imps2$meanImp), ]) 
+
+
+# Plot variable importance
+plot(boruta_output, cex.axis=.7, las=2, xlab="", main="Variable Importance")  
+
+
+
+
+
+##################################
+# rpart model feature importance #
+################################## 
+
+
+rPartMod = train(Class ~ ., data=tmp_data, method="rpart")
+rpartImp = varImp(rPartMod)
+print(rpartImp)
+
+
+#
+# regularized random forest 
+#
+
+rrfMod = train(Class ~ ., data=tmp_data, method="RRF")
+rrfImp = varImp(rrfMod, scale=F)
+rrfImp
+plot(rrfImp, top = 20, main='Variable Importance')
+
+
+#########################
+# IG (Information Gain) #
+#########################
+
+
+# TODO
+
+#
+# SVM - SCAD #
+# 
+
+# https://cran.r-project.org/web/packages/penalizedSVM/penalizedSVM.pdf
+# https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-12-138
+
+
+############
+# Stepwise #
+############
+
+# Step 1: Define base intercept only model
+base.mod <- lm(Class ~ 1 , data=tmp_data)  
+
+# Step 2: Full model with all predictors
+all.mod <- lm(Class ~ . , data= tmp_data) 
+
+# Step 3: Perform step-wise algorithm. direction='both' implies both forward and backward stepwise
+stepMod <- step(base.mod, scope = list(lower = base.mod, upper = all.mod), direction = "both", trace = 0, steps = 1000)  
+
+# Step 4: Get the shortlisted variable.
+shortlistedVars <- names(unlist(stepMod[[1]])) 
+shortlistedVars <- shortlistedVars[!shortlistedVars %in% "(Intercept)"] # remove intercept
+
+# Show
+print(shortlistedVars)
+
+
+
+#######
+# QVT #
+#######
+# TODO implement this or see if you have time to
+
+##########
+# QVT(B) #
+##########
+
+##########
+# QVT(L) #
+##########
+
+##########
+# QVT(X) #
+##########
+
+##########
+# QVT(I) #
+##########
+
+
+
+
 ```
 
 
+
 ```{r - SVM Baseline - Implemented}
-sample_sub = read.csv(file='mlsp-2014-mri/submission_example.csv',head=TRUE,sep=",")
+sample_sub = read.csv(file='mlsp-2014-mri/submission_example.csv', head=TRUE,sep=",")
 
 getModelInfo(model = "svmPoly")
 
