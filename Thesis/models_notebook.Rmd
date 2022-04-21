@@ -63,10 +63,10 @@ SBM_train = read.csv(file='mlsp-2014-mri/Train/train_SBM.csv',head=TRUE,sep=",")
 train_data = merge(FNC_train, SBM_train, by = "Id")
 train_data = merge(train_data, y_labels_train, by="Id")
 
-
-SBM_test = read.csv(file='mlsp-2014-mri/Test/test_SBM.csv',head=TRUE,sep=",")
-FNC_test = read.csv(file='mlsp-2014-mri/Test/test_FNC.csv',head=TRUE,sep=",")
-test_data = merge(FNC_test, SBM_test, by = "Id")
+# These dont have lables so its pointless to use for testing
+# SBM_test = read.csv(file='mlsp-2014-mri/Test/test_SBM.csv',head=TRUE,sep=",")
+# FNC_test = read.csv(file='mlsp-2014-mri/Test/test_FNC.csv',head=TRUE,sep=",")
+# test_data = merge(FNC_test, SBM_test, by = "Id")
 
 #######################################
 # data 70% - 30% split for train-test #
@@ -89,45 +89,50 @@ test_sample_data = train_data[-tmp_data,]
 
 # 0 = 'Healthy Control', 1 = 'Schizophrenic Patient'
 
-#################
-# RANDOM FOREST #
-#################
-
-# TODO
-# https://explained.ai/rf-importance/
-
+#############################
+# Regularized Random Forest #
+#############################
 # making a dummy var, something you'd use in general linear regression
 
 tmp_data = cbind(train_data, rnorm(1:dim(train_data)[1]))
 colnames(tmp_data)[413] = 'dummy_var'
 cols_list = colnames(tmp_data)
 cols = cols_list[cols_list != "Id"]
-tmp_data = subset(tmp_data, select=c(cols))
-random_forest = randomForest(Class ~ ., data=tmp_data, 
-                             ntree = 2000, mtry = 100, 
-                             importance=TRUE, proximity=TRUE)  
+data_with_dummy_var = subset(tmp_data, select=c(cols))
+
+RRF = train(Class ~ ., data=data_with_dummy_var, method="RRF")
+RRF_features = varImp(RRF, scale=F)
+RRF_features
+plot(RRF_features, top = 20, main='Variable Importance')
+
+# ignore below this 
+#random_forest = randomForest(Class ~ ., data=tmp_data, 
+#                             ntree = 2000, mtry = 100, 
+#                             importance=TRUE, proximity=TRUE)  
 
 # drop everything below dummy_Var
-importance_df = data.frame(random_forest$importance)
-by_ill_acc_gain = importance_df[order(importance_df$X0, importance_df$MeanDecreaseAccuracy),]
-by_ill = importance_df[order(importance_df$X1),]
-by_acc_gain = importance_df[order(importance_df$MeanDecreaseAccuracy),]
+#importance_df = data.frame(random_forest$importance)
+#by_ill_acc_gain = importance_df[order(importance_df$X0, importance_df$MeanDecreaseAccuracy),]
+#by_ill = importance_df[order(importance_df$X1),]
+#by_acc_gain = importance_df[order(importance_df$MeanDecreaseAccuracy),]
 
-random_forest$importance
+#random_forest$importance
 
-importance(random_forest)
+#importance(random_forest)
+#varImp(random_forest)
+# ignore above
 
-# https://www.machinelearningplus.com/machine-learning/feature-selection/
+# TODO investigate what to do with this if boruta is being used
 
 #######
 # RFE # 
 #######
-
+# https://topepo.github.io/caret/feature-selection-using-genetic-algorithms.html
 
 control = rfeControl(functions = rfFuncs, # random forest
                       method = "repeatedcv", # repeated cv
-                      repeats = 10, 
-                      number = 20) # folds
+                      repeats = 5, 
+                      verbose = FALSE) # folds
 
 tmp = subset(train_data, select= -c(Class))
 
@@ -158,15 +163,6 @@ ggplot(data = varimp_data,
 
 
 #######
-# PCA #
-#######
-# TODO, do I even want to use this?
-
-
-
-
-
-#######
 # GLM #
 #######
 # Full interaction model 
@@ -183,41 +179,26 @@ summary(glm1)
 
 # TODO not working very well
 
-#############
-# GLM combo #
-#############
-
-
-
-
-
 
 #########
 # LASSO #
 #########
 
-fplasso <- glmnet(tmp_data[,1:410], tmp_data$Class, family = "multinomial", intercept = F, alpha=1)
-fplasso
+# TODO DONE
+lasso_cv = cv.glmnet(as.matrix(tmp_data[,1:410]), as.double(tmp_data$Class), family='binomial', alpha=1, parallel=TRUE, standardize=TRUE, type.measure='auc')
 
-#Select features (with coefficients not shrunk to zero)
-coef(fplasso, s = "lambda.min")
-
-
-
-# Fit the LASSO model (Lasso: Alpha = 1)
-set.seed(100)
-cv.lasso <- cv.glmnet(as.matrix(tmp_data[,1:410]), as.double(tmp_data$Class), family='binomial', alpha=1, parallel=TRUE, standardize=TRUE, type.measure='auc')
+plot(lasso_cv)
+lasso_cv$lambda.min
+cat('Min Lambda: ', lasso_cv$lambda.min, '\n 1Sd Lambda: ', lasso_cv$lambda.1se)
 
 
-# Results
-plot(cv.lasso)
+# family has to be binomial to get coef otherwise multinomial
+df_lass_cv_coef = round(as.matrix(coef(lasso_cv, s=lasso_cv$lambda.min)), 4)
 
+# See all contributing variables/not shrunk to 0
+df_lass_cv_coef_survivors = df_lass_cv_coef[df_lass_cv_coef[, 1] != 0, ]
+df_lass_cv_coef_survivors
 
-
-
-
-drop=""
-drop=drop[drop==0]%>%names()
 
 
 ##########
@@ -226,18 +207,11 @@ drop=drop[drop==0]%>%names()
 
 boruta_output = Boruta(Class ~ ., data=na.omit(tmp_data), doTrace=0)  
 
-boruta_signif <- getSelectedAttributes(boruta_output, withTentative = TRUE)
+boruta_signif = getSelectedAttributes(boruta_output, withTentative = TRUE)
 print(boruta_signif) 
-
-imps = attStats(roughFixMod)
-imps2 = imps[imps$decision != 'Rejected', c('meanImp', 'decision')]
-head(imps2[order(-imps2$meanImp), ]) 
 
 # Plot variable importance
 plot(boruta_output, cex.axis=.7, las=2, xlab="", main="Variable Importance")  
-
-
-
 
 
 ##########################
@@ -249,8 +223,6 @@ boruta_signif_2 = getSelectedAttributes(roughFixMod)
 print(boruta_signif_2)
 
 
-
-
 imps = attStats(roughFixMod)
 imps2 = imps[imps$decision != 'Rejected', c('meanImp', 'decision')]
 head(imps2[order(-imps2$meanImp), ]) 
@@ -258,9 +230,6 @@ head(imps2[order(-imps2$meanImp), ])
 
 # Plot variable importance
 plot(boruta_output, cex.axis=.7, las=2, xlab="", main="Variable Importance")  
-
-
-
 
 
 ##################################
@@ -271,16 +240,6 @@ plot(boruta_output, cex.axis=.7, las=2, xlab="", main="Variable Importance")
 rPartMod = train(Class ~ ., data=tmp_data, method="rpart")
 rpartImp = varImp(rPartMod)
 print(rpartImp)
-
-
-#
-# regularized random forest 
-#
-
-rrfMod = train(Class ~ ., data=tmp_data, method="RRF")
-rrfImp = varImp(rrfMod, scale=F)
-rrfImp
-plot(rrfImp, top = 20, main='Variable Importance')
 
 
 #########################
@@ -303,22 +262,56 @@ plot(rrfImp, top = 20, main='Variable Importance')
 ############
 
 # Step 1: Define base intercept only model
-base.mod <- lm(Class ~ 1 , data=tmp_data)  
+lm_base = lm(Class ~ 1 , data=data_with_dummy_var[,1:411])  
 
 # Step 2: Full model with all predictors
-all.mod <- lm(Class ~ . , data= tmp_data) 
+lm_full = lm(Class ~ . , data=data_with_dummy_var[,1:411]) 
 
 # Step 3: Perform step-wise algorithm. direction='both' implies both forward and backward stepwise
-stepMod <- step(base.mod, scope = list(lower = base.mod, upper = all.mod), direction = "both", trace = 0, steps = 1000)  
+stepwise_m = step(lm_base, scope = list(lower = lm_base, upper = lm_full), direction = "both", trace = 0, steps = 1000)  
 
 # Step 4: Get the shortlisted variable.
-shortlistedVars <- names(unlist(stepMod[[1]])) 
-shortlistedVars <- shortlistedVars[!shortlistedVars %in% "(Intercept)"] # remove intercept
+shortlisted_vars = names(unlist(stepwise_m[[1]])) 
+shortlisted_vars = shortlisted_vars[!shortlisted_vars %in% "(Intercept)"] # remove intercept
 
 # Show
 print(shortlistedVars)
 
+################################
+# relative importance using LR #
+################################
 
+# install.packages('relaimpo')
+library(relaimpo)
+
+# Build linear regression model
+lm_model = lm(Class ~ ., data=data_with_dummy_var[,1:411])
+
+# calculate relative importance
+rel_imp = calc.relimp(lm_model, type = "lmg", rela = F)  
+
+# Sort
+cat('Relative Importances: \n')
+sort(round(rel_imp$lmg, 3), decreasing=TRUE)
+
+bootsub = boot.relimp(Class ~ ., data=data_with_dummy_var[,1:411],
+                       b = 1000, type = 'lmg', rank = TRUE, diff = TRUE)
+
+plot(booteval.relimp(bootsub, level=.95))
+
+
+
+# TODO 
+# read about DALEX for feature importance 
+library(DALEX)
+
+# Variable importance with DALEX
+explained_rf = explain(random_forest, data=data=data_with_dummy_var[,1:411], y=data_with_dummy_var$Class)
+
+# Get the variable importances
+varimps = variable_dropout(explained_rf, type='raw')
+
+print(varimps)
 
 #######
 # QVT #
