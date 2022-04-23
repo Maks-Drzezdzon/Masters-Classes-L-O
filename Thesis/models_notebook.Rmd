@@ -69,23 +69,32 @@ train_data = merge(train_data, y_labels_train, by="Id")
 # test_data = merge(FNC_test, SBM_test, by = "Id")
 
 #######################################
-# data 70% - 30% split for train-test #
+# data 80% - 20% split for train-test #
 #######################################
+train_data = train_data[,2:412]
+
 # https://rdrr.io/rforge/caret/man/createDataPartition.html
 # get indices for 70% of the data set
 tmp_data = createDataPartition(y = train_data$Class, p = 0.8, list=FALSE)
 
-# seperate test and training sets
+# separate test and training sets
 train_sample_data = train_data[tmp_data,]
 test_sample_data = train_data[-tmp_data,]
 
 
+get_top_features=function(features, size){
+  var_imp = varImp(features)
+  tmp_df = data.frame(var_imp[1])
+  feature_names = rownames(tmp_df)[order(tmp_df$Overall, decreasing=TRUE)][1:size]
+  features_subset_df = subset(train_data, select = feature_names)
+  return(features_subset_df)
+
+}
+
+
 ```
 
-```{r - Feature selection}
-
-# https://academic.oup.com/comjnl/advance-article-abstract/doi/10.1093/comjnl/bxac033/6565626?redirectedFrom=fulltext
-
+```{r - Regularized Random Forest - DONE - TODO go higher than 25}
 
 # 0 = 'Healthy Control', 1 = 'Schizophrenic Patient'
 
@@ -100,27 +109,24 @@ cols_list = colnames(tmp_data)
 cols = cols_list[cols_list != "Id"]
 data_with_dummy_var = subset(tmp_data, select=c(cols))
 
-RRF = train(Class ~ ., data=data_with_dummy_var, method="RRF")
-RRF_features = varImp(RRF, scale=F)
-RRF_features
-plot(RRF_features, top = 20, main='Variable Importance')
 
-# ignore below this 
-#random_forest = randomForest(Class ~ ., data=tmp_data, 
-#                             ntree = 2000, mtry = 100, 
-#                             importance=TRUE, proximity=TRUE)  
+size=25
+RRF = train(Class ~ ., data=train_data, method="RRF")
+RRF_features = varImp(RRF)
 
-# drop everything below dummy_Var
-#importance_df = data.frame(random_forest$importance)
-#by_ill_acc_gain = importance_df[order(importance_df$X0, importance_df$MeanDecreaseAccuracy),]
-#by_ill = importance_df[order(importance_df$X1),]
-#by_acc_gain = importance_df[order(importance_df$MeanDecreaseAccuracy),]
+feature_names = data.frame(RRF_features[1])
+feature_names = rownames(feature_names)[order(feature_names$Overall, decreasing=TRUE)][1:size]
 
-#random_forest$importance
 
-#importance(random_forest)
-#varImp(random_forest)
-# ignore above
+plot(RRF_features, top = size, main='Variable Importance')
+
+
+RRF_features_data =  get_top_features(RRF, size)
+
+
+```
+
+```{r - RFE - DONE}
 
 # TODO investigate what to do with this if boruta is being used
 
@@ -129,57 +135,37 @@ plot(RRF_features, top = 20, main='Variable Importance')
 #######
 # https://topepo.github.io/caret/feature-selection-using-genetic-algorithms.html
 
-control = rfeControl(functions = rfFuncs, # random forest
-                      method = "repeatedcv", # repeated cv
-                      repeats = 5, 
-                      verbose = FALSE) # folds
 
-tmp = subset(train_data, select= -c(Class))
-
-
-result_rfe1 = rfe(x = tmp, 
+# 203 was the highest you can go without including terms that lower model preformance 
+size = 203
+result_rfe_all_features = rfe(x = train_data[,1:410], 
                    y = train_data$Class, 
-                   sizes = c(20:60), # best 20-60 features
+                   # sizes = 410, # best all features
+                   # 410 found that some features were lowering accuracy
+                   sizes = size,
                    rfeControl = control)
 
-result_rfe1
+#predictors(result_rfe_all_features)
 
 
-# https://towardsdatascience.com/effective-feature-selection-recursive-feature-elimination-using-r-148ff998e4f7
-predictors(result_rfe1)
-
-ggplot(data = result_rfe1, metric = "Accuracy") + theme_bw()
-ggplot(data = result_rfe1, metric = "Kappa") + theme_bw()
+RFE_features_data = get_top_features(result_rfe_all_features, size)
 
 
-arimp_data = data.frame(feature = row.names(varImp(result_rfe1))[1:60],
-                          importance = varImp(result_rfe1)[1:60, 1])
+Varimp_data_all = data.frame(feature = row.names(varImp(result_rfe_all_features))[1:size],
+                          importance = varImp(result_rfe_all_features)[1:size, 1])
 
-ggplot(data = varimp_data, 
+ggplot(data=Varimp_data_all, 
        aes(x = reorder(feature, -importance), y = importance, fill = feature)) +
   geom_bar(stat="identity") + labs(x = "Features", y = "Variable Importance") + 
-  geom_text(aes(label = round(importance, 2)), vjust=1.6, color="white", size=4) + 
-  theme_bw() + theme(legend.position = "none")
+  # geom_text(aes(label = round(importance, 1)), vjust=1.6, color="white", size=4) + 
+  theme_bw() + theme(legend.position = "none", axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 
-#######
-# GLM #
-#######
-# Full interaction model 
-cols_list = colnames(train_data)
-cols = cols_list[cols_list != "Id"]
-tmp_data = subset(tmp_data, select=c(cols))
-
-# memory error......
-# glm1 = glm(Class ~ (.)^2, family=binomial, data = tmp_data)
-
-glm1 = glm(Class ~ ., family=binomial, data = tmp_data)
-
-summary(glm1)
-
-# TODO not working very well
+```
 
 
+
+```{r - LASSO - }
 #########
 # LASSO #
 #########
@@ -200,6 +186,10 @@ df_lass_cv_coef_survivors = df_lass_cv_coef[df_lass_cv_coef[, 1] != 0, ]
 df_lass_cv_coef_survivors
 
 
+```
+
+
+```{r - Boruta - }
 
 ##########
 # Boruta #
@@ -232,6 +222,13 @@ head(imps2[order(-imps2$meanImp), ])
 plot(boruta_output, cex.axis=.7, las=2, xlab="", main="Variable Importance")  
 
 
+
+```
+
+
+
+```{r - rpart - }
+
 ##################################
 # rpart model feature importance #
 ################################## 
@@ -242,21 +239,12 @@ rpartImp = varImp(rPartMod)
 print(rpartImp)
 
 
-#########################
-# IG (Information Gain) #
-#########################
 
 
-# TODO
-
-#
-# SVM - SCAD #
-# 
-
-# https://cran.r-project.org/web/packages/penalizedSVM/penalizedSVM.pdf
-# https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-12-138
+```
 
 
+```{r - Stepwise - }
 ############
 # Stepwise #
 ############
@@ -276,6 +264,63 @@ shortlisted_vars = shortlisted_vars[!shortlisted_vars %in% "(Intercept)"] # remo
 
 # Show
 print(shortlistedVars)
+
+
+```
+
+```{r - QVT - }
+
+
+
+
+```
+
+
+
+
+```{r - Feature selection, echo=TRUE, message=TRUE, warning=TRUE, paged.print=TRUE}
+
+# https://academic.oup.com/comjnl/advance-article-abstract/doi/10.1093/comjnl/bxac033/6565626?redirectedFrom=fulltext
+
+
+
+
+#######
+# GLM #
+#######
+# Full interaction model 
+cols_list = colnames(train_data)
+cols = cols_list[cols_list != "Id"]
+tmp_data = subset(tmp_data, select=c(cols))
+
+# memory error......
+# glm1 = glm(Class ~ (.)^2, family=binomial, data = tmp_data)
+
+glm1 = glm(Class ~ ., family=binomial, data = tmp_data)
+
+summary(glm1)
+
+# TODO not working very well
+
+
+
+
+
+#########################
+# IG (Information Gain) #
+#########################
+
+
+# TODO
+
+#
+# SVM - SCAD #
+# 
+
+# https://cran.r-project.org/web/packages/penalizedSVM/penalizedSVM.pdf
+# https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-12-138
+
+
 
 ################################
 # relative importance using LR #
