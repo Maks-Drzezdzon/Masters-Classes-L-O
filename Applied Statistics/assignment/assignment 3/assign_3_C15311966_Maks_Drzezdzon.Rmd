@@ -216,6 +216,8 @@ glm1 %>% tbl_regression()
 ```{r - 3) Write report (Submission deadline: 1.00pm 14th March 2022)}
 # https://stackoverflow.com/questions/14423325/confidence-intervals-for-predictions-from-logistic-regression
 new_data = data.frame(gender="Male", partner="Yes", monthlycharges=70.0, internetservice="Fiber optic", paymentmethod="Electronic check")
+preds = predict(glm1, new_data, interval = "confidence")
+preds
 preds = predict(glm1, new_data, se.fit = TRUE, type="response")
 critval = qnorm(0.975) ##  95% CI
 upr = preds$fit + (critval * preds$se.fit)
