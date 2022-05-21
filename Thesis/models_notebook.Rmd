@@ -14,7 +14,7 @@ library(WeightSVM)
 library(e1071) # SVM package 
 library(kernlab) # SVM package/s - has multiple libs such as LiblineaR, kernlab, e1071, obliqueRF
 library(penalizedSVM) # needed for Smoothly clipped absolute deviation penalty (SCAD)
-
+library(Metrics)
 
 
 # Notes for kernlab - seems to have e1071 svm impl too aswell as other libraries
@@ -64,9 +64,9 @@ train_data = merge(FNC_train, SBM_train, by = "Id")
 train_data = merge(train_data, y_labels_train, by="Id")
 
 # These dont have lables so its pointless to use for testing
-# SBM_test = read.csv(file='mlsp-2014-mri/Test/test_SBM.csv',head=TRUE,sep=",")
-# FNC_test = read.csv(file='mlsp-2014-mri/Test/test_FNC.csv',head=TRUE,sep=",")
-# test_data = merge(FNC_test, SBM_test, by = "Id")
+SBM_test = read.csv(file='mlsp-2014-mri/Test/test_SBM.csv',head=TRUE,sep=",")
+FNC_test = read.csv(file='mlsp-2014-mri/Test/test_FNC.csv',head=TRUE,sep=",")
+test_data = merge(FNC_test, SBM_test, by = "Id")
 
 #######################################
 # data 80% - 20% split for train-test #
@@ -75,12 +75,24 @@ train_data = train_data[,2:412]
 
 # https://rdrr.io/rforge/caret/man/createDataPartition.html
 # get indices for 70% of the data set
-tmp_data = createDataPartition(y = train_data$Class, p = 0.8, list=FALSE)
+tmp_data = createDataPartition(y = train_data$Class, p = 0.7, list=FALSE)
 
 # separate test and training sets
 train_sample_data = train_data[tmp_data,]
 test_sample_data = train_data[-tmp_data,]
 
+
+test_func=function(data_split, input_dataset, model){
+  train_sample_data = input_dataset[data_split,]
+  test_sample_data = input_dataset[-data_split,]
+  preds = predict(model, train_sample_data)
+  
+}
+
+data_split=function(input_ds){
+  tmp_data = createDataPartition(y = input_ds$Class, p = 0.8, list=FALSE)
+  return(tmp_data)
+}
 
 get_top_features=function(features, size){
   var_imp = varImp(features)
@@ -97,9 +109,30 @@ get_top_features=function(features, size){
 
 }
 
+get_data_for_kaggle_score=function(preds){
+  sample_sub = read.csv(file='mlsp-2014-mri/submission_example.csv', head=TRUE,sep=",")
+  sample_sub$Probability = preds
+  write.csv(sample_sub,file='new_submission.csv', row.names=FALSE)
+}
+
+get_test_metrics=function(test_sample_data, preds){
+  
+  sse = sse(as.numeric(test_sample_data$Class), preds)
+  RMSE = RMSE(as.numeric(test_sample_data$Class), preds)
+  mse = mse(as.numeric(test_sample_data$Class), preds)
+  R2 = R2(preds, as.numeric(test_sample_data$Class))
+  auc = Metrics::auc(test_sample_data$Class, preds)
+  
+  print(paste0("AUC is: ", round(auc, 2)))
+  print(paste0("SSE is: ", sse))
+  print(paste0("RMSE is: ", RMSE))
+  print(paste0("mse is: ", mse))
+  print(paste0("R2 is: ", round(R2, 2)))
+  
+}
+
 
 ```
-
 
 
 ```{r - Regularized Random Forest - DONE - TODO go higher than 25}
@@ -111,15 +144,15 @@ get_top_features=function(features, size){
 #############################
 # making a dummy var, something you'd use in general linear regression
 
-tmp_data = cbind(train_data, rnorm(1:dim(train_data)[1]))
-colnames(tmp_data)[413] = 'dummy_var'
-cols_list = colnames(tmp_data)
-cols = cols_list[cols_list != "Id"]
-data_with_dummy_var = subset(tmp_data, select=c(cols))
+#tmp_data = cbind(train_data, rnorm(1:dim(train_data)[1]))
+#colnames(tmp_data)[412] = 'dummy_var'
+#cols_list = colnames(tmp_data)
+#cols = cols_list[cols_list != "Id"]
+#data_with_dummy_var = subset(tmp_data, select=c(cols))
 
 
 size=25
-RRF = train(Class ~ ., data=train_data, method="RRF")
+RRF = train(Class ~ ., data=train_sample_data, method="RRF")
 RRF_features = varImp(RRF)
 
 feature_names = data.frame(RRF_features[1])
@@ -135,7 +168,6 @@ RRF_features_data =  get_top_features(RRF, size)
 ```
 
 
-
 ```{r - RFE - DONE}
 
 # TODO investigate what to do with this if boruta is being used
@@ -147,19 +179,25 @@ RRF_features_data =  get_top_features(RRF, size)
 
 
 # 203 was the highest you can go without including terms that lower model preformance 
+train_control = rfeControl(functions=rfFuncs, method = "cv", number = 10)
 size = 203
-result_rfe_all_features = rfe(x = train_data[,1:410], 
-                   y = train_data$Class, 
+result_rfe_all_features = rfe(x = train_sample_data[,1:411], 
+                   y = train_sample_data$Class, 
                    # sizes = 410, # best all features
                    # 410 found that some features were lowering accuracy
                    sizes = size,
-                   rfeControl = control)
+                   rfeControl = train_control)
 
 #predictors(result_rfe_all_features)
 
+result_rfe_all_features$variables
 
 RFE_features_data = get_top_features(result_rfe_all_features, size)
+RFE_features_data
 
+tmp_data = createDataPartition(y = RFE_features_data$Class, p = 0.7, list=FALSE)
+train_sample_data_rfe = RFE_features_data[tmp_data,]
+test_sample_data_rfe = RFE_features_data[-tmp_data,]
 
 Varimp_data_all = data.frame(feature = row.names(varImp(result_rfe_all_features))[1:size],
                           importance = varImp(result_rfe_all_features)[1:size, 1])
@@ -174,12 +212,11 @@ ggplot(data=Varimp_data_all,
 ```
 
 
-
 ```{r - LASSO - DONE, not sure if worth, needs more thought}
 #########
 # LASSO #
 #########
-lasso_cv = cv.glmnet(as.matrix(train_data[,1:410]), as.double(train_data$Class), family='binomial', alpha=1, parallel=TRUE, standardize=TRUE, type.measure='mse', keep=T)
+lasso_cv = cv.glmnet(as.matrix(train_sample_data[,1:410]), as.double(train_sample_data$Class), family='binomial', alpha=1, parallel=TRUE, standardize=TRUE, type.measure='mse', keep=T)
 
 plot(lasso_cv)
 # lasso_cv$lambda.min
@@ -206,21 +243,20 @@ LASSO_features_data = subset(train_data, select = tmp_df$feature_names[2:19])
 ```
 
 
-
 ```{r - Boruta - DONE}
 
 ##########
 # Boruta #
 ##########
 
-boruta_output = Boruta(Class ~ ., data=train_data, doTrace=0)  
+boruta_output = Boruta(Class ~ ., data=train_sample_data, doTrace=0)  
 
 boruta_signif_with_tentative = getSelectedAttributes(boruta_output, withTentative = TRUE)
 
 imps_with_tentative = attStats(boruta_output)
 imps2_with_tentative = imps_with_tentative[imps_with_tentative$decision != 'Rejected', c('meanImp', 'decision')]
 head(imps2_with_tentative[order(-imps2_with_tentative$meanImp), ]) 
-Boruta_features_data_with_tentative = subset(train_data, select = rownames(imps2_with_tentative))
+Boruta_features_data_with_tentative = subset(train_sample_data, select = rownames(imps2_with_tentative))
 
 ##########################
 # no tentative variables #
@@ -233,7 +269,7 @@ boruta_signif_2 = getSelectedAttributes(boruta_output)
 imps_without_tentative = attStats(boruta_without_tentative)
 imps2_without_tentative = imps_without_tentative[imps_without_tentative$decision != 'Rejected', c('meanImp', 'decision')]
 head(imps2_without_tentative[order(-imps2_without_tentative$meanImp), ]) 
-Boruta_features_data_without_tentative = subset(train_data, select = rownames(imps2_without_tentative))
+Boruta_features_data_without_tentative = subset(train_sample_data, select = rownames(imps2_without_tentative))
 
 
 # Plot variable importance
@@ -245,20 +281,17 @@ plot(boruta_output, cex.axis=.7, las=2, xlab="", main="Variable Importance")
 ```
 
 
-
 ```{r - rpart - DONE}
 
 ##################################
 # rpart model feature importance #
 ################################## 
 
-rpart = train(Class ~ ., data=train_data, method="rpart")
+rpart = train(Class ~ ., data=train_sample_data, method="rpart")
 plot(rpart)
 rpartImp = varImp(rpart)
 
 rpart_features_data = get_top_features(rpart, 5)
-
-rpart_features_data
 
 
 ```
@@ -288,14 +321,13 @@ print(shortlistedVars)
 
 ```
 
+
 ```{r - QVT - }
 
 
 
 
 ```
-
-
 
 
 ```{r - Feature selection, echo=TRUE, message=TRUE, warning=TRUE, paged.print=TRUE}
@@ -405,34 +437,85 @@ print(varimps)
 ```
 
 
-
 ```{r - SVM Baseline - Implemented}
-sample_sub = read.csv(file='mlsp-2014-mri/submission_example.csv', head=TRUE,sep=",")
-
 getModelInfo(model = "svmPoly")
 
 # best params {'C': 100, 'cache_size': 200, 'coef0': 0.7, 'gamma': 0.0001, 'kernel': 'poly', 'random_state': 0} rs 104
 set.seed(104)
 train_control = trainControl(method = "cv", number = 10, search = "grid")
 
-svm_model_poly = svm(Class ~ ., data = train_sample_data, kernel = "polynomial", cost=100, coef0= 0.7, cachesize=200, gamma=0.0001, scale = TRUE) 
+##################
+# svm_model_poly #
+##################
+train_sample_data = train_sample_data_rfe
+test_sample_data = test_sample_data_rfe
+
+svm_model_poly = svm(Class ~ ., data = train_sample_data, kernel = "polynomial",
+                     cost=100, coef0= 0.7, cachesize=200, gamma=0.0001, scale = TRUE) 
 # scale = True because ive 86 features
 # tune poly look for better degree
-pred = predict(svm_model_poly, test_data)
 
-sample_sub$Probability = pred
+preds = predict(svm_model_poly, newdata = test_sample_data)
+preds = as.numeric(levels(preds))[preds]
 
-write.csv(sample_sub,file='new_submission.csv',row.names=FALSE)
+
+get_test_metrics(test_sample_data, preds)
+
+# test using kaggle dataset 
+preds = predict(svm_model_poly, newdata = test_data)
+get_data_for_kaggle_score(preds = preds)
+
+
+#################
+# svm_model_rbf #
+#################
 
 svm_model_rbf = svm(Class ~ ., data = train_sample_data, scale = TRUE) # rbf
-pred = predict(svm_model_rbf, test_data, type="Class")
+preds = predict(svm_model_rbf, test_sample_data, type="Class", scale = TRUE)
+
+preds = as.numeric(levels(preds))[preds]
+
+get_test_metrics(test_sample_data, preds)
+
+# test using kaggle dataset 
+preds = predict(svm_model_rbf, newdata = test_data)
+get_data_for_kaggle_score(preds = preds)
+
+####################
+# svm_model_linear #
+####################
 
 svm_model_linear = svm(Class ~ ., data = train_sample_data, kernel = "linear", scale = TRUE)
-pred = predict(svm_model_linear, test_data, type="Class")
+
+preds = predict(svm_model_linear, test_sample_data, type="Class")
+
+
+preds = as.numeric(levels(preds))[preds]
+
+get_test_metrics(test_sample_data, preds)
+
+# test using kaggle dataset 
+preds = predict(svm_model_linear, newdata = test_data)
+get_data_for_kaggle_score(preds = preds)
+
+
+#####################
+# svm_model_sigmoid #
+#####################
 
 svm_model_sigmoid = svm(Class ~ ., data = train_sample_data, kernel = "sigmoid", scale = TRUE)
-pred = predict(svm_model_sigmoid, test_data, type="Class")
+preds = predict(svm_model_sigmoid, test_sample_data, type="Class")
 
+
+
+preds = as.numeric(levels(preds))[preds]
+
+get_test_metrics(test_sample_data, preds)
+
+# test using kaggle dataset
+preds = predict(svm_model_sigmoid, newdata = test_data)
+
+get_data_for_kaggle_score(preds = preds)
 ```
 
 
@@ -477,6 +560,8 @@ pred = predict(sparse_svm, tmp_test_data, lambda = c(0.2, 0.1))
 sparse_svm_cross_val = cv.sparseSVM(x, y, nfolds = 5, ncores = 2, seed = 1234)
 
 pred = predict(sparse_svm_cross_val, tmp_test_data, lambda = c(0.2, 0.1))
+
+pred
 
 
 ```
