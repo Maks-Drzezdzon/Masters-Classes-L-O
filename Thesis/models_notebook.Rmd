@@ -6,6 +6,13 @@ output: html_notebook
 
 
 ```{r - setup, reload data}
+
+# QVT setup 
+library(irr)
+library(ROCR)
+library(infotheo)
+
+
 # install.packages("penalizedSVM")
 
 library(sparseSVM)
@@ -82,28 +89,32 @@ train_sample_data = train_data[tmp_data,]
 test_sample_data = train_data[-tmp_data,]
 
 
-test_func=function(data_split, input_dataset, model){
-  train_sample_data = input_dataset[data_split,]
-  test_sample_data = input_dataset[-data_split,]
-  preds = predict(model, train_sample_data)
-  
+set_new_data_after_feature_selection=function(train_data){
+  tmp_data = createDataPartition(y = train_data$Class, p = 0.7, list=FALSE)
+  train_sample_data = RRF_features_data[tmp_data,]
+  test_sample_data = RRF_features_data[-tmp_data,]
 }
 
 data_split=function(input_ds){
-  tmp_data = createDataPartition(y = input_ds$Class, p = 0.8, list=FALSE)
+  tmp_data = createDataPartition(y = input_ds$Class, p = 0.7, list=FALSE)
   return(tmp_data)
 }
 
-get_top_features=function(features, size){
-  var_imp = varImp(features)
-  tmp_df = data.frame(var_imp[1])
-  if(missing(size)) {
-        feature_names = rownames(tmp_df)[order(tmp_df$Overall, decreasing=TRUE)]
-
-    } else {
-        feature_names = rownames(tmp_df)[order(tmp_df$Overall, decreasing=TRUE)][1:size]
-
-    }
+get_top_features=function(features, size, feature_names){
+  
+  if(missing(feature_names)){
+    var_imp = varImp(features)
+    tmp_df = data.frame(var_imp[1])
+  
+    if(missing(size)) {
+          feature_names = rownames(tmp_df)[order(tmp_df$Overall, decreasing=TRUE)]
+  
+      } else {
+          feature_names = rownames(tmp_df)[order(tmp_df$Overall, decreasing=TRUE)][1:size]
+  
+      }
+  }
+  
   features_subset_df = subset(train_data, select = feature_names)
   return(features_subset_df)
 
@@ -117,17 +128,19 @@ get_data_for_kaggle_score=function(preds){
 
 get_test_metrics=function(test_sample_data, preds){
   
-  sse = sse(as.numeric(test_sample_data$Class), preds)
-  RMSE = RMSE(as.numeric(test_sample_data$Class), preds)
-  mse = mse(as.numeric(test_sample_data$Class), preds)
-  R2 = R2(preds, as.numeric(test_sample_data$Class))
+  #sse = sse(as.numeric(test_sample_data$Class), preds)
+  #RMSE = RMSE(as.numeric(test_sample_data$Class), preds)
+  #mse = mse(as.numeric(test_sample_data$Class), preds)
+  #R2 = R2(preds, as.numeric(test_sample_data$Class))
   auc = Metrics::auc(test_sample_data$Class, preds)
+  cf = confusionMatrix(as.factor(preds), as.factor(test_sample_data$Class), mode="everything", positive = "1")
   
+  print(cf)
   print(paste0("AUC is: ", round(auc, 2)))
-  print(paste0("SSE is: ", sse))
-  print(paste0("RMSE is: ", RMSE))
-  print(paste0("mse is: ", mse))
-  print(paste0("R2 is: ", round(R2, 2)))
+  #print(paste0("SSE is: ", sse))
+  #print(paste0("RMSE is: ", RMSE))
+  #print(paste0("mse is: ", mse))
+  #print(paste0("R2 is: ", round(R2, 2)))
   
 }
 
@@ -152,17 +165,20 @@ get_test_metrics=function(test_sample_data, preds){
 
 
 size=25
-RRF = train(Class ~ ., data=train_sample_data, method="RRF")
+RRF = train(Class ~ ., data=train_data, method="RRF")
 RRF_features = varImp(RRF)
-
 feature_names = data.frame(RRF_features[1])
 feature_names = rownames(feature_names)[order(feature_names$Overall, decreasing=TRUE)][1:size]
+feature_names = append(feature_names, "Class")
+feature_names
 
+# plot(RRF_features, top = size, main='Variable Importance')
+size= 26
+RRF_features_data =  get_top_features(RRF, size, feature_names)
 
-plot(RRF_features, top = size, main='Variable Importance')
-
-
-RRF_features_data =  get_top_features(RRF, size)
+tmp_data = createDataPartition(y = RRF_features_data$Class, p = 0.7, list=FALSE)
+train_sample_data = RRF_features_data[tmp_data,]
+test_sample_data = RRF_features_data[-tmp_data,]
 
 
 ```
@@ -181,8 +197,9 @@ RRF_features_data =  get_top_features(RRF, size)
 # 203 was the highest you can go without including terms that lower model preformance 
 train_control = rfeControl(functions=rfFuncs, method = "cv", number = 10)
 size = 203
-result_rfe_all_features = rfe(x = train_sample_data[,1:411], 
-                   y = train_sample_data$Class, 
+
+result_rfe_all_features = rfe(x = train_data[,1:411], 
+                   y = train_data$Class, 
                    # sizes = 410, # best all features
                    # 410 found that some features were lowering accuracy
                    sizes = size,
@@ -193,11 +210,13 @@ result_rfe_all_features = rfe(x = train_sample_data[,1:411],
 result_rfe_all_features$variables
 
 RFE_features_data = get_top_features(result_rfe_all_features, size)
-RFE_features_data
+
 
 tmp_data = createDataPartition(y = RFE_features_data$Class, p = 0.7, list=FALSE)
 train_sample_data_rfe = RFE_features_data[tmp_data,]
 test_sample_data_rfe = RFE_features_data[-tmp_data,]
+train_sample_data = train_sample_data_rfe
+test_sample_data = test_sample_data_rfe
 
 Varimp_data_all = data.frame(feature = row.names(varImp(result_rfe_all_features))[1:size],
                           importance = varImp(result_rfe_all_features)[1:size, 1])
@@ -209,14 +228,17 @@ ggplot(data=Varimp_data_all,
   theme_bw() + theme(legend.position = "none", axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 
+
+
 ```
 
 
-```{r - LASSO - DONE, not sure if worth, needs more thought}
+```{r - LASSO - DONE}
 #########
 # LASSO #
 #########
-lasso_cv = cv.glmnet(as.matrix(train_sample_data[,1:410]), as.double(train_sample_data$Class), family='binomial', alpha=1, parallel=TRUE, standardize=TRUE, type.measure='mse', keep=T)
+size = 20
+lasso_cv = cv.glmnet(as.matrix(train_data[,1:410]), as.double(train_data$Class), family='binomial', alpha=1, parallel=TRUE, standardize=TRUE, type.measure='mse', keep=T)
 
 plot(lasso_cv)
 # lasso_cv$lambda.min
@@ -233,12 +255,15 @@ df_lass_cv_coef = round(as.matrix(coef(lasso_cv, s=lasso_cv$lambda.min)), 4)
 df_lass_cv_coef_survivors = df_lass_cv_coef[df_lass_cv_coef[, 1] != 0, ]
 
 
-feature_names = rownames(df_lass_cv_coef)[order(df_lass_cv_coef, decreasing=TRUE)][1:20]
+feature_names = rownames(df_lass_cv_coef)[order(df_lass_cv_coef, decreasing=TRUE)][1:size]
+feature_names = append(feature_names, "Class")
+feature_names = feature_names[feature_names != "(Intercept)"]
+feature_names
+LASSO_features_data =  get_top_features(lasso_cv, size, feature_names)
 
-tmp_df = data.frame(feature_names)
-
-LASSO_features_data = subset(train_data, select = tmp_df$feature_names[2:19])
-
+tmp_data = createDataPartition(y = LASSO_features_data$Class, p = 0.7, list=FALSE)
+train_sample_data = LASSO_features_data[tmp_data,]
+test_sample_data = LASSO_features_data[-tmp_data,]
 
 ```
 
@@ -251,12 +276,12 @@ LASSO_features_data = subset(train_data, select = tmp_df$feature_names[2:19])
 
 boruta_output = Boruta(Class ~ ., data=train_sample_data, doTrace=0)  
 
-boruta_signif_with_tentative = getSelectedAttributes(boruta_output, withTentative = TRUE)
+#boruta_signif_with_tentative = getSelectedAttributes(boruta_output, withTentative = TRUE)
 
-imps_with_tentative = attStats(boruta_output)
-imps2_with_tentative = imps_with_tentative[imps_with_tentative$decision != 'Rejected', c('meanImp', 'decision')]
-head(imps2_with_tentative[order(-imps2_with_tentative$meanImp), ]) 
-Boruta_features_data_with_tentative = subset(train_sample_data, select = rownames(imps2_with_tentative))
+#imps_with_tentative = attStats(boruta_output)
+#imps2_with_tentative = imps_with_tentative[imps_with_tentative$decision != 'Rejected', c('meanImp', 'decision')]
+#head(imps2_with_tentative[order(-imps2_with_tentative$meanImp), ]) 
+#Boruta_features_data_with_tentative = subset(train_sample_data, select = rownames(imps2_with_tentative))
 
 ##########################
 # no tentative variables #
@@ -269,13 +294,18 @@ boruta_signif_2 = getSelectedAttributes(boruta_output)
 imps_without_tentative = attStats(boruta_without_tentative)
 imps2_without_tentative = imps_without_tentative[imps_without_tentative$decision != 'Rejected', c('meanImp', 'decision')]
 head(imps2_without_tentative[order(-imps2_without_tentative$meanImp), ]) 
-Boruta_features_data_without_tentative = subset(train_sample_data, select = rownames(imps2_without_tentative))
+feature_names = rownames(imps2_without_tentative)
+feature_names = append(feature_names, "Class")
+feature_names
+Boruta_features_data_without_tentative = get_top_features(feature_names = feature_names)
 
 
 # Plot variable importance
 plot(boruta_output, cex.axis=.7, las=2, xlab="", main="Variable Importance")  
-
-
+Boruta_features_data_without_tentative
+tmp_data = createDataPartition(y = Boruta_features_data_without_tentative$Class, p = 0.7, list=FALSE)
+train_sample_data = Boruta_features_data_without_tentative[tmp_data,]
+test_sample_data = Boruta_features_data_without_tentative[-tmp_data,]
 
 
 ```
@@ -293,31 +323,14 @@ rpartImp = varImp(rpart)
 
 rpart_features_data = get_top_features(rpart, 5)
 
+feature_names = colnames(rpart_features_data)
+feature_names = append(feature_names, "Class")
 
-```
+rpart_features_data = subset(train_data, select = feature_names)
 
-
-```{r - Stepwise - }
-############
-# Stepwise #
-############
-
-# Step 1: Define base intercept only model
-lm_base = lm(Class ~ 1 , data=train_data)  
-
-# Step 2: Full model with all predictors
-lm_full = lm(Class ~ . , data=train_data) 
-
-# Step 3: Perform step-wise algorithm. direction='both' implies both forward and backward stepwise
-stepwise_m = step(lm_base, scope = list(lower = lm_base, upper = lm_full), direction = "both", trace = 0, steps = 1000)  
-
-# Step 4: Get the shortlisted variable.
-shortlisted_vars = names(unlist(stepwise_m[[1]])) 
-shortlisted_vars = shortlisted_vars[!shortlisted_vars %in% "(Intercept)"] # remove intercept
-
-# Show
-print(shortlistedVars)
-
+tmp_data = createDataPartition(y = rpart_features_data$Class, p = 0.7, list=FALSE)
+train_sample_data = train_data[tmp_data,]
+test_sample_data = train_data[-tmp_data,]
 
 ```
 
@@ -330,136 +343,10 @@ print(shortlistedVars)
 ```
 
 
-```{r - Feature selection, echo=TRUE, message=TRUE, warning=TRUE, paged.print=TRUE}
-
-# https://academic.oup.com/comjnl/advance-article-abstract/doi/10.1093/comjnl/bxac033/6565626?redirectedFrom=fulltext
-
-
-
-
-#######
-# GLM #
-#######
-# Full interaction model 
-cols_list = colnames(train_data)
-cols = cols_list[cols_list != "Id"]
-tmp_data = subset(tmp_data, select=c(cols))
-
-# memory error......
-# glm1 = glm(Class ~ (.)^2, family=binomial, data = tmp_data)
-
-glm1 = glm(Class ~ ., family=binomial, data = tmp_data)
-
-summary(glm1)
-
-# TODO not working very well
-
-
-
-
-
-#########################
-# IG (Information Gain) #
-#########################
-
-
-# TODO
-
-#
-# SVM - SCAD #
-# 
-
-# https://cran.r-project.org/web/packages/penalizedSVM/penalizedSVM.pdf
-# https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-12-138
-
-
-
-################################
-# relative importance using LR #
-################################
-
-# install.packages('relaimpo')
-library(relaimpo)
-
-# Build linear regression model
-lm_model = lm(Class ~ ., data=data_with_dummy_var[,1:411])
-
-# calculate relative importance
-rel_imp = calc.relimp(lm_model, type = "lmg", rela = F)  
-
-# Sort
-cat('Relative Importances: \n')
-sort(round(rel_imp$lmg, 3), decreasing=TRUE)
-
-bootsub = boot.relimp(Class ~ ., data=data_with_dummy_var[,1:411],
-                       b = 1000, type = 'lmg', rank = TRUE, diff = TRUE)
-
-plot(booteval.relimp(bootsub, level=.95))
-
-
-
-# TODO 
-# read about DALEX for feature importance 
-library(DALEX)
-
-# Variable importance with DALEX
-explained_rf = explain(random_forest, data=data=data_with_dummy_var[,1:411], y=data_with_dummy_var$Class)
-
-# Get the variable importances
-varimps = variable_dropout(explained_rf, type='raw')
-
-print(varimps)
-
-#######
-# QVT #
-#######
-# TODO implement this or see if you have time to
-
-##########
-# QVT(B) #
-##########
-
-##########
-# QVT(L) #
-##########
-
-##########
-# QVT(X) #
-##########
-
-##########
-# QVT(I) #
-##########
-
-
-
-
-```
-
-
-```{r - SVM Baseline - Implemented}
-getModelInfo(model = "svmPoly")
-
+```{r - SVM Baseline - Done}
 # best params {'C': 100, 'cache_size': 200, 'coef0': 0.7, 'gamma': 0.0001, 'kernel': 'poly', 'random_state': 0} rs 104
-set.seed(104)
-train_control = trainControl(method = "cv", number = 10, search = "grid")
-
-##################
-# svm_model_poly #
-##################
-train_sample_data = train_sample_data_rfe
-test_sample_data = test_sample_data_rfe
-
-svm_model_poly = svm(Class ~ ., data = train_sample_data, kernel = "polynomial",
-                     cost=100, coef0= 0.7, cachesize=200, gamma=0.0001, scale = TRUE) 
-# scale = True because ive 86 features
-# tune poly look for better degree
-
-preds = predict(svm_model_poly, newdata = test_sample_data)
-preds = as.numeric(levels(preds))[preds]
 
 
-get_test_metrics(test_sample_data, preds)
 
 # test using kaggle dataset 
 preds = predict(svm_model_poly, newdata = test_data)
@@ -470,7 +357,7 @@ get_data_for_kaggle_score(preds = preds)
 # svm_model_rbf #
 #################
 
-svm_model_rbf = svm(Class ~ ., data = train_sample_data, scale = TRUE) # rbf
+svm_model_rbf = svm(Class ~ ., data = train_sample_data, kernel = 'radial', scale = TRUE) # rbf
 preds = predict(svm_model_rbf, test_sample_data, type="Class", scale = TRUE)
 
 preds = as.numeric(levels(preds))[preds]
@@ -519,22 +406,14 @@ get_data_for_kaggle_score(preds = preds)
 ```
 
 
-
-```{r - DWD Baseline - Missing}
-
-```
-
-
-
-
-```{r - sparseSVM - Implemented}
+```{r - sparseSVM - may be excluded}
 # Convert factor back to num array without loosing information 
 # TODO look up plotting functions for this alg
 
-tmp_data = createDataPartition(y = train_data$Class, p = 1, list=FALSE)
+#tmp_data = createDataPartition(y = train_data$Class, p = 1, list=FALSE)
 
 # separate test and training sets
-train_sample_data = train_data[tmp_data,]
+#train_sample_data = train_data[tmp_data,]
 
 # convert factor to numeric array without loosing data
 f = train_sample_data$Class
@@ -546,34 +425,50 @@ y = replace(tmp_y, tmp_y == 0, -1)
 
 
 # remove target variable
-tmp_x = subset(train_sample_data, select = -c(Class))
+tmp_x = subset(test_sample_data)
+tmp_x
 # convert to matrix
 x = as.matrix(tmp_x)
 sparse_svm = sparseSVM(x, y)
+sparse_svm
 
 tmp_test_data = as.matrix(tmp_x)
-
-pred = predict(sparse_svm, tmp_test_data, lambda = c(0.2, 0.1))
-
-
+tmp_test_data
+class(tmp_test_data)
+preds = predict(sparse_svm, tmp_test_data, lambda = c(0.2, 0.1))
 
 sparse_svm_cross_val = cv.sparseSVM(x, y, nfolds = 5, ncores = 2, seed = 1234)
 
-pred = predict(sparse_svm_cross_val, tmp_test_data, lambda = c(0.2, 0.1))
+preds = predict(sparse_svm_cross_val, tmp_test_data, lambda = c(0.2, 0.1))
 
-pred
+preds = predict(sparse_svm_cross_val, tmp_test_data)
 
+preds = replace(preds, preds == -1, 0)
+preds
+
+
+test_sample_data$Class
+cf = confusionMatrix(as.factor(preds), as.factor(test_sample_data$Class), mode="everything", positive = "1")
+
+
+preds = predict(svm_model_poly, newdata = test_sample_data)
+preds = as.numeric(levels(preds))[preds]
+
+
+get_test_metrics(test_sample_data, preds)
+
+# test using kaggle dataset 
+preds = predict(svm_model_poly, newdata = test_data)
+get_data_for_kaggle_score(preds = preds)
 
 ```
 
 
-
-
-```{r - SVMMaj - Implemented}
+```{r - SVMMaj - Deprecated it seems, no support to work with external libraries for metrics}
 # depends on running setup in sparseSVM
 
 # TODO look up plotting functions for this alg
-svm_maj = svmmaj(x, y, hinge = 'quadratic', lambda = 1)
+svm_maj = svmmaj(train_sample_data, train_sample_data$Class, hinge = 'quadratic', lambda = 1)
 
 
 summary(svm_maj)
@@ -583,7 +478,7 @@ summary(svm_maj)
 weights.obs = list(positive = 1, negative = 2)
 weights.obs
 ## using radial basis kernel
-svm_maj_v2 = svmmaj(x, y, hinge = 'quadratic', lambda = 1, 
+svm_maj_v2 = svmmaj(train_sample_data, train_sample_data$Class, hinge = 'quadratic', lambda = 1, 
                 weights.obs = weights.obs, scale = 'interval', kernel = rbfdot, kernel.sigma = 1)
 
 summary(svm_maj_v2)
@@ -592,30 +487,24 @@ summary(svm_maj_v2)
 svm_maj_v3 = svmmaj(x, y, weight.obs = weight.obs, spline.knots = 3, spline.degree = 2)
 plotWeights(svm_maj_v3, plotdim = c(2, 4))
 
-pred = predict(svm_maj, tmp_test_data)
+preds = predict(svm_maj, test_sample_data, type="Class")
+pred
+
+var_imp = varImp(preds)
+tmp_df = data.frame(var_imp[1])
+    
+preds = as.numeric(levels(preds))[preds]
+
+get_test_metrics(test_sample_data, preds)
+
 pred = predict(svm_maj_v2, tmp_test_data)
 pred = predict(svm_maj_v3, tmp_test_data)
 
 ```
 
 
+```{r - WeightSVM - may be excluded}
 
-
-```{r - WeightSVM - Work in prog}
-# depends on running setup in sparseSVM
-
-# reset data - clean this up and write why you did it so you dont forget
-# TODO read above
-# https://www.rdocumentation.org/packages/WeightSVM/versions/1.7-9/topics/wsvm
-# https://cran.r-project.org/web/packages/WeightSVM/WeightSVM.pdf
-
-tmp_data = createDataPartition(y = train_data$Class, p = 0.8, list=FALSE)
-
-# seperate test and training sets
-train_sample_data = train_data[tmp_data,]
-test_sample_data = train_data[-tmp_data,]
-
-# this worked
 weight_svm = wsvm(Class ~ ., weight = rep(1,69), data = train_sample_data)
 
 pred = predict(weight_svm, tmp_test_data, lambda = c(0.2, 0.1))
@@ -624,9 +513,7 @@ pred = predict(weight_svm, tmp_test_data, lambda = c(0.2, 0.1))
 ```
 
 
-
-
-```{r - SparseDWD - Work in prog}
+```{r - SparseDWD - may be excluded}
 # Convert factor back to num array without loosing information 
 # TODO look up plotting functions for this alg
 
@@ -653,20 +540,54 @@ sparse_dwd = sdwd(x, y, lambda2=1)
 tmp_test_data = as.matrix(tmp_x)
 
 pred = predict(sparse_dwd, tmp_test_data)
-
+pred
 
 ```
 
 
+```{r - kerndwd - cant collect metrics}
+# Save references 
+tmp_test_sample = test_sample_data
+tmp_train_sample = train_sample_data
+
+# restore references
+test_sample_data = tmp_test_sample
+train_sample_data = tmp_train_sample
 
 
-```{r - kerndwd}
-# https://cran.r-project.org/web/packages/kerndwd/kerndwd.pdf
+x = as.matrix(data.frame(lapply(train_sample_data, as.numeric)))
+mode(x)
+f = train_sample_data$Class
+mode(f)
+y = as.numeric(levels(f))[f]
+y
+mode(y)
+
+
+test_sample_data$Class = as.matrix(test_sample_data$Class)
+train_sample_data = data.frame(lapply(train_sample_data, as.numeric))
+test_sample_data = as.matrix(data.frame(lapply(test_sample_data, as.numeric)))
+x = train_sample_data
+
 
 # fit a linear DWD
 kern = vanilladot()
-dwd_linear = kerndwd(x, y, kern, qval=1, eps=1e-5, maxit=1e5)
-pred = predict(dwd_linear, kern, x, test_data)
+dwd_linear = kerndwd(x, f, kern)
+dwd_linear
+preds = predict(dwd_linear, kern, as.matrix(x), test_sample_data)
+preds
+
+auc = Metrics::auc(tmp_test_sample$Class, preds)
+cf = confusionMatrix(preds, as.factor(tmp_test_sample$Class), mode="everything", positive = "1")
+
+print(cf)
+print(paste0("AUC is: ", round(auc, 2)))
+
+get_test_metrics(tmp_test_sample, preds)
+
+# test using kaggle dataset 
+preds = predict(svm_model_poly, newdata = test_data)
+get_data_for_kaggle_score(preds = preds)
 
 
 
@@ -674,7 +595,6 @@ pred = predict(dwd_linear, kern, x, test_data)
 kern = rbfdot(sigma=1)
 dwd_gaussian = kerndwd(x, y, kern, qval=1, eps=1e-5, maxit=1e5)
 pred = predict(dwd_gaussian, kern, x, test_data)
-
 
 # fit a weighted kernel DWD
 kern = rbfdot(sigma=1)
@@ -720,14 +640,7 @@ pred = predict(dwd_spline, kern, x, test_data)
 
 # sigest(x)
 
-
-
-
-
-
 ```
-
-
 
 
 ```{r - DWDLargeR}
@@ -746,12 +659,3 @@ pred = predict(dwd_larger_r, test_data)
 ```
 
 
-
-```{r - TODO write functions here to gather statistics, put into df and write out, loop over models and append etc}
-# TODO read title
-
-
-
-
-
-```
