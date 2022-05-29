@@ -57,7 +57,9 @@ getwd()
 y_labels_train = read.csv(file='mlsp-2014-mri/Train/train_labels.csv', head=TRUE, sep=",") # this is your y var
 # Convert 'Class' into an unordered categorical variable, and assign labels
 # to each level.
+
 y_labels_train$Class = factor(y_labels_train$Class) 
+
 # labels=c('Healthy_Control','Schizophrenic_Patient')
 # 46 control # 40 patient 
 
@@ -348,6 +350,19 @@ test_sample_data = train_data[-tmp_data,]
 
 
 
+svm_model_poly = svm(Class ~ ., data = train_sample_data, kernel = "polynomial",
+                     cost=100, coef0= 0.7, cachesize=200, gamma=0.0001, scale = TRUE) 
+
+preds = predict(svm_model_poly, newdata = test_sample_data)
+from_svm = preds
+auc = Metrics::auc(tmp_test_sample$Class, preds)
+auc
+preds = pred_v2
+preds = as.numeric(levels(preds))[preds]
+preds
+from_svm
+get_test_metrics(test_sample_data, preds)
+
 # test using kaggle dataset 
 preds = predict(svm_model_poly, newdata = test_data)
 get_data_for_kaggle_score(preds = preds)
@@ -546,6 +561,7 @@ pred
 
 
 ```{r - kerndwd - cant collect metrics}
+
 # Save references 
 tmp_test_sample = test_sample_data
 tmp_train_sample = train_sample_data
@@ -555,40 +571,56 @@ test_sample_data = tmp_test_sample
 train_sample_data = tmp_train_sample
 
 
-x = as.matrix(data.frame(lapply(train_sample_data, as.numeric)))
-mode(x)
-f = train_sample_data$Class
-mode(f)
-y = as.numeric(levels(f))[f]
-y
-mode(y)
 
+# OLD FORMATING 
+#x = as.matrix(data.frame(lapply(train_sample_data, as.numeric)))
+#f = train_sample_data$Class
+#y = as.numeric(levels(f))[f]
 
-test_sample_data$Class = as.matrix(test_sample_data$Class)
 train_sample_data = data.frame(lapply(train_sample_data, as.numeric))
-test_sample_data = as.matrix(data.frame(lapply(test_sample_data, as.numeric)))
-x = train_sample_data
+test_sample_data = data.frame(lapply(test_sample_data, as.numeric))
 
+# REQUIRED format data for kern function, i guess?
+# replace(test_sample_data$Class, test_sample_data$Class==0, -1)
+# The order of conversion was wrong first 
+test_sample_data$Class[test_sample_data$Class == 1] = 0
+train_sample_data$Class[train_sample_data$Class == 1] = 0
+test_sample_data$Class[test_sample_data$Class == 2] = 1
+train_sample_data$Class[train_sample_data$Class == 2] = 1
+
+
+test_sample_data$Class[test_sample_data$Class == 0] = -1
+train_sample_data$Class[train_sample_data$Class == 0] = -1
 
 # fit a linear DWD
 kern = vanilladot()
-dwd_linear = kerndwd(x, f, kern)
-dwd_linear
-preds = predict(dwd_linear, kern, as.matrix(x), test_sample_data)
+dwd_linear = kerndwd(train_sample_data[1:410], train_sample_data$Class, kern, lambda = 1)
+
+# why is the pred being squished down to [1:25 1:100] from 
+train_sample_data = as.matrix(train_sample_data)
+preds = predict(dwd_linear, kern, train_sample_data, test_sample_data)
 preds
+# revert value sanitazation for model so results can be used for gathering metrics 
+store_for_svm = pred
+pred = replace(preds, preds==-1, 0)
+test_sample_data$Class[test_sample_data$Class == -1] = 0
 
-auc = Metrics::auc(tmp_test_sample$Class, preds)
-cf = confusionMatrix(preds, as.factor(tmp_test_sample$Class), mode="everything", positive = "1")
+# metrics tinkering 
+auc = Metrics::auc(tmp_test_sample$Class, pred)
 
-print(cf)
-print(paste0("AUC is: ", round(auc, 2)))
+pred_v2 = as.factor(pred)
+cf = confusionMatrix(pred_v2, as.factor(test_sample_data$Class), mode="everything", positive = "1")
 
 get_test_metrics(tmp_test_sample, preds)
 
 # test using kaggle dataset 
-preds = predict(svm_model_poly, newdata = test_data)
-get_data_for_kaggle_score(preds = preds)
+preds_v3 = predict(dwd_linear, kern, train_sample_data, test_data)
+get_data_for_kaggle_score(preds = preds_v3)
 
+
+##############
+# STOP BLOCK #
+##############
 
 
 # fit a DWD using Gaussian kernel
