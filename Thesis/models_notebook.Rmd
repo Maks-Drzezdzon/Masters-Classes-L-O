@@ -54,11 +54,11 @@ library(kableExtra) # Used to generate report ready tables
 getwd()
 
 
-y_labels_train = read.csv(file='mlsp-2014-mri/Train/train_labels.csv', head=TRUE, sep=",") # this is your y var
+#y_labels_train = read.csv(file='mlsp-2014-mri/Train/train_labels.csv', head=TRUE, sep=",") # this is your y var
 # Convert 'Class' into an unordered categorical variable, and assign labels
 # to each level.
 
-y_labels_train$Class = factor(y_labels_train$Class) 
+#y_labels_train$Class = factor(y_labels_train$Class) 
 
 # labels=c('Healthy_Control','Schizophrenic_Patient')
 # 46 control # 40 patient 
@@ -67,22 +67,35 @@ y_labels_train$Class = factor(y_labels_train$Class)
 # loading and merging data #
 ############################
 
-FNC_train = read.csv(file='mlsp-2014-mri/Train/train_FNC.csv',head=TRUE,sep=",")
-SBM_train = read.csv(file='mlsp-2014-mri/Train/train_SBM.csv',head=TRUE,sep=",")
-train_data = merge(FNC_train, SBM_train, by = "Id")
-train_data = merge(train_data, y_labels_train, by="Id")
+mlsp_test = read.csv(file='mlsp_test.csv',head=TRUE,sep=",")
+mlsp_train = read.csv(file='mlsp_train.csv',head=TRUE,sep=",")
+rpart_features_data = read.csv(file='rpart_features_data.csv',head=TRUE,sep=",")
+Boruta_features_data_without_tentative = read.csv(file='Boruta_features_data_without_tentative.csv',head=TRUE,sep=",")
+LASSO_features_data = read.csv(file='LASSO_features_data.csv',head=TRUE,sep=",")
+RFE_features_data = read.csv(file='RFE_features_data.csv',head=TRUE,sep=",")
+RRF_features_data = read.csv(file='RRF_features_data.csv',head=TRUE,sep=",")
+
+
+#FNC_train = read.csv(file='mlsp-2014-mri/Train/train_FNC.csv',head=TRUE,sep=",")
+#SBM_train = read.csv(file='mlsp-2014-mri/Train/train_SBM.csv',head=TRUE,sep=",")
+#train_data = merge(FNC_train, SBM_train, by = "Id")
+#train_data = merge(train_data, y_labels_train, by="Id")
 
 # These dont have lables so its pointless to use for testing
-SBM_test = read.csv(file='mlsp-2014-mri/Test/test_SBM.csv',head=TRUE,sep=",")
-FNC_test = read.csv(file='mlsp-2014-mri/Test/test_FNC.csv',head=TRUE,sep=",")
-test_data = merge(FNC_test, SBM_test, by = "Id")
-
+#SBM_test = read.csv(file='mlsp-2014-mri/Test/test_SBM.csv',head=TRUE,sep=",")
+#FNC_test = read.csv(file='mlsp-2014-mri/Test/test_FNC.csv',head=TRUE,sep=",")
+#test_data = merge(FNC_test, SBM_test, by = "Id")
+#test_data = test_data[,2:411]
+#write.csv(test_data, "mlsp_test.csv", row.names = FALSE)
 #######################################
 # data 80% - 20% split for train-test #
 #######################################
-train_data = train_data[,2:412]
-
+#train_data = train_data[,2:412]
+#write.csv(train_data, "mlsp_train.csv", row.names = FALSE)
 # https://rdrr.io/rforge/caret/man/createDataPartition.html
+
+
+
 # get indices for 70% of the data set
 tmp_data = createDataPartition(y = train_data$Class, p = 0.7, list=FALSE)
 
@@ -177,6 +190,7 @@ feature_names
 # plot(RRF_features, top = size, main='Variable Importance')
 size= 26
 RRF_features_data =  get_top_features(RRF, size, feature_names)
+# write.csv(RRF_features_data, "RRF_features_data.csv", row.names = FALSE)
 
 tmp_data = createDataPartition(y = RRF_features_data$Class, p = 0.7, list=FALSE)
 train_sample_data = RRF_features_data[tmp_data,]
@@ -212,7 +226,7 @@ result_rfe_all_features = rfe(x = train_data[,1:411],
 result_rfe_all_features$variables
 
 RFE_features_data = get_top_features(result_rfe_all_features, size)
-
+# 
 
 tmp_data = createDataPartition(y = RFE_features_data$Class, p = 0.7, list=FALSE)
 train_sample_data_rfe = RFE_features_data[tmp_data,]
@@ -262,6 +276,7 @@ feature_names = append(feature_names, "Class")
 feature_names = feature_names[feature_names != "(Intercept)"]
 feature_names
 LASSO_features_data =  get_top_features(lasso_cv, size, feature_names)
+write.csv(LASSO_features_data, "LASSO_features_data.csv", row.names = FALSE)
 
 tmp_data = createDataPartition(y = LASSO_features_data$Class, p = 0.7, list=FALSE)
 train_sample_data = LASSO_features_data[tmp_data,]
@@ -300,6 +315,7 @@ feature_names = rownames(imps2_without_tentative)
 feature_names = append(feature_names, "Class")
 feature_names
 Boruta_features_data_without_tentative = get_top_features(feature_names = feature_names)
+write.csv(Boruta_features_data_without_tentative, "Boruta_features_data_without_tentative.csv", row.names = FALSE)
 
 
 # Plot variable importance
@@ -329,6 +345,7 @@ feature_names = colnames(rpart_features_data)
 feature_names = append(feature_names, "Class")
 
 rpart_features_data = subset(train_data, select = feature_names)
+write.csv(rpart_features_data, "rpart_features_data.csv", row.names = FALSE)
 
 tmp_data = createDataPartition(y = rpart_features_data$Class, p = 0.7, list=FALSE)
 train_sample_data = train_data[tmp_data,]
@@ -345,7 +362,7 @@ test_sample_data = train_data[-tmp_data,]
 ```
 
 
-```{r - SVM Baseline - Done}
+```{r - SVM Kernels - Done}
 # best params {'C': 100, 'cache_size': 200, 'coef0': 0.7, 'gamma': 0.0001, 'kernel': 'poly', 'random_state': 0} rs 104
 
 
@@ -421,143 +438,92 @@ get_data_for_kaggle_score(preds = preds)
 ```
 
 
-```{r - sparseSVM - may be excluded}
-# Convert factor back to num array without loosing information 
-# TODO look up plotting functions for this alg
+```{r - get data}
 
-#tmp_data = createDataPartition(y = train_data$Class, p = 1, list=FALSE)
+#######################################
+# data 70% - 20% split for train-test #
+#######################################
+train_data = mlsp_train
 
-# separate test and training sets
-#train_sample_data = train_data[tmp_data,]
+train_data = Boruta_features_data_without_tentative
 
-# convert factor to numeric array without loosing data
-f = train_sample_data$Class
-y = as.numeric(levels(f))[f]
-tmp_y = y
-# this algo needs it to be in 1 and -1 format so im replacing it now before it crashes, 
-# docs say it does it on its own but it doesnt seem to work
-y = replace(tmp_y, tmp_y == 0, -1)
+train_data = LASSO_features_data
 
+train_data = RFE_features_data
 
-# remove target variable
-tmp_x = subset(test_sample_data)
-tmp_x
-# convert to matrix
-x = as.matrix(tmp_x)
-sparse_svm = sparseSVM(x, y)
-sparse_svm
+train_data = rpart_features_data
 
-tmp_test_data = as.matrix(tmp_x)
-tmp_test_data
-class(tmp_test_data)
-preds = predict(sparse_svm, tmp_test_data, lambda = c(0.2, 0.1))
-
-sparse_svm_cross_val = cv.sparseSVM(x, y, nfolds = 5, ncores = 2, seed = 1234)
-
-preds = predict(sparse_svm_cross_val, tmp_test_data, lambda = c(0.2, 0.1))
-
-preds = predict(sparse_svm_cross_val, tmp_test_data)
-
-preds = replace(preds, preds == -1, 0)
-preds
+train_data = RRF_features_data
 
 
-test_sample_data$Class
-cf = confusionMatrix(as.factor(preds), as.factor(test_sample_data$Class), mode="everything", positive = "1")
-
-
-preds = predict(svm_model_poly, newdata = test_sample_data)
-preds = as.numeric(levels(preds))[preds]
-
-
-get_test_metrics(test_sample_data, preds)
-
-# test using kaggle dataset 
-preds = predict(svm_model_poly, newdata = test_data)
-get_data_for_kaggle_score(preds = preds)
-
-```
-
-
-```{r - SVMMaj - Deprecated it seems, no support to work with external libraries for metrics}
-# depends on running setup in sparseSVM
-
-# TODO look up plotting functions for this alg
-svm_maj = svmmaj(train_sample_data, train_sample_data$Class, hinge = 'quadratic', lambda = 1)
-
-
-summary(svm_maj)
-
-# weights.obs = list(positive = 2, negative = 1)
-# I want to penalise negatives more, right?
-weights.obs = list(positive = 1, negative = 2)
-weights.obs
-## using radial basis kernel
-svm_maj_v2 = svmmaj(train_sample_data, train_sample_data$Class, hinge = 'quadratic', lambda = 1, 
-                weights.obs = weights.obs, scale = 'interval', kernel = rbfdot, kernel.sigma = 1)
-
-summary(svm_maj_v2)
-
-## I-spline basis
-svm_maj_v3 = svmmaj(x, y, weight.obs = weight.obs, spline.knots = 3, spline.degree = 2)
-plotWeights(svm_maj_v3, plotdim = c(2, 4))
-
-preds = predict(svm_maj, test_sample_data, type="Class")
-pred
-
-var_imp = varImp(preds)
-tmp_df = data.frame(var_imp[1])
-    
-preds = as.numeric(levels(preds))[preds]
-
-get_test_metrics(test_sample_data, preds)
-
-pred = predict(svm_maj_v2, tmp_test_data)
-pred = predict(svm_maj_v3, tmp_test_data)
-
-```
-
-
-```{r - WeightSVM - may be excluded}
-
-weight_svm = wsvm(Class ~ ., weight = rep(1,69), data = train_sample_data)
-
-pred = predict(weight_svm, tmp_test_data, lambda = c(0.2, 0.1))
-
-
-```
-
-
-```{r - SparseDWD - may be excluded}
-# Convert factor back to num array without loosing information 
-# TODO look up plotting functions for this alg
-
-tmp_data = createDataPartition(y = train_data$Class, p = 1, list=FALSE)
+# get indices for 70% of the data set
+train_data$Class = factor(train_data$Class) 
+tmp_data = createDataPartition(y = train_data$Class, p = 0.7, list=FALSE)
 
 # separate test and training sets
 train_sample_data = train_data[tmp_data,]
+test_sample_data = train_data[-tmp_data,]
 
-# convert factor to numeric array without loosing data
-f = train_sample_data$Class
-y = as.numeric(levels(f))[f]
-tmp_y = y
-# this algo needs it to be in 1 and -1 format so im replacing it now before it crashes, 
-# docs say it does it on its own but it doesnt seem to work
-y = replace(tmp_y, tmp_y == 0, -1)
-
-
-# remove target variable
-tmp_x = subset(train_sample_data, select = -c(Class))
-# convert to matrix
-x = as.matrix(tmp_x)
-sparse_dwd = sdwd(x, y, lambda2=1)
-
-tmp_test_data = as.matrix(tmp_x)
-
-pred = predict(sparse_dwd, tmp_test_data)
-pred
 
 ```
+
+
+```{r - DWD Kernels }
+
+fitControl = trainControl(## 10-fold CV
+                           method = "repeatedcv",
+                           number = 10,
+                           ## repeated ten times
+                           repeats = 10)
+
+###########
+# dwdPoly #
+###########
+dwdPoly = train(Class ~ ., data = train_sample_data, method = "dwdPoly", trControl=fitControl)
+preds = predict(dwdPoly, test_sample_data)
+preds = as.numeric(levels(preds))[preds]
+get_test_metrics(test_sample_data, preds)
+preds = predict(dwdPoly, newdata = mlsp_test)
+get_data_for_kaggle_score(preds = preds)
+
+
+#############
+# dwdRadial #
+#############
+dwdRadial = train(Class ~ ., data = train_sample_data, method = "dwdRadial", trControl=fitControl)
+preds = predict(dwdRadial, test_sample_data)
+preds = as.numeric(levels(preds))[preds]
+get_test_metrics(test_sample_data, preds)
+preds = predict(dwdPoly, newdata = mlsp_test)
+get_data_for_kaggle_score(preds = preds)
+
+
+#############
+# dwdLinear #
+#############
+dwdLinear = train(Class ~ ., data = train_sample_data, method = "dwdLinear", trControl=fitControl)
+preds = predict(dwdLinear, test_sample_data)
+preds = as.numeric(levels(preds))[preds]
+get_test_metrics(test_sample_data, preds)
+preds = predict(dwdPoly, newdata = mlsp_test)
+get_data_for_kaggle_score(preds = preds)
+
+
+########
+# sdwd #
+########
+sdwd = train(Class ~ ., data = train_sample_data, method = "sdwd", trControl=fitControl)
+preds = predict(sdwd, test_sample_data)
+preds = as.numeric(levels(preds))[preds]
+get_test_metrics(test_sample_data, preds)
+preds = predict(dwdPoly, newdata = mlsp_test)
+get_data_for_kaggle_score(preds = preds)
+
+
+
+
+```
+
 
 
 ```{r - kerndwd - cant collect metrics}
@@ -570,7 +536,7 @@ tmp_train_sample = train_sample_data
 test_sample_data = tmp_test_sample
 train_sample_data = tmp_train_sample
 
-
+size=20
 
 # OLD FORMATING 
 #x = as.matrix(data.frame(lapply(train_sample_data, as.numeric)))
@@ -592,50 +558,57 @@ train_sample_data$Class[train_sample_data$Class == 2] = 1
 test_sample_data$Class[test_sample_data$Class == 0] = -1
 train_sample_data$Class[train_sample_data$Class == 0] = -1
 
-# fit a linear DWD
+####################
+# fit a linear DWD #
+####################
 kern = vanilladot()
-dwd_linear = kerndwd(train_sample_data[1:410], train_sample_data$Class, kern, lambda = 1)
+dim(train_sample_data)
+dwd_linear = kerndwd(train_sample_data[1:size], train_sample_data$Class, kern, lambda = 1)
 
 # why is the pred being squished down to [1:25 1:100] from 
 train_sample_data = as.matrix(train_sample_data)
 preds = predict(dwd_linear, kern, train_sample_data, test_sample_data)
-preds
+
 # revert value sanitazation for model so results can be used for gathering metrics 
-store_for_svm = pred
-pred = replace(preds, preds==-1, 0)
+
+preds = replace(preds, preds==-1, 0)
 test_sample_data$Class[test_sample_data$Class == -1] = 0
-
-# metrics tinkering 
-auc = Metrics::auc(tmp_test_sample$Class, pred)
-
-pred_v2 = as.factor(pred)
-cf = confusionMatrix(pred_v2, as.factor(test_sample_data$Class), mode="everything", positive = "1")
-
 get_test_metrics(tmp_test_sample, preds)
 
 # test using kaggle dataset 
+new_Test = data.frame(lapply(test_data, as.numeric))
+train_sample_data = as.matrix(train_sample_data)
 preds_v3 = predict(dwd_linear, kern, train_sample_data, test_data)
+preds_v3
 get_data_for_kaggle_score(preds = preds_v3)
 
 
-##############
-# STOP BLOCK #
-##############
+###################################
+# fit a DWD using Gaussian kernel #
+###################################
 
-
-# fit a DWD using Gaussian kernel
 kern = rbfdot(sigma=1)
-dwd_gaussian = kerndwd(x, y, kern, qval=1, eps=1e-5, maxit=1e5)
-pred = predict(dwd_gaussian, kern, x, test_data)
+dwd_gaussian = kerndwd(train_sample_data[1:410], train_sample_data$Class, kern, lambda=1)
+train_sample_data = as.matrix(train_sample_data)
+test_sample_data
+preds = predict(dwd_gaussian, kern, train_sample_data, test_sample_data)
+preds
 
-# fit a weighted kernel DWD
+#############################
+# fit a weighted kernel DWD #
+#############################
+
 kern = rbfdot(sigma=1)
-weights = c(1, 2)[factor(y)]
-dwd_weighted_gaussian = kerndwd(x, y, kern, qval=1, wt = weights, eps=1e-5, maxit=1e5)
-pred = predict(dwd_weighted_gaussian, kern, x, test_data)
+weights = c(1, 2)[factor(train_sample_data$Class)]
+dwd_weighted_gaussian = kerndwd(train_sample_data, train_sample_data$Class, kern, lambda=1, qval=1, wt = weights, eps=1e-5, maxit=1e5)
+train_sample_data = as.matrix(train_sample_data)
+test_sample_data
+pred = predict(dwd_weighted_gaussian, kern, train_sample_data, test_sample_data)
+pred
+#########################
+# fit polynomial kernel #
+#########################
 
-
-# fit polynomial kernel
 kern = polydot(degree = 1, scale = 1, offset = 1)
 dwd_polynomial = kerndwd(x, y, kern, qval=1, eps=1e-5, maxit=1e5)
 pred = predict(dwd_polynomial, kern, x, test_data)
@@ -655,39 +628,20 @@ nobs = nrow(test_data)
 dwd_bessel = kerndwd(x, y, kern, qval=1, eps=1e-5, maxit=1e5)
 pred = predict(dwd_bessel, kern, x, test_data)
 
-
-# fit anova rbf kernel where rbf is a gaussian kernel 
+#######################################################
+# fit anova rbf kernel where rbf is a gaussian kernel #
+#######################################################
 kern = anovadot(sigma = 1, degree = 1)
 dwd_anova = kerndwd(x, y, kern, qval=1, eps=1e-5, maxit=1e5)
 pred = predict(dwd_anova, kern, x, test_data)
 
-
-# fit spline kernel - Error: cannot allocate vector of size 106.8 Gb
+######################################################################
+# fit spline kernel - Error: cannot allocate vector of size 106.8 Gb #
+######################################################################
 kern = splinedot()
 dwd_spline = kerndwd(x, y, kern, qval=1, eps=1e-5, maxit=1e5)
 pred = predict(dwd_spline, kern, x, test_data)
 
 
-# TODO add models to list and loop over them later - read about optimizing these kernels later
-
-# sigest(x)
-
 ```
-
-
-```{r - DWDLargeR}
-
-
-# calculate the best penalty parameter
-penalty_param = penaltyParameter(x, y,expon=1)
-# solve the generalized DWD model
-dwd_larger_r = genDWD(x, y, penalty_param, expon=1)
-
-pred = predict(dwd_larger_r, test_data)
-
-# TODO Error in genDWD(x, y, penalty_param, expon = 1) : trying to get slot "ra" from an object of a basic class ("matrix") with no slots
-# Im tired do this later
-
-```
-
 
