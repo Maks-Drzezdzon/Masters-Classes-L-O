@@ -97,11 +97,11 @@ RRF_features_data = read.csv(file='RRF_features_data.csv',head=TRUE,sep=",")
 
 
 # get indices for 70% of the data set
-tmp_data = createDataPartition(y = train_data$Class, p = 0.7, list=FALSE)
+#tmp_data = createDataPartition(y = train_data$Class, p = 0.7, list=FALSE)
 
 # separate test and training sets
-train_sample_data = train_data[tmp_data,]
-test_sample_data = train_data[-tmp_data,]
+#train_sample_data = train_data[tmp_data,]
+#test_sample_data = train_data[-tmp_data,]
 
 
 set_new_data_after_feature_selection=function(train_data){
@@ -156,6 +156,15 @@ get_test_metrics=function(test_sample_data, preds){
   #print(paste0("RMSE is: ", RMSE))
   #print(paste0("mse is: ", mse))
   #print(paste0("R2 is: ", round(R2, 2)))
+  
+}
+
+
+scale_data = function(){
+  preproc_test = preProcess(test_sample_data, method = c('scale', 'center'))
+  preproc_train = preProcess(train_sample_data, method = c('scale', 'center'))
+  test_sample_data = predict(preproc_test, test_sample_data)
+  train_sample_data = predict(preproc_train, train_sample_data)
   
 }
 
@@ -441,7 +450,7 @@ get_data_for_kaggle_score(preds = preds)
 ```{r - get data}
 
 #######################################
-# data 70% - 20% split for train-test #
+# data 70% - 30% split for train-test #
 #######################################
 train_data = mlsp_train
 
@@ -451,10 +460,23 @@ train_data = LASSO_features_data
 
 train_data = RFE_features_data
 
+
 train_data = rpart_features_data
 
 train_data = RRF_features_data
 
+
+
+
+
+
+tmp_df= findLinearCombos(train_data)
+
+
+# removing linear dependencies 
+tmp_df= findLinearCombos(train_data[1:length(train_data) - 1])
+tmp_df$remove
+train_data=train_data[,-tmp_df$remove]
 
 # get indices for 70% of the data set
 train_data$Class = factor(train_data$Class) 
@@ -463,23 +485,70 @@ tmp_data = createDataPartition(y = train_data$Class, p = 0.7, list=FALSE)
 # separate test and training sets
 train_sample_data = train_data[tmp_data,]
 test_sample_data = train_data[-tmp_data,]
+scale_data()
+
 
 
 ```
 
 
-```{r - DWD Kernels }
+```{r}
 
+gbmGrid =  expand.grid(lambda=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19), lambda2=c(1,2,3,4,5,6,7,8,9,10))
+sdwd = train(Class ~ ., data = train_sample_data, method = "sdwd", trControl=fitControl)
+preds = predict(sdwd, test_sample_data)
+preds = as.numeric(levels(preds))[preds]
+get_test_metrics(test_sample_data, preds)
+preds_no_grid = predict(sdwd, newdata = mlsp_test)
+get_data_for_kaggle_score(preds = preds_no_grid)
+
+
+sdwd = train(Class ~ ., data = train_sample_data, method = "sdwd", trControl=fitControl, tuneGrid = gbmGrid)
+preds = predict(sdwd, test_sample_data)
+preds = as.numeric(levels(preds))[preds]
+get_test_metrics(test_sample_data, preds)
+preds = predict(sdwd, newdata = mlsp_test)
+get_data_for_kaggle_score(preds = preds)
+```
+
+
+```{r - DWD Kernels }
+set.seed(123)
 fitControl = trainControl(## 10-fold CV
                            method = "repeatedcv",
                            number = 10,
                            ## repeated ten times
-                           repeats = 10)
+                           repeats = 10,
+                           allowParallel = TRUE,
+                           savePredictions = 'final')
+
+# "boot", "cv", "LOOCV", "LGOCV", "repeatedcv", "timeslice"
+
+# would have been used preprocessing if more time was available,
+# need to filter data out to see how to use cor properly
+#modelLookup("dwdPoly")
+#near_zero = nearZeroVar(train_data)
+#near_zero_filtered = train_data[,-near_zero]
+#t=as.numeric(as.matrix(train_data[1:410]))
+#corolated = cor(t)
+#as.numeric(as.matrix(train_data))
 
 ###########
 # dwdPoly #
 ###########
-dwdPoly = train(Class ~ ., data = train_sample_data, method = "dwdPoly", trControl=fitControl)
+
+
+
+# using rep(1:10) seems to cause issues?
+
+gbmGrid =  expand.grid(qval=c(7, 11, 12, 13, 14), 
+                       lambda=c(12), 
+                       degree=c(3, 6, 7, 8, 9),
+                       scale=c(0.1)
+                    )
+head(dwdPoly$bestTune)
+dwdPoly = train(Class ~ ., data = train_sample_data, method = "dwdPoly",  trControl=fitControl)
+dwdPoly = train(Class ~ ., data = train_sample_data, method = "dwdPoly",  trControl=fitControl, tuneGrid = gbmGrid)
 preds = predict(dwdPoly, test_sample_data)
 preds = as.numeric(levels(preds))[preds]
 get_test_metrics(test_sample_data, preds)
@@ -487,10 +556,19 @@ preds = predict(dwdPoly, newdata = mlsp_test)
 get_data_for_kaggle_score(preds = preds)
 
 
+
+
+
 #############
 # dwdRadial #
 #############
+
+gbmGrid =  expand.grid(qval=c(1), 
+                       lambda=c(0.01, 0.02, 0.03), 
+                       sigma=c(0.007230246, 0.006, 0.005, 0.004)
+                    )
 dwdRadial = train(Class ~ ., data = train_sample_data, method = "dwdRadial", trControl=fitControl)
+dwdRadial = train(Class ~ ., data = train_sample_data, method = "dwdRadial", trControl=fitControl, tuneGrid = gbmGrid)
 preds = predict(dwdRadial, test_sample_data)
 preds = as.numeric(levels(preds))[preds]
 get_test_metrics(test_sample_data, preds)
@@ -501,18 +579,31 @@ get_data_for_kaggle_score(preds = preds)
 #############
 # dwdLinear #
 #############
+
+gbmGrid =  expand.grid(lambda=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19), qval=c(1,2,3,4,5,6,7,8,9,10))
+
 dwdLinear = train(Class ~ ., data = train_sample_data, method = "dwdLinear", trControl=fitControl)
 preds = predict(dwdLinear, test_sample_data)
 preds = as.numeric(levels(preds))[preds]
 get_test_metrics(test_sample_data, preds)
-preds = predict(dwdPoly, newdata = mlsp_test)
+preds_no_grid = predict(dwdLinear, newdata = mlsp_test)
+get_data_for_kaggle_score(preds = preds_no_grid)
+
+dwdLinear = train(Class ~ ., data = train_sample_data, method = "dwdLinear", trControl=fitControl, tuneGrid = gbmGrid)
+preds = predict(dwdLinear, test_sample_data)
+preds = as.numeric(levels(preds))[preds]
+get_test_metrics(test_sample_data, preds)
+preds = predict(dwdLinear, newdata = mlsp_test)
 get_data_for_kaggle_score(preds = preds)
 
 
 ########
 # sdwd #
 ########
-sdwd = train(Class ~ ., data = train_sample_data, method = "sdwd", trControl=fitControl)
+
+gbmGrid =  expand.grid()
+
+sdwd = train(Class ~ ., data = train_sample_data, method = "sdwd", trControl=fitControl, tuneGrid = gbmGrid)
 preds = predict(sdwd, test_sample_data)
 preds = as.numeric(levels(preds))[preds]
 get_test_metrics(test_sample_data, preds)
