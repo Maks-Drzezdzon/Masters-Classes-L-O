@@ -6,37 +6,15 @@ output: html_notebook
 
 
 ```{r - setup, reload data}
-
 # QVT setup 
 library(irr)
 library(ROCR)
 library(infotheo)
 
-
-# install.packages("penalizedSVM")
-
-library(sparseSVM)
-library(SVMMaj)
-library(WeightSVM)
 library(e1071) # SVM package 
 library(kernlab) # SVM package/s - has multiple libs such as LiblineaR, kernlab, e1071, obliqueRF
 library(penalizedSVM) # needed for Smoothly clipped absolute deviation penalty (SCAD)
 library(Metrics)
-
-
-# Notes for kernlab - seems to have e1071 svm impl too aswell as other libraries
-# https://topepo.github.io/caret/available-models.html 
-# https://stackoverflow.com/questions/18911338/vastly-different-results-for-svm-model-using-e1071-and-caret
-# https://www.thekerneltrip.com/statistics/kernlab-vs-e1071/#:~:text=While%20kernlab%20implements%20kernel%2Dbased,bagged%20clustering%2C%20naive%20Bayes%20classifier. 
-
-
-
-
-
-# library(rdwd) # DWD package
-library(sdwd) # SparseDWD
-library(kerndwd)
-library(DWDLargeR)
 
 # Other
 library(caret) # data split - https://rdrr.io/rforge/caret/man/createDataPartition.html
@@ -47,18 +25,16 @@ library(glmnet)
 library(elasticnet)
 library(randomForest)
 
-
-# https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html
 library(kableExtra) # Used to generate report ready tables
 
 getwd()
 
 
-#y_labels_train = read.csv(file='mlsp-2014-mri/Train/train_labels.csv', head=TRUE, sep=",") # this is your y var
+y_labels_train = read.csv(file='mlsp-2014-mri/Train/train_labels.csv', head=TRUE, sep=",") # this is your y var
 # Convert 'Class' into an unordered categorical variable, and assign labels
 # to each level.
 
-#y_labels_train$Class = factor(y_labels_train$Class) 
+y_labels_train$Class = factor(y_labels_train$Class) 
 
 # labels=c('Healthy_Control','Schizophrenic_Patient')
 # 46 control # 40 patient 
@@ -76,10 +52,10 @@ RFE_features_data = read.csv(file='RFE_features_data.csv',head=TRUE,sep=",")
 RRF_features_data = read.csv(file='RRF_features_data.csv',head=TRUE,sep=",")
 
 
-#FNC_train = read.csv(file='mlsp-2014-mri/Train/train_FNC.csv',head=TRUE,sep=",")
-#SBM_train = read.csv(file='mlsp-2014-mri/Train/train_SBM.csv',head=TRUE,sep=",")
-#train_data = merge(FNC_train, SBM_train, by = "Id")
-#train_data = merge(train_data, y_labels_train, by="Id")
+FNC_train = read.csv(file='mlsp-2014-mri/Train/train_FNC.csv',head=TRUE,sep=",")
+SBM_train = read.csv(file='mlsp-2014-mri/Train/train_SBM.csv',head=TRUE,sep=",")
+train_data = merge(FNC_train, SBM_train, by = "Id")
+train_data = merge(train_data, y_labels_train, by="Id")
 
 # These dont have lables so its pointless to use for testing
 #SBM_test = read.csv(file='mlsp-2014-mri/Test/test_SBM.csv',head=TRUE,sep=",")
@@ -189,17 +165,17 @@ scale_data = function(){
 
 
 size=25
-RRF = train(Class ~ ., data=train_data, method="RRF")
+RRF = train(Class ~ ., data=train_data, method="RRF", tuneLength=25, metric="AUC", scale=TRUE)
 RRF_features = varImp(RRF)
 feature_names = data.frame(RRF_features[1])
 feature_names = rownames(feature_names)[order(feature_names$Overall, decreasing=TRUE)][1:size]
 feature_names = append(feature_names, "Class")
 feature_names
 
-# plot(RRF_features, top = size, main='Variable Importance')
+plot(RRF_features, top = size, main='Regularized Random Forest Feature Importance', ylab="Feature Label", xlab="Importance Score")
 size= 26
 RRF_features_data =  get_top_features(RRF, size, feature_names)
-# write.csv(RRF_features_data, "RRF_features_data.csv", row.names = FALSE)
+write.csv(RRF_features_data, "RRF_features_data.csv", row.names = FALSE)
 
 tmp_data = createDataPartition(y = RRF_features_data$Class, p = 0.7, list=FALSE)
 train_sample_data = RRF_features_data[tmp_data,]
@@ -258,14 +234,14 @@ ggplot(data=Varimp_data_all,
 ```
 
 
-```{r - LASSO - DONE}
+```{r - LASSO - DONE - updated}
 #########
 # LASSO #
 #########
 size = 20
-lasso_cv = cv.glmnet(as.matrix(train_data[,1:410]), as.double(train_data$Class), family='binomial', alpha=1, parallel=TRUE, standardize=TRUE, type.measure='mse', keep=T)
+lasso_cv = cv.glmnet(as.matrix(train_data[,1:410]), as.double(train_data$Class), family='binomial', alpha=1, parallel=TRUE, standardize=TRUE, type.measure='auc', keep=T)
 
-plot(lasso_cv)
+plot(lasso_cv) # main="Lasso selecting optimal value for Lambda and features kept")
 # lasso_cv$lambda.min
 cat('Min Lambda: ', lasso_cv$lambda.min, '\n 1Sd Lambda: ', lasso_cv$lambda.1se)
 
@@ -288,8 +264,8 @@ LASSO_features_data =  get_top_features(lasso_cv, size, feature_names)
 write.csv(LASSO_features_data, "LASSO_features_data.csv", row.names = FALSE)
 
 tmp_data = createDataPartition(y = LASSO_features_data$Class, p = 0.7, list=FALSE)
-train_sample_data = LASSO_features_data[tmp_data,]
-test_sample_data = LASSO_features_data[-tmp_data,]
+#train_sample_data = LASSO_features_data[tmp_data,]
+#test_sample_data = LASSO_features_data[-tmp_data,]
 
 ```
 
@@ -301,7 +277,7 @@ test_sample_data = LASSO_features_data[-tmp_data,]
 ##########
 
 boruta_output = Boruta(Class ~ ., data=train_sample_data, doTrace=0)  
-
+help(Boruta)
 #boruta_signif_with_tentative = getSelectedAttributes(boruta_output, withTentative = TRUE)
 
 #imps_with_tentative = attStats(boruta_output)
@@ -328,7 +304,7 @@ write.csv(Boruta_features_data_without_tentative, "Boruta_features_data_without_
 
 
 # Plot variable importance
-plot(boruta_output, cex.axis=.7, las=2, xlab="", main="Variable Importance")  
+plot(boruta_output, cex.axis=.7, las=2, xlab="Features", main="Boruta Variable Importance")  
 Boruta_features_data_without_tentative
 tmp_data = createDataPartition(y = Boruta_features_data_without_tentative$Class, p = 0.7, list=FALSE)
 train_sample_data = Boruta_features_data_without_tentative[tmp_data,]
@@ -338,14 +314,16 @@ test_sample_data = Boruta_features_data_without_tentative[-tmp_data,]
 ```
 
 
-```{r - rpart - DONE}
+```{r - rpart - DONE - updated}
 
 ##################################
 # rpart model feature importance #
 ################################## 
+library(rattle)
 
-rpart = train(Class ~ ., data=train_sample_data, method="rpart")
-plot(rpart)
+rpart = train(Class ~ ., data=train_sample_data, method="rpart", tuneLength=25, metric="AUC")
+fancyRpartPlot(rpart$finalModel, type=2)
+help(fancyRpartPlot)
 rpartImp = varImp(rpart)
 
 rpart_features_data = get_top_features(rpart, 5)
@@ -376,9 +354,9 @@ test_sample_data = train_data[-tmp_data,]
 
 
 
-svm_model_poly = svm(Class ~ ., data = train_sample_data, kernel = "polynomial",
-                     cost=100, coef0= 0.7, cachesize=200, gamma=0.0001, scale = TRUE) 
-
+#svm_model_poly = svm(Class ~ ., data = train_sample_data, kernel = "polynomial",
+                     #cost=100, coef0= 0.7, cachesize=200, gamma=0.0001, scale = TRUE) 
+svm_model_poly = svm(Class ~ ., data = train_sample_data, kernel = "polynomial", tuneLength=25, metric="AUC", scale = TRUE)
 preds = predict(svm_model_poly, newdata = test_sample_data)
 from_svm = preds
 auc = Metrics::auc(tmp_test_sample$Class, preds)
@@ -398,7 +376,8 @@ get_data_for_kaggle_score(preds = preds)
 # svm_model_rbf #
 #################
 
-svm_model_rbf = svm(Class ~ ., data = train_sample_data, kernel = 'radial', scale = TRUE) # rbf
+# svm_model_rbf = svm(Class ~ ., data = train_sample_data, kernel = 'radial', scale = TRUE) # rbf
+svm_model_rbf = svm(Class ~ ., data = train_sample_data, kernel = 'radial', scale = TRUE, tuneLength=25, metric="AUC")
 preds = predict(svm_model_rbf, test_sample_data, type="Class", scale = TRUE)
 
 preds = as.numeric(levels(preds))[preds]
@@ -413,7 +392,8 @@ get_data_for_kaggle_score(preds = preds)
 # svm_model_linear #
 ####################
 
-svm_model_linear = svm(Class ~ ., data = train_sample_data, kernel = "linear", scale = TRUE)
+# svm_model_linear = svm(Class ~ ., data = train_sample_data, kernel = "linear", scale = TRUE)
+svm_model_linear = svm(Class ~ ., data = train_sample_data, kernel = "linear", scale = TRUE, tuneLength=25, metric="AUC")
 
 preds = predict(svm_model_linear, test_sample_data, type="Class")
 
@@ -431,7 +411,8 @@ get_data_for_kaggle_score(preds = preds)
 # svm_model_sigmoid #
 #####################
 
-svm_model_sigmoid = svm(Class ~ ., data = train_sample_data, kernel = "sigmoid", scale = TRUE)
+svm_model_sigmoid = svm(Class ~ ., data = train_sample_data, kernel = "sigmoid", scale = TRUE, tuneLength=25, metric="AUC")
+# svm_model_sigmoid = svm(Class ~ ., data = train_sample_data, kernel = "sigmoid", scale = TRUE)
 preds = predict(svm_model_sigmoid, test_sample_data, type="Class")
 
 
@@ -465,9 +446,10 @@ train_data = rpart_features_data
 
 train_data = RRF_features_data
 
+table(mlsp_train$Class)
 
-
-
+kbl(mlsp_train) %>%
+ kable_classic(full_width = F)
 
 
 tmp_df= findLinearCombos(train_data)
@@ -489,26 +471,6 @@ scale_data()
 
 
 
-```
-
-
-```{r}
-
-gbmGrid =  expand.grid(lambda=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19), lambda2=c(1,2,3,4,5,6,7,8,9,10))
-sdwd = train(Class ~ ., data = train_sample_data, method = "sdwd", trControl=fitControl)
-preds = predict(sdwd, test_sample_data)
-preds = as.numeric(levels(preds))[preds]
-get_test_metrics(test_sample_data, preds)
-preds_no_grid = predict(sdwd, newdata = mlsp_test)
-get_data_for_kaggle_score(preds = preds_no_grid)
-
-
-sdwd = train(Class ~ ., data = train_sample_data, method = "sdwd", trControl=fitControl, tuneGrid = gbmGrid)
-preds = predict(sdwd, test_sample_data)
-preds = as.numeric(levels(preds))[preds]
-get_test_metrics(test_sample_data, preds)
-preds = predict(sdwd, newdata = mlsp_test)
-get_data_for_kaggle_score(preds = preds)
 ```
 
 
@@ -536,19 +498,7 @@ fitControl = trainControl(## 10-fold CV
 ###########
 # dwdPoly #
 ###########
-
-
-
-# using rep(1:10) seems to cause issues?
-
-gbmGrid =  expand.grid(qval=c(7, 11, 12, 13, 14), 
-                       lambda=c(12), 
-                       degree=c(3, 6, 7, 8, 9),
-                       scale=c(0.1)
-                    )
-head(dwdPoly$bestTune)
-dwdPoly = train(Class ~ ., data = train_sample_data, method = "dwdPoly",  trControl=fitControl)
-dwdPoly = train(Class ~ ., data = train_sample_data, method = "dwdPoly",  trControl=fitControl, tuneGrid = gbmGrid)
+dwdPoly = train(Class ~ ., data = train_sample_data, method = "dwdPoly",  trControl=fitControl, tuneLength=20, metric="AUC", scale=TRUE)
 preds = predict(dwdPoly, test_sample_data)
 preds = as.numeric(levels(preds))[preds]
 get_test_metrics(test_sample_data, preds)
@@ -567,8 +517,8 @@ gbmGrid =  expand.grid(qval=c(1),
                        lambda=c(0.01, 0.02, 0.03), 
                        sigma=c(0.007230246, 0.006, 0.005, 0.004)
                     )
-dwdRadial = train(Class ~ ., data = train_sample_data, method = "dwdRadial", trControl=fitControl)
-dwdRadial = train(Class ~ ., data = train_sample_data, method = "dwdRadial", trControl=fitControl, tuneGrid = gbmGrid)
+dwdRadial = train(Class ~ ., data = train_sample_data, method = "dwdRadial", trControl=fitControl, tuneLength=25, metric="AUC", scale=TRUE)
+#wdRadial = train(Class ~ ., data = train_sample_data, method = "dwdRadial", trControl=fitControl, tuneGrid = gbmGrid)
 preds = predict(dwdRadial, test_sample_data)
 preds = as.numeric(levels(preds))[preds]
 get_test_metrics(test_sample_data, preds)
@@ -582,19 +532,14 @@ get_data_for_kaggle_score(preds = preds)
 
 gbmGrid =  expand.grid(lambda=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19), qval=c(1,2,3,4,5,6,7,8,9,10))
 
-dwdLinear = train(Class ~ ., data = train_sample_data, method = "dwdLinear", trControl=fitControl)
+dwdLinear = train(Class ~ ., data = train_sample_data, method = "dwdLinear", trControl=fitControl, tuneLength=25, metric="AUC", scale=TRUE)
 preds = predict(dwdLinear, test_sample_data)
 preds = as.numeric(levels(preds))[preds]
 get_test_metrics(test_sample_data, preds)
 preds_no_grid = predict(dwdLinear, newdata = mlsp_test)
 get_data_for_kaggle_score(preds = preds_no_grid)
 
-dwdLinear = train(Class ~ ., data = train_sample_data, method = "dwdLinear", trControl=fitControl, tuneGrid = gbmGrid)
-preds = predict(dwdLinear, test_sample_data)
-preds = as.numeric(levels(preds))[preds]
-get_test_metrics(test_sample_data, preds)
-preds = predict(dwdLinear, newdata = mlsp_test)
-get_data_for_kaggle_score(preds = preds)
+#dwdLinear = train(Class ~ ., data = train_sample_data, method = "dwdLinear", trControl=fitControl, tuneGrid = gbmGrid)
 
 
 ########
@@ -602,19 +547,19 @@ get_data_for_kaggle_score(preds = preds)
 ########
 
 gbmGrid =  expand.grid()
+sdwd = train(Class ~ ., data = train_sample_data, method = "sdwd", trControl=fitControl, tuneLength=25, metric="AUC", scale=TRUE)
 
-sdwd = train(Class ~ ., data = train_sample_data, method = "sdwd", trControl=fitControl, tuneGrid = gbmGrid)
+#sdwd = train(Class ~ ., data = train_sample_data, method = "sdwd", trControl=fitControl, tuneGrid = gbmGrid)
 preds = predict(sdwd, test_sample_data)
 preds = as.numeric(levels(preds))[preds]
 get_test_metrics(test_sample_data, preds)
-preds = predict(dwdPoly, newdata = mlsp_test)
-get_data_for_kaggle_score(preds = preds)
+preds_no_grid = predict(sdwd, newdata = mlsp_test)
+get_data_for_kaggle_score(preds = preds_no_grid)
 
 
 
 
 ```
-
 
 
 ```{r - kerndwd - cant collect metrics}
